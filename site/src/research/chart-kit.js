@@ -147,6 +147,17 @@ export function createChart(el, { options = {}, reducedMotion = false }, spec) {
     e.currentTarget.textContent = open ? 'Hide table' : 'Data table';
   });
 
+  // Optional custom controls (e.g. a slider); they call redraw() after changing chart state.
+  if (spec.controls) {
+    let box = root.querySelector('.rc__controls');
+    if (!box) {
+      box = document.createElement('div');
+      box.className = 'rc__controls';
+      body.before(box);
+    }
+    spec.controls(box, () => draw(false));
+  }
+
   draw(false);
   let lastW = width;
   const ro = new ResizeObserver(() => {

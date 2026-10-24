@@ -17,6 +17,7 @@ const MONITOR = 0.5;         // penalty monitor period (sim s)
 const FUSION_HZ = 3;         // ASF fusion rate
 const STABLE_HITS = 3;       // detections before an object is persisted
 const PRESCAN = 2.6, RELOAD = 0.6, GOAL_HOLD = 2.6;
+const REPLAN_HOLD = 1.2;     // sim s the robot waits while the new route is computed and drawn
 const NEAR_GOAL = 1.0;       // early-termination guard: 2 × node proximity threshold (0.5 m)
 
 /** Script for the first (forward) leg. Static furniture is found by the prescan, a person forces two replans. */
@@ -27,7 +28,7 @@ const SCRIPT = [
   // A person steps next to the direct 2→7 edge while the robot drives 0→2.
   { at: (s) => s.phase === 'drive' && s.replans === 0 && s.robot.x >= 2.3, spawn: { cls: 'person', x: 5.6, y: -0.32, conf: 0.91, id: 'p1' } },
   // After the first replan (0,2,7 → 2,5,7) the person walks into the upper corridor.
-  { at: (s) => s.phase === 'drive' && s.replans === 1 && Math.hypot(s.robot.x - NODES[2].x, s.robot.y - NODES[2].y) < 0.3, walk: { id: 'p1', x: 4.55, y: 1.62, dur: 0.9 } },
+  { at: (s) => s.phase === 'drive' && s.replans === 1 && s.route.seg >= 1 && s.robot.x > NODES[2].x + 0.08, walk: { id: 'p1', x: 4.55, y: 1.62, dur: 0.6 } },
 ];
 
 export function createRouteSim({ interactive = false } = {}) {
@@ -41,7 +42,7 @@ export function createRouteSim({ interactive = false } = {}) {
       objects: [], ann: annotateGraph([]), heat: new Map(),
       route: null, oldRoutes: [], recorded: null, replans: 0, delta: 0,
       events: [], nextMonitor: 0, nextFusion: 0, scriptDone: new Set(), trail: [],
-      arrivedAt: -1, done: false,
+      arrivedAt: -1, done: false, holdUntil: 0,
     });
     uid = 0;
     log('prescan', 'Prescan · 360° spin');
@@ -96,6 +97,8 @@ export function createRouteSim({ interactive = false } = {}) {
     s.route = { nodes: r.nodes, pts, cum, keys, total: cum[cum.length - 1], cost: r.cost, length: r.length, penalty: r.penalty, routeKeys: r.keys, t: s.t, sp: 0, seg: 0 };
     s.recorded = new Map([...s.ann].map(([k, e]) => [k, e.penalty]));
     s.nextMonitor = s.t + MONITOR;
+    // FollowPath restarts after a short beat so the new route can draw in.
+    s.holdUntil = s.t + (reason === 'replan' ? REPLAN_HOLD : 0.5);
     if (reason === 'replan') {
       s.replans++;
       const prev = s.oldRoutes[s.oldRoutes.length - 1];
@@ -203,7 +206,8 @@ export function createRouteSim({ interactive = false } = {}) {
         s.nextMonitor = s.t + MONITOR;
         if (!nearGoal && s.delta > DELTA) { log('cancel', `Δp ${s.delta.toFixed(1)} > δ ${DELTA.toFixed(1)} · FollowPath cancelled`); compute('replan'); s.delta = 0; }
       }
-      if (drive(STEP)) {
+      if (s.t < s.holdUntil) R.v = 0;
+      else if (drive(STEP)) {
         s.phase = 'goal'; s.phaseT = 0; s.arrivedAt = s.t; R.v = 0;
         log('goal', s.goal === GOAL ? 'Goal reached · node 7' : 'Start reached · node 0');
       }
