@@ -1,0 +1,64 @@
+/* SAIM design tokens. Every page and demo pulls colour, type and motion values from here. */
+:root {
+  /* Surfaces */
+  --ink: #0a0a0b;
+  --ink-2: #121214;
+  --ink-3: #1b1b1e;
+  --ink-4: #26262a;
+  --paper: #f5f0e6;
+  --paper-2: #ece4d4;
+  --paper-3: #e0d6c2;
+
+  /* Brand */
+  --red: #c1121f;
+  --orange: #fa520f;
+  --ember: #ff7a2f;
+  --amber: #ffb547;
+  --gold: #e8c27a;
+
+  /* Data / diagram accents (used sparingly, mostly inside demos) */
+  --cyan: #5bc0eb;
+  --mint: #7ce0c3;
+  --violet: #9b8cff;
+  --danger: #ff4d5e;
+
+  /* Text */
+  --fg: #f3eee4;
+  --fg-dim: rgba(243, 238, 228, 0.66);
+  --fg-mute: rgba(243, 238, 228, 0.42);
+  --fg-ink: #17161a;
+  --fg-ink-dim: rgba(23, 22, 26, 0.68);
+  --line: rgba(243, 238, 228, 0.12);
+  --line-strong: rgba(243, 238, 228, 0.22);
+  --line-ink: rgba(23, 22, 26, 0.12);
+
+  --grad-fire: linear-gradient(120deg, var(--red) 0%, var(--orange) 55%, var(--amber) 100%);
+  --grad-ink: radial-gradient(120% 80% at 50% 0%, #1d1a1a 0%, var(--ink) 60%);
+
+  /* Type */
+  --font-serif: 'Newsreader Variable', 'Newsreader', Georgia, serif;
+  --font-sans: 'Inter Variable', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, monospace;
+
+  --fs-mega: clamp(3.4rem, 9.5vw, 10.5rem);
+  --fs-h1: clamp(2.8rem, 6.4vw, 6.4rem);
+  --fs-h2: clamp(2.1rem, 4.4vw, 4.2rem);
+  --fs-h3: clamp(1.4rem, 2.2vw, 2rem);
+  --fs-lead: clamp(1.08rem, 1.35vw, 1.32rem);
+  --fs-body: 1rem;
+  --fs-small: 0.875rem;
+  --fs-mono: 0.75rem;
+
+  /* Layout */
+  --gutter: clamp(16px, 4vw, 56px);
+  --maxw: 1360px;
+  --radius-s: 10px;
+  --radius: 18px;
+  --radius-l: 28px;
+  --nav-h: 72px;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur: 0.8s;
+}

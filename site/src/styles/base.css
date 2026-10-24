@@ -1,0 +1,77 @@
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/newsreader/opsz.css';
+@import '@fontsource-variable/newsreader/opsz-italic.css';
+@import '@fontsource-variable/jetbrains-mono';
+@import 'lenis/dist/lenis.css';
+@import './tokens.css';
+@import './components.css';
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
+}
+
+img, svg, video, canvas { display: block; max-width: 100%; }
+img { height: auto; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+h1, h2, h3, h4, p, figure { margin: 0; }
+::selection { background: var(--orange); color: var(--ink); }
+
+:focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; border-radius: 4px; }
+
+/* ---------- Layout ---------- */
+.container { width: 100%; max-width: var(--maxw); margin-inline: auto; padding-inline: var(--gutter); }
+.section { position: relative; padding-block: clamp(88px, 12vw, 180px); }
+.section--tight { padding-block: clamp(64px, 8vw, 120px); }
+.section--paper { background: var(--paper); color: var(--fg-ink); }
+.section--paper .eyebrow { color: var(--red); }
+.section--paper .lead, .section--paper .muted { color: var(--fg-ink-dim); }
+.section--ink2 { background: var(--ink-2); }
+
+.grid { display: grid; gap: clamp(16px, 2vw, 28px); }
+.grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 960px) { .grid-3, .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px) { .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; } }
+
+/* ---------- Type ---------- */
+.mega, .h1, .h2, .h3 { font-family: var(--font-serif); font-weight: 420; letter-spacing: -0.025em; line-height: 0.98; }
+.mega { font-size: var(--fs-mega); letter-spacing: -0.04em; line-height: 0.9; }
+.h1 { font-size: var(--fs-h1); }
+.h2 { font-size: var(--fs-h2); line-height: 1.02; }
+.h3 { font-size: var(--fs-h3); line-height: 1.12; letter-spacing: -0.015em; }
+.h1 em, .h2 em, .mega em, .h3 em { font-style: italic; font-weight: 380; }
+.fire-text { background: var(--grad-fire); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.lead { font-size: var(--fs-lead); line-height: 1.55; color: var(--fg-dim); max-width: 62ch; }
+.muted { color: var(--fg-dim); }
+.mono { font-family: var(--font-mono); font-size: var(--fs-mono); letter-spacing: 0.08em; text-transform: uppercase; }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--font-mono); font-size: var(--fs-mono); letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--orange);
+}
+.eyebrow::before { content: ''; width: 18px; height: 1px; background: currentColor; }
+.stack > * + * { margin-top: var(--stack-gap, 1.25rem); }
+
+/* ---------- Motion defaults ---------- */
+/* Elements with data-reveal start hidden only once JS confirms it will animate them. */
+.js-motion [data-reveal]:not(.is-in) { opacity: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .js-motion [data-reveal]:not(.is-in) { opacity: 1; }
+  *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+}
