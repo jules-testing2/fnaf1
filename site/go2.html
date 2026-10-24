@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <script>try{if(localStorage.getItem('saim-theme')==='light')document.documentElement.dataset.theme='light'}catch(e){}</script>
+  <style>html{background:#0a0a0b;color-scheme:dark}html[data-theme=light]{background:#f6f1e7;color-scheme:light}body{opacity:0;animation:saim-show .01s 1.5s forwards}@keyframes saim-show{to{opacity:1}}</style>
+  <noscript><style>body{opacity:1;animation:none}</style></noscript>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SAIM Go2 · FIIRIDOG quadruped</title>
+  <meta name="description" content="A quadruped for rough terrain and confined spaces where wheeled robots cannot go: inspection, reconnaissance and payload delivery.">
+  <meta name="theme-color" content="#0a0a0b">
+  <meta property="og:title" content="SAIM Go2 · FIIRIDOG quadruped">
+  <meta property="og:description" content="A quadruped for rough terrain and confined spaces where wheeled robots cannot go: inspection, reconnaissance and payload delivery.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+</head>
+<body data-page="go2">
+  <main id="main">
+
+    <!-- Hero: the quadruped on layered terrain -->
+    <section class="pp-hero go-hero" aria-labelledby="go-title">
+      <div class="pp-hero__grid-bg" aria-hidden="true"></div>
+      <div class="go-terrain" aria-hidden="true">
+        <svg class="go-terrain__layer" data-depth="0.15" viewBox="0 0 1600 400" preserveAspectRatio="none">
+          <path class="go-t-far" d="M0 300 L120 230 L210 260 L330 170 L450 240 L560 190 L700 250 L820 150 L960 230 L1080 180 L1210 250 L1330 160 L1460 230 L1600 200 L1600 400 L0 400Z"/>
+        </svg>
+        <svg class="go-terrain__layer" data-depth="0.35" viewBox="0 0 1600 400" preserveAspectRatio="none">
+          <path class="go-t-mid" d="M0 330 L60 318 L90 300 L130 312 L170 290 L230 306 L260 286 L320 300 L380 280 L420 298 L470 284 L540 300 L600 276 L660 296 L720 282 L780 302 L840 288 L900 296 L960 274 L1030 296 L1080 284 L1150 300 L1210 280 L1270 298 L1330 286 L1390 302 L1450 284 L1520 298 L1600 286 L1600 400 L0 400Z"/>
+          <g class="go-t-rocks"><path d="M210 300 l22 -18 l26 6 l10 14z"/><path d="M640 292 l14 -16 l30 4 l8 12z"/><path d="M1180 298 l18 -20 l24 8 l6 12z"/><path d="M1420 300 l12 -12 l20 2 l6 10z"/></g>
+        </svg>
+        <svg class="go-terrain__layer" data-depth="0.7" viewBox="0 0 1600 400" preserveAspectRatio="none">
+          <path class="go-t-near" d="M0 360 L180 360 L180 336 L260 336 L260 312 L340 312 L340 288 L420 288 L420 264 L1600 264 L1600 400 L0 400Z"/>
+          <path class="go-t-glow" d="M0 360 L180 360 L180 336 L260 336 L260 312 L340 312 L340 288 L420 288 L420 264 L1600 264"/>
+          <path class="go-t-edge" d="M0 360 L180 360 L180 336 L260 336 L260 312 L340 312 L340 288 L420 288 L420 264 L1600 264"/>
+        </svg>
+      </div>
+      <div class="container go-hero__grid">
+        <div class="go-hero__copy stack" style="--stack-gap:1.6rem">
+          <div class="pp-hero__head">
+            <p class="eyebrow" data-scramble>Quadruped platform</p>
+            <span class="chip chip--live">Thermal + RGB</span>
+          </div>
+          <h1 class="h1 go-hero__title" id="go-title"><span class="go-hero__line">SAIM Go2</span> <span class="go-hero__line"><em class="fire-text">FIIRIDOG</em></span></h1>
+          <p class="lead" data-reveal>A quadruped built for rough terrain and confined spaces where wheeled robots can’t go: inspection, reconnaissance, and payload delivery.</p>
+          <div class="pp-hero__ctas" data-reveal data-reveal-delay="0.15">
+            <a class="btn btn--fire" href="mailto:contact@saimrobotics.com?subject=SAIM%20Go2%20FIIRIDOG%20%C2%B7%20demo%20request" data-magnetic>Request a demo <span class="arrow">→</span></a>
+            <a class="btn btn--ghost" href="#vision" data-magnetic>See in thermal</a>
+          </div>
+        </div>
+        <div class="go-hero__dog">
+          <img src="img/go2.webp" alt="The SAIM Go2 FIIRIDOG quadruped robot, grey with a black sensor turret on its back" width="833" height="1023" fetchpriority="high">
+          <span class="go-hero__shadow" aria-hidden="true"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Specs with small explanatory glyphs -->
+    <section class="section section--tight pp-stats go-stats" aria-label="Go2 key specifications">
+      <div class="container grid grid-4" data-stagger>
+        <div>
+          <svg class="go-glyph" viewBox="0 0 64 40" aria-hidden="true"><rect x="12" y="8" width="40" height="12" rx="4"/><path d="M18 20 l-4 14 M26 20 l2 14 M40 20 l-2 14 M48 20 l4 14"/></svg>
+          <div class="stat-value" data-scramble>4x4</div><div class="stat-label">Leg configuration</div>
+        </div>
+        <div>
+          <svg class="go-glyph" viewBox="0 0 64 40" aria-hidden="true"><circle cx="32" cy="20" r="15"/><path class="go-glyph__fill" d="M32 5 A15 15 0 0 1 45 27.5" /><path d="M32 12 v8 l5 3"/></svg>
+          <div class="stat-value" data-counter="3" data-suffix=" h">3 h</div><div class="stat-label">Continuous patrol</div>
+        </div>
+        <div>
+          <svg class="go-glyph" viewBox="0 0 64 40" aria-hidden="true"><path d="M8 34 H56 L8 34 L44 6"/><path class="go-glyph__fill" d="M24 34 A16 16 0 0 0 20.6 24.4"/></svg>
+          <div class="stat-value" data-counter="45" data-suffix="°">45°</div><div class="stat-label">Slope capability</div>
+        </div>
+        <div>
+          <svg class="go-glyph" viewBox="0 0 64 40" aria-hidden="true"><path d="M32 4 L48 10 V20 C48 29 41 34 32 37 C23 34 16 29 16 20 V10Z"/><path class="go-glyph__fill" d="M32 14 C29 19 27 21 27 24 a5 5 0 0 0 10 0 C37 21 35 19 32 14Z"/></svg>
+          <div class="stat-value" data-scramble>IP66</div><div class="stat-label">Weather rating</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RGB vs thermal -->
+    <section class="section section--ink2 go-vision" id="vision" aria-labelledby="go-vision-title">
+      <div class="container go-vision__grid">
+        <div class="stack" style="--stack-gap:1.4rem">
+          <p class="eyebrow" data-reveal>Thermal + RGB sensing</p>
+          <h2 class="h2" id="go-vision-title" data-split>Day shift, <em>night shift.</em></h2>
+          <p class="lead" data-reveal>Day/night inspection payloads for security and infrastructure checks. Drag across the robot to compare what a colour camera and a thermal view would show.</p>
+          <div class="pp-seg" role="group" aria-label="View mode" data-reveal>
+            <button type="button" data-view="0" aria-pressed="false">RGB</button>
+            <button type="button" data-view="50" aria-pressed="true">Split</button>
+            <button type="button" data-view="100" aria-pressed="false">Thermal</button>
+          </div>
+          <p class="pp-note" data-reveal>The thermal side is an illustration: a false-colour palette applied to the photo, not sensor output.</p>
+        </div>
+        <div class="go-vision__stage" data-reveal="scale">
+          <div class="go-vision__view go-vision__rgb"><canvas aria-hidden="true"></canvas></div>
+          <div class="go-vision__view go-vision__ir"><canvas aria-hidden="true"></canvas></div>
+          <div class="go-vision__hud mono" aria-hidden="true">
+            <span class="hud-c tl"></span><span class="hud-c tr"></span><span class="hud-c bl"></span><span class="hud-c br"></span>
+            <span class="go-vision__tag is-rgb">RGB</span>
+            <span class="go-vision__tag is-ir">IR · False colour</span>
+            <span class="go-vision__scale"><i></i><em>Cold</em><em>Hot</em></span>
+          </div>
+          <div class="go-vision__handle" aria-hidden="true"><span></span></div>
+          <input class="go-vision__range" type="range" min="0" max="100" value="50" aria-label="Thermal view coverage, percent of the image">
+        </div>
+      </div>
+    </section>
+
+    <!-- Patrol -->
+    <section class="section go-patrol" aria-labelledby="go-patrol-title">
+      <div class="container">
+        <div class="pp-section-head">
+          <p class="eyebrow" data-reveal>Goes where wheels can’t</p>
+          <h2 class="h2" id="go-patrol-title" data-split>One patrol, <em>every kind of ground.</em></h2>
+          <p class="lead" data-reveal>An illustrative inspection loop through the places that stop wheeled robots: stairs, rubble, a crawlspace and a dense equipment room, compressed from up to three hours of continuous patrol.</p>
+        </div>
+        <div class="go-patrol__grid">
+          <div class="go-map" role="img" aria-label="Top-down map of a facility. A quadruped follows a patrol loop from the yard, up a stairwell, across a rubble zone, through a crawlspace and an equipment room, and back.">
+            <svg viewBox="0 0 800 520" aria-hidden="true">
+              <defs>
+                <pattern id="go-hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="8" /></pattern>
+              </defs>
+              <g class="go-map__grid"></g>
+              <g class="go-map__rooms">
+                <rect x="40" y="40" width="300" height="190" rx="6"/>
+                <rect x="360" y="40" width="200" height="120" rx="6"/>
+                <rect x="580" y="40" width="180" height="250" rx="6"/>
+                <rect x="40" y="250" width="240" height="230" rx="6"/>
+                <rect x="300" y="300" width="460" height="180" rx="6"/>
+              </g>
+              <g class="go-map__zones">
+                <g data-zone="stairs"><rect x="60" y="60" width="120" height="150" class="go-zone"/><path class="go-stairs" d="M60 75 H180 M60 90 H180 M60 105 H180 M60 120 H180 M60 135 H180 M60 150 H180 M60 165 H180 M60 180 H180 M60 195 H180"/></g>
+                <g data-zone="rubble"><rect x="380" y="60" width="160" height="80" class="go-zone"/><g class="go-rubble"><path d="M400 80 l14 -8 l10 10 l-8 10z"/><path d="M450 100 l18 -6 l6 14 l-14 6z"/><path d="M500 76 l12 4 l-2 14 l-12 -4z"/><path d="M420 118 l10 -6 l12 8 l-8 8z"/><path d="M490 120 l16 0 l2 12 l-14 2z"/></g></g>
+                <g data-zone="crawl"><rect x="600" y="80" width="140" height="190" class="go-zone"/><rect x="600" y="80" width="140" height="190" fill="url(#go-hatch)" class="go-hatch"/></g>
+                <g data-zone="equip"><rect x="330" y="320" width="400" height="140" class="go-zone"/><g class="go-equip"><rect x="350" y="340" width="60" height="40"/><rect x="430" y="340" width="40" height="90"/><rect x="490" y="390" width="70" height="50"/><rect x="580" y="340" width="50" height="50"/><rect x="650" y="370" width="60" height="70"/></g></g>
+                <g data-zone="yard"><rect x="60" y="270" width="200" height="190" class="go-zone"/></g>
+              </g>
+              <path class="go-route__ghost" d="M160 420 C160 360 120 330 120 260 L120 200 C120 150 140 110 200 100 L380 100 C420 100 470 90 520 110 C560 126 580 140 620 140 L680 140 C710 140 700 200 700 240 C700 280 690 300 640 310 L540 330 C500 340 450 410 400 400 L320 390 C260 384 200 470 160 420Z"/>
+              <path class="go-route" d="M160 420 C160 360 120 330 120 260 L120 200 C120 150 140 110 200 100 L380 100 C420 100 470 90 520 110 C560 126 580 140 620 140 L680 140 C710 140 700 200 700 240 C700 280 690 300 640 310 L540 330 C500 340 450 410 400 400 L320 390 C260 384 200 470 160 420Z"/>
+              <g class="go-checkpoints"></g>
+              <g class="go-dog"><path class="go-dog__cone" d="M0 0 L60 -26 A64 64 0 0 1 60 26 Z"/><circle r="9" class="go-dog__body"/><circle r="3.5" class="go-dog__eye" cx="4"/></g>
+            </svg>
+            <div class="go-map__hud mono"><span>PATROL · T+ <b data-clock>00:00:00</b></span><span class="go-map__of">/ 03:00:00</span></div>
+          </div>
+          <ol class="go-legs">
+            <li data-cp="stairs"><span class="mono">01</span><div><h3>Stairwell</h3><p class="muted">Stairs that stop wheeled robots.</p></div></li>
+            <li data-cp="rubble"><span class="mono">02</span><div><h3>Rubble zone</h3><p class="muted">Rubble and loose ground underfoot.</p></div></li>
+            <li data-cp="crawl"><span class="mono">03</span><div><h3>Crawlspace</h3><p class="muted">A compact footprint for tunnels and crawlspaces.</p></div></li>
+            <li data-cp="equip"><span class="mono">04</span><div><h3>Equipment room</h3><p class="muted">Dense rooms full of equipment to inspect.</p></div></li>
+            <li data-cp="yard"><span class="mono">05</span><div><h3>Yard</h3><p class="muted">Outdoors, with an IP66 weather rating.</p></div></li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- Capabilities -->
+  <section class="section" aria-label="In motion">
+    <div class="container">
+      <p class="eyebrow" data-reveal>In motion</p>
+      <h2 class="h2" style="margin-top:20px;max-width:16ch" data-split>FIIRIDOG, <em>in the building.</em></h2>
+      <p class="lead" style="margin-top:20px" data-reveal>Stairs, telemetry and a route that waits for people to pass.</p>
+      <div style="margin-top:clamp(32px,4vw,56px)" data-reveal><div data-demo="video-reel" data-options='{"clips": [{"src": "media/go2-stairs.mp4", "poster": "media/go2-stairs.webp", "tag": "Go2 \u00b7 stair descent", "title": "Stairs, with full telemetry", "caption": "Landing, stair descent and ground-floor states tracked live on the quadruped."}, {"src": "media/go2-wait-route.mp4", "poster": "media/go2-wait-route.webp", "tag": "Go2 \u00b7 deterministic task", "title": "No free route, so Go2 waits", "caption": "People block the doorway; the quadruped holds, then moves through as soon as the way clears."}, {"src": "media/go2-arm-pick.mp4", "poster": "media/go2-arm-pick.webp", "tag": "Go2 + Arm \u00b7 mobile manipulation", "title": "Go2 picks up a box", "caption": "The quadruped with an arm on its back reaches down, grasps a box and carries it, shown at 3x speed."}], "layout": "grid"}'></div></div>
+    </div>
+  </section>
+    <section class="section section--paper go-caps" aria-labelledby="go-caps-title">
+      <div class="container">
+        <div class="pp-section-head">
+          <p class="eyebrow" data-reveal>Capabilities</p>
+          <h2 class="h2" id="go-caps-title" data-split>Four legs, <em>one stack.</em></h2>
+        </div>
+        <div class="grid grid-4" data-stagger>
+          <article class="card pp-cap" data-tilt="4" data-spotlight>
+            <span class="pp-cap__n mono">01</span>
+            <span class="pp-cap__icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 27h6v-5h6v-5h6v-5h8"/><path d="M22 7l2-3 3 2"/></svg></span>
+            <h3 class="h3">Rough terrain locomotion</h3>
+            <p class="muted">Handles stairs, rubble, and loose ground that stop wheeled robots.</p>
+          </article>
+          <article class="card pp-cap" data-tilt="4" data-spotlight>
+            <span class="pp-cap__n mono">02</span>
+            <span class="pp-cap__icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M16 4c-3 5-6 8-6 13a6 6 0 0 0 12 0c0-5-3-8-6-13Z"/><path d="M16 14c-1.5 2.5-3 4-3 6a3 3 0 0 0 6 0c0-2-1.5-3.5-3-6Z"/></svg></span>
+            <h3 class="h3">Thermal + RGB sensing</h3>
+            <p class="muted">Day/night inspection payloads for security and infrastructure checks.</p>
+          </article>
+          <article class="card pp-cap" data-tilt="4" data-spotlight>
+            <span class="pp-cap__n mono">03</span>
+            <span class="pp-cap__icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 24V12a13 13 0 0 1 26 0v12"/><path d="M9 24v-9a7 7 0 0 1 14 0v9"/><path d="M2 24h28"/></svg></span>
+            <h3 class="h3">Confined-space access</h3>
+            <p class="muted">Compact footprint reaches tunnels, crawlspaces, and dense equipment rooms.</p>
+          </article>
+          <article class="card pp-cap" data-tilt="4" data-spotlight>
+            <span class="pp-cap__n mono">04</span>
+            <span class="pp-cap__icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M16 3 29 9.5 16 16 3 9.5Z"/><path d="m3 16 13 6.5L29 16M3 22.5 16 29l13-6.5"/></svg></span>
+            <h3 class="h3">Autonomy Stack onboard</h3>
+            <p class="muted">Same perception-to-action pipeline as every other SAIM platform.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <div data-product-bands></div>
+  </main>
+  <script type="module" src="/src/pages/go2.js"></script>
+</body>
+</html>

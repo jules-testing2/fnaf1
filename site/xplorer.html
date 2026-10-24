@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <script>try{if(localStorage.getItem('saim-theme')==='light')document.documentElement.dataset.theme='light'}catch(e){}</script>
+  <style>html{background:#0a0a0b;color-scheme:dark}html[data-theme=light]{background:#f6f1e7;color-scheme:light}body{opacity:0;animation:saim-show .01s 1.5s forwards}@keyframes saim-show{to{opacity:1}}</style>
+  <noscript><style>body{opacity:1;animation:none}</style></noscript>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SAIM Xplorer · Autonomous mobile robots</title>
+  <meta name="description" content="One mobile platform, four builds, from lightweight indoor mapping to full off-road autonomy.">
+  <meta name="theme-color" content="#0a0a0b">
+  <meta property="og:title" content="SAIM Xplorer · Autonomous mobile robots">
+  <meta property="og:description" content="One mobile platform, four builds, from lightweight indoor mapping to full off-road autonomy.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+</head>
+<body data-page="xplorer">
+  <main id="main">
+
+    <!-- Hero: the four builds parked in front of the name -->
+    <section class="pp-hero xp-hero" aria-labelledby="xp-title">
+      <div class="pp-hero__grid-bg" aria-hidden="true"></div>
+      <div class="container">
+        <div class="pp-hero__head">
+          <p class="eyebrow" data-scramble>Autonomous mobile robots</p>
+          <span class="chip chip--live">4 builds · 1 stack</span>
+        </div>
+        <h1 class="mega xp-hero__title" id="xp-title"><span class="xp-hero__saim">SAIM</span> <em class="fire-text">Xplorer</em></h1>
+        <div class="xp-hero__fleet" role="list" aria-label="The four Xplorer builds">
+          <a class="xp-hero__bot" href="#build-a" data-build="a" role="listitem">
+            <img src="img/xplorer-a.webp" alt="Xplorer A, a compact blue indoor robot" width="355" height="234">
+            <span class="mono"><b>A</b> Indoor</span>
+          </a>
+          <a class="xp-hero__bot" href="#build-b" data-build="b" role="listitem">
+            <img src="img/xplorer-b.webp" alt="Xplorer B, a larger blue robot on off-road tyres with a camera mast" width="398" height="458">
+            <span class="mono"><b>B</b> Warehouse</span>
+          </a>
+          <a class="xp-hero__bot" href="#build-c" data-build="c" role="listitem">
+            <img src="img/xplorer-c.webp" alt="Xplorer C, a black and light-blue robot with a front shell" width="284" height="197">
+            <span class="mono"><b>C</b> Outdoor</span>
+          </a>
+          <a class="xp-hero__bot" href="#build-d" data-build="d" role="listitem">
+            <img src="img/xplorer-d.webp" alt="Xplorer D, a sand-coloured robot with a front LiDAR" width="353" height="233">
+            <span class="mono"><b>D</b> Field</span>
+          </a>
+        </div>
+        <div class="xp-hero__foot">
+          <p class="lead" data-reveal>One mobile platform, four builds: from lightweight indoor mapping to full off-road autonomy, all running the same Semantic Autonomy Stack.</p>
+          <div class="pp-hero__ctas" data-reveal data-reveal-delay="0.15">
+            <a class="btn btn--fire" href="mailto:contact@saimrobotics.com?subject=SAIM%20Xplorer%20%C2%B7%20spec%20sheet%20request" data-magnetic>Request specs sheet <span class="arrow">→</span></a>
+            <a class="btn btn--ghost" href="#builds" data-magnetic>Compare the builds</a>
+          </div>
+        </div>
+      </div>
+      <div class="pp-ticker" aria-hidden="true">
+        <div class="marquee" data-marquee="36"><div class="marquee__track mono">
+          <span>ROS 2 Jazzy</span><i></i><span>Nav2 Route Server</span><i></i><span>Raspberry Pi 5 · CPU only</span><i></i><span>2D LiDAR · 360°</span><i></i><span>Monocular camera</span><i></i><span>YOLO26n · NCNN</span><i></i><span>Angular Sector Fusion</span><i></i><span>Semantic replanning</span><i></i>
+        </div></div>
+      </div>
+    </section>
+
+    <!-- Range at a glance -->
+    <section class="section section--tight pp-stats" aria-label="Xplorer range at a glance">
+      <div class="container grid grid-4" data-stagger>
+        <div><div class="stat-value" data-counter="4">4</div><div class="stat-label">Builds, one chassis family</div></div>
+        <div><div class="stat-value" data-counter="220" data-suffix=" kg">220 kg</div><div class="stat-label">Top payload · Xplorer D</div></div>
+        <div><div class="stat-value" data-counter="48" data-suffix=" h">48 h</div><div class="stat-label">Top endurance · Xplorer D</div></div>
+        <div><div class="stat-value" data-counter="1">1</div><div class="stat-label">Semantic Autonomy Stack</div></div>
+      </div>
+    </section>
+
+    <!-- Build switcher -->
+    <section class="section xp-builds" id="builds" aria-labelledby="xp-builds-title">
+      <div class="container">
+        <div class="pp-section-head">
+          <p class="eyebrow" data-reveal>Four builds</p>
+          <h2 class="h2" id="xp-builds-title" data-split>Same brain, <em>four bodies.</em></h2>
+        </div>
+
+        <div class="xp-tabs" role="tablist" aria-label="Xplorer builds" data-reveal>
+          <button class="xp-tab" role="tab" id="xp-tab-a" aria-controls="xp-panel" aria-selected="true" data-build="a"><b>A</b><span>Indoor</span></button>
+          <button class="xp-tab" role="tab" id="xp-tab-b" aria-controls="xp-panel" aria-selected="false" tabindex="-1" data-build="b"><b>B</b><span>Warehouse</span></button>
+          <button class="xp-tab" role="tab" id="xp-tab-c" aria-controls="xp-panel" aria-selected="false" tabindex="-1" data-build="c"><b>C</b><span>Outdoor</span></button>
+          <button class="xp-tab" role="tab" id="xp-tab-d" aria-controls="xp-panel" aria-selected="false" tabindex="-1" data-build="d"><b>D</b><span>Field</span></button>
+          <span class="xp-tabs__ink" aria-hidden="true"></span>
+        </div>
+
+        <div class="xp-config" id="xp-panel" role="tabpanel" aria-labelledby="xp-tab-a" data-reveal>
+          <div class="xp-stage">
+            <canvas class="xp-stage__env" aria-hidden="true"></canvas>
+            <div class="xp-stage__hud mono" aria-hidden="true">
+              <span class="hud-c tl"></span><span class="hud-c tr"></span><span class="hud-c bl"></span><span class="hud-c br"></span>
+              <span class="xp-stage__env-label">ENV · <b data-x="env">Indoor, flat floors</b></span>
+              <span class="xp-stage__id">BUILD <b data-x="letter">A</b> / D</span>
+            </div>
+            <div class="xp-stage__photos">
+              <img class="xp-stage__photo is-active" data-build="a" src="img/xplorer-a.webp" alt="Xplorer A" width="355" height="234">
+              <img class="xp-stage__photo" data-build="b" src="img/xplorer-b.webp" alt="Xplorer B" width="398" height="458">
+              <img class="xp-stage__photo" data-build="c" src="img/xplorer-c.webp" alt="Xplorer C" width="284" height="197">
+              <img class="xp-stage__photo" data-build="d" src="img/xplorer-d.webp" alt="Xplorer D" width="353" height="233">
+            </div>
+          </div>
+
+          <div class="xp-detail">
+            <div class="xp-detail__head">
+              <span class="chip" data-x="tag">Indoor</span>
+              <h3 class="h2 xp-detail__name" data-x="name" aria-live="polite">Xplorer A</h3>
+            </div>
+            <p class="muted xp-detail__desc" data-x="desc">Lightweight AMR for indoor mapping and inspection, the entry platform for facilities getting started with autonomy. Built to run SLAM and inspection routes on a single charge, with minimal setup.</p>
+            <div class="xp-meters">
+              <div class="xp-meter">
+                <span class="mono">Payload</span>
+                <strong class="xp-meter__value" data-x="payload">25 kg</strong>
+                <span class="xp-meter__bar"><i data-x="payload-bar"></i></span>
+              </div>
+              <div class="xp-meter">
+                <span class="mono">Runtime</span>
+                <strong class="xp-meter__value" data-x="runtime">12 h</strong>
+                <span class="xp-meter__bar"><i data-x="runtime-bar"></i></span>
+              </div>
+            </div>
+            <dl class="pp-spec xp-detail__rows">
+              <div><dt data-x="row0-k">Sensing</dt><dd data-x="row0-v">LiDAR + stereo camera</dd></div>
+              <div><dt data-x="row1-k">Speed</dt><dd data-x="row1-v">1.2 m/s</dd></div>
+              <div><dt data-x="row2-k">Environment</dt><dd data-x="row2-v">Indoor, flat floors</dd></div>
+            </dl>
+            <a class="link-arrow" data-x="mail" href="mailto:contact@saimrobotics.com?subject=Xplorer%20A%20%C2%B7%20spec%20sheet%20request">Request the Xplorer A specs sheet</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Procedural digital twin with sensor view -->
+    <section class="section section--ink2 xp-twin" id="twin" aria-labelledby="xp-twin-title">
+      <div class="container xp-twin__grid">
+        <div class="xp-twin__copy stack">
+          <p class="eyebrow" data-reveal>Digital twin · sensor view</p>
+          <h2 class="h2" id="xp-twin-title" data-split>Turn it around. <em>Switch on its senses.</em></h2>
+          <p class="lead" data-reveal>A procedural model of each build on a turntable. Toggle the sensor view to see the geometry the lab robots work with: a 2D LiDAR sweeping the room in a single plane, and the camera's field of view where object detection happens.</p>
+          <div class="xp-twin__controls" data-reveal>
+            <div class="xp-seg" role="group" aria-label="Twin build">
+              <button type="button" data-twin-build="a" aria-pressed="true">A</button>
+              <button type="button" data-twin-build="b" aria-pressed="false">B</button>
+              <button type="button" data-twin-build="c" aria-pressed="false">C</button>
+              <button type="button" data-twin-build="d" aria-pressed="false">D</button>
+            </div>
+            <div class="xp-toggles" role="group" aria-label="Sensor view">
+              <button type="button" class="xp-toggle" data-sensor="lidar" aria-pressed="false"><i style="--c:var(--amber)"></i>LiDAR sweep</button>
+              <button type="button" class="xp-toggle" data-sensor="camera" aria-pressed="false"><i style="--c:var(--orange)"></i>Camera FOV</button>
+            </div>
+          </div>
+          <dl class="pp-spec pp-spec--compact" data-reveal>
+            <div><dt>2D LiDAR</dt><dd>360° · ~503 rays · 10 Hz · 0.02 to 25 m</dd></div>
+            <div><dt>Camera</dt><dd>49.8° horizontal FOV · ~70 LiDAR rays inside it</dd></div>
+            <div><dt>Scan plane</dt><dd>About 16 cm above the floor</dd></div>
+          </dl>
+          <p class="pp-note" data-reveal>Sensor geometry follows the lab's Xplorer research robots (Sensors 2026). Twin proportions are illustrative and the sweep is slowed down for the eye.</p>
+        </div>
+        <div class="xp-twin__view" data-reveal="scale">
+          <div class="xp-twin__canvas" role="img" aria-label="Rotating 3D model of the selected Xplorer build. With sensor view on, LiDAR rays sweep a room with a chair, a person, a plant, a table and a bench, and the camera's field of view is shaded in front of the robot."></div>
+          <div class="xp-twin__hud mono" aria-hidden="true">
+            <span class="hud-c tl"></span><span class="hud-c tr"></span><span class="hud-c bl"></span><span class="hud-c br"></span>
+            <span class="xp-twin__label">TWIN · <b data-twin-label>XPLORER A</b></span>
+            <span class="xp-twin__hint">Drag to rotate</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- What the robot sees: perception pipeline over an ambient point cloud -->
+    <section class="section xp-sees" id="sees" aria-labelledby="xp-sees-title">
+      <div class="xp-sees__bg" data-demo="lidar-scan" data-options='{"bare":true,"ambient":true}' aria-hidden="true"></div>
+      <div class="xp-sees__veil" aria-hidden="true"></div>
+      <div class="container xp-sees__grid">
+        <div class="stack" style="--stack-gap:1.4rem">
+          <p class="eyebrow" data-reveal>What Xplorer sees</p>
+          <h2 class="h2" id="xp-sees-title" data-split>From pixels and ranges <em>to a route that thinks.</em></h2>
+          <p class="lead" data-reveal>On the research robots everything below runs on a single Raspberry Pi 5, CPU only, under ROS 2 Jazzy and Nav2.</p>
+          <ol class="xp-steps" data-stagger>
+            <li><span class="mono">01 · Camera</span><h3 class="h3">Detect</h3><p class="muted">YOLO26n on NCNN finds people, chairs, plants and more at 5.5 ± 0.7 FPS on the Pi.</p></li>
+            <li><span class="mono">02 · 2D LiDAR</span><h3 class="h3">Range</h3><p class="muted">Angular Sector Fusion projects each box onto LiDAR rays and takes the 25th-percentile range.</p></li>
+            <li><span class="mono">03 · Semantic map</span><h3 class="h3">Remember</h3><p class="muted">Objects are classified as dynamic, static or minor and stored in a GeoJSON semantic map.</p></li>
+            <li><span class="mono">04 · Nav2 Route Server</span><h3 class="h3">Replan</h3><p class="muted">Penalties heat up graph edges; past a threshold the route is recomputed around the problem.</p></li>
+          </ol>
+          <a class="link-arrow" href="research-route-planning.html" data-reveal>Read the route-planning paper</a>
+        </div>
+        <div class="xp-sees__demo" data-reveal="right">
+          <div data-demo="route-replan" data-options='{"compact":true}'></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Real research fleet -->
+  <section class="section" aria-label="In motion">
+    <div class="container">
+      <p class="eyebrow" data-reveal>In motion</p>
+      <h2 class="h2" style="margin-top:20px;max-width:16ch" data-split>Xplorer, <em>on the job.</em></h2>
+      <p class="lead" style="margin-top:20px" data-reveal>Footage from the faculty corridors and the lab bench.</p>
+      <div style="margin-top:clamp(32px,4vw,56px)" data-reveal><div data-demo="video-reel" data-options='{"clips": [{"src": "media/xplorer-vlm-task.mp4", "poster": "media/xplorer-vlm-task.webp", "tag": "Xplorer \u00b7 VLM task", "title": "Go to the faculty entrance", "caption": "A natural-language mission resolved by the stack and driven down the faculty corridor, map overlay inset."}, {"src": "media/xplorer-arm.mp4", "poster": "media/xplorer-arm.webp", "tag": "Xplorer + Arm", "title": "Mobile manipulation", "caption": "An arm mounted on the Xplorer chassis."}], "layout": "grid"}'></div></div>
+    </div>
+  </section>
+    <section class="section section--paper xp-lab" id="lab" aria-labelledby="xp-lab-title">
+      <div class="container">
+        <div class="pp-section-head">
+          <p class="eyebrow" data-reveal>In the lab</p>
+          <h2 class="h2" id="xp-lab-title" data-split>Three robots, built in-house, <em>tested for real.</em></h2>
+        </div>
+        <div class="xp-lab__grid">
+          <figure class="figure xp-lab__fig" data-reveal="clip">
+            <div class="xp-lab__photo"><img src="img/products/xplorer-fleet.webp" alt="Three Xplorer research robots side by side on a terrazzo floor next to a potted plant: A on the left, B in the centre, C on the right" width="787" height="409" loading="lazy"></div>
+            <figcaption><b>Xplorer A, B and C.</b> The research fleet behind the Sensors 2026 route-planning paper. A and B share a single Raspberry Pi 5; C splits navigation and YOLO inference across two Pis over Ethernet.</figcaption>
+          </figure>
+          <div class="xp-lab__numbers grid grid-2" data-stagger>
+            <div><div class="stat-value" data-counter="115">115</div><div class="stat-label">Navigation legs</div></div>
+            <div><div class="stat-value" data-counter="97" data-suffix="%">97%</div><div class="stat-label">Overall success rate</div></div>
+            <div><div class="stat-value" data-counter="42">42</div><div class="stat-label">Replanning events</div></div>
+            <div><div class="stat-value" data-counter="3">3</div><div class="stat-label">Physical robots</div></div>
+          </div>
+        </div>
+        <dl class="pp-spec pp-spec--table xp-lab__table" data-stagger>
+          <div><dt>Compute</dt><dd>Raspberry Pi 5, 16 GB, ARM Cortex-A76, Ubuntu 24.04, no GPU (C adds a second Pi 5 for inference)</dd></div>
+          <div><dt>Camera</dt><dd>Logitech C920 HD, 1080p, configured at 640 × 480</dd></div>
+          <div><dt>2D LiDAR</dt><dd>STL-19P (LD19), 360°, ~503 rays, 10 Hz, 0.02 to 25 m</dd></div>
+          <div><dt>IMU</dt><dd>BNO055, 9-DoF, I2C</dd></div>
+          <div><dt>Drivetrain</dt><dd>4WD differential: goBILDA with RoboClaw controllers (A, B); hall encoders with L298N + ESP32 (C)</dd></div>
+          <div><dt>Software</dt><dd>ROS 2 Jazzy, Nav2 1.3.10: AMCL, EKF at 20 Hz, MPPI controller, Route Server</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- Hardware architecture -->
+    <section class="section xp-arch" id="architecture" aria-labelledby="xp-arch-title">
+      <div class="container">
+        <div class="pp-section-head">
+          <p class="eyebrow" data-reveal>Under the shell</p>
+          <h2 class="h2" id="xp-arch-title" data-split>Sensors in, <em>decisions out,</em> on one small board.</h2>
+          <p class="lead" data-reveal>The Xplorer A/B architecture from the paper: every sensor stream lands on a Raspberry Pi 5 where Nav2, the Route Server, YOLO26 and the Semantic Localizer share the CPU.</p>
+        </div>
+        <div class="xp-arch__board" data-arch>
+          <div class="xp-arch__col" data-stagger>
+            <div class="xp-arch__node is-sensor"><span class="mono">LaserScan</span><strong>2D LiDAR</strong><small>STL-19P</small></div>
+            <div class="xp-arch__node is-sensor"><span class="mono">Image</span><strong>RGB camera</strong><small>Logitech C920</small></div>
+            <div class="xp-arch__node is-sensor"><span class="mono">IMU</span><strong>Inertial unit</strong><small>BNO055</small></div>
+            <div class="xp-arch__node is-sensor"><span class="mono">GPS</span><strong>GPS RTK</strong><small>UM982 + EM901A</small></div>
+          </div>
+          <div class="xp-arch__wires" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+          <div class="xp-arch__core" data-reveal="scale">
+            <div class="xp-arch__chip mono">Raspberry Pi 5 · 16 GB · Ubuntu 24.04 · ROS 2 Jazzy</div>
+            <div class="xp-arch__sw">
+              <div><strong>Xplorer bringup</strong><small>ros2_control hardware interface, sensor drivers</small></div>
+              <div><strong>Nav2</strong><small>AMCL, planner, controller, behaviour and BT navigator servers</small></div>
+              <div><strong>Nav2 Route Server</strong><small>graph routing, penalty-weighted replanning</small></div>
+              <div><strong>YOLO26</strong><small>NCNN inference + diagnostics</small></div>
+              <div class="is-wide"><strong>Semantic Localizer</strong><small>Angular Sector Fusion · SemanticMapManager · navigation graph annotation</small></div>
+            </div>
+          </div>
+          <div class="xp-arch__wires is-right" aria-hidden="true"><i></i><i></i><i></i></div>
+          <div class="xp-arch__col" data-stagger>
+            <div class="xp-arch__node is-act"><span class="mono">Odometry · joint states</span><strong>Left motor controller</strong><small>RoboClaw 2 × 15A · 2 encoders</small></div>
+            <div class="xp-arch__node is-act"><span class="mono">Odometry · joint states</span><strong>Right motor controller</strong><small>RoboClaw 2 × 15A · 2 encoders</small></div>
+            <div class="xp-arch__node is-power"><span class="mono">Power</span><strong>12 V Li-ion + BMS</strong><small>Pi 5 via USB-PD at 5 V</small></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div data-product-bands></div>
+  </main>
+  <script type="module" src="/src/pages/xplorer.js"></script>
+</body>
+</html>

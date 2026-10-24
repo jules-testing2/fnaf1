@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <script>try{if(localStorage.getItem('saim-theme')==='light')document.documentElement.dataset.theme='light'}catch(e){}</script>
+  <style>html{background:#0a0a0b;color-scheme:dark}html[data-theme=light]{background:#f6f1e7;color-scheme:light}body{opacity:0;animation:saim-show .01s 1.5s forwards}@keyframes saim-show{to{opacity:1}}</style>
+  <noscript><style>body{opacity:1;animation:none}</style></noscript>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SAIM Robotics · Physical autonomy in the real world</title>
+  <meta name="description" content="SAIM Robotics builds mobile robots, humanoid and quadruped platforms and manipulation arms, all driven by one Semantic Autonomy Stack and backed by published research.">
+  <meta name="theme-color" content="#0a0a0b">
+  <meta property="og:title" content="SAIM Robotics · Physical autonomy in the real world">
+  <meta property="og:description" content="SAIM Robotics builds mobile robots, humanoid and quadruped platforms and manipulation arms, all driven by one Semantic Autonomy Stack and backed by published research.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <!-- First visit of the session gets a short boot intro; decided before first paint to avoid a flash. -->
+  <script>
+    try {
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.documentElement.classList.add('hero-pending');
+        if (!sessionStorage.getItem('saim:intro')) document.documentElement.classList.add('has-intro');
+      }
+    } catch (e) {}
+  </script>
+</head>
+<body data-page="index">
+  <div class="intro" data-intro aria-hidden="true">
+    <div class="intro__grid"></div>
+    <div class="intro__inner">
+      <img class="intro__logo" src="img/logo-white.webp" alt="" width="545" height="218">
+      <ol class="intro__log">
+        <li><span>L0</span> Mobile platform</li>
+        <li><span>L1</span> Navigation execution</li>
+        <li><span>L2</span> Perception · semantic map</li>
+        <li><span>L3</span> Semantic reasoning</li>
+        <li><span>L4</span> Mission interface</li>
+        <li><span>L5</span> Operational memory</li>
+      </ol>
+      <div class="intro__meter"><span class="intro__count">000</span><span class="intro__bar"><i></i></span><span>SAS online</span></div>
+    </div>
+    <p class="intro__skip">Click or press any key to skip</p>
+  </div>
+
+  <main id="main">
+    <!-- ============ HERO ============ -->
+    <section class="hero" data-hero aria-labelledby="hero-title">
+      <div class="hero__stage" data-hero-stage role="img" aria-label="Robot's-eye view: a rotating LiDAR sweep reveals a point cloud of a room around a small mobile robot. Detected objects such as a person, chairs, a table and a couch get labelled boxes, and the planned route glows ahead of the robot, around an edge penalised by a walking person.">
+        <svg class="hero__poster" viewBox="0 0 1000 700" aria-hidden="true">
+          <defs>
+            <radialGradient id="hp-glow" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#fa520f" stop-opacity=".55"/><stop offset="1" stop-color="#fa520f" stop-opacity="0"/></radialGradient>
+            <linearGradient id="hp-route" x1="0" x2="1"><stop offset="0" stop-color="#ffb547"/><stop offset=".6" stop-color="#fa520f"/><stop offset="1" stop-color="#c1121f"/></linearGradient>
+            <linearGradient id="hp-wedge" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#ffb547" stop-opacity=".5"/><stop offset="1" stop-color="#fa520f" stop-opacity="0"/></linearGradient>
+            <pattern id="hp-dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="#f3eee4" fill-opacity=".14"/></pattern>
+          </defs>
+          <rect x="100" y="70" width="800" height="560" fill="url(#hp-dots)"/>
+          <g fill="none" stroke="#ff7a2f" stroke-width="3" stroke-linecap="round" stroke-dasharray="0 7" opacity=".85">
+            <path d="M100 318 V70 H900 V630 H100 V382"/><path d="M360 70 V222"/>
+            <rect x="700" y="76" width="120" height="20"/><rect x="822" y="562" width="64" height="48"/>
+          </g>
+          <circle cx="320" cy="250" r="230" fill="url(#hp-glow)" opacity=".5"/>
+          <g fill="none" stroke="#ffb547" stroke-opacity=".22" stroke-dasharray="2 8"><circle cx="320" cy="250" r="90"/><circle cx="320" cy="250" r="180"/><circle cx="320" cy="250" r="270"/></g>
+          <path d="M320 250 L590 250 A270 270 0 0 0 551 110 Z" fill="url(#hp-wedge)"/>
+          <g fill="none" stroke="#f3eee4" stroke-opacity=".18" stroke-width="1.5">
+            <path d="M200 470 L200 290 L260 150 M200 290 L440 210 M200 470 L340 550 L440 450 L440 210 L560 222 L700 210 L820 250 L820 450 L700 382 L560 438 L440 450 M700 382 L700 210 M560 438 L640 550 L340 550"/>
+          </g>
+          <path d="M820 450 L640 550" stroke="#ff4d5e" stroke-width="3" stroke-dasharray="6 6"/>
+          <path d="M320 250 L440 210 L560 222 L700 210 L820 250 L820 450 L700 382 L560 438" fill="none" stroke="url(#hp-route)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+          <g fill="#0a0a0b" stroke="#ffb547" stroke-width="2.5">
+            <circle cx="200" cy="470" r="6"/><circle cx="200" cy="290" r="6"/><circle cx="260" cy="150" r="6"/><circle cx="440" cy="210" r="6"/><circle cx="440" cy="450" r="6"/><circle cx="560" cy="222" r="6"/><circle cx="560" cy="438" r="6"/><circle cx="700" cy="210" r="6"/><circle cx="820" cy="250" r="6"/><circle cx="820" cy="450" r="6"/><circle cx="700" cy="382" r="6"/><circle cx="640" cy="550" r="6"/><circle cx="340" cy="550" r="6"/>
+          </g>
+          <g fill="none" stroke-width="2.5">
+            <rect x="694" y="470" width="30" height="30" stroke="#ff4d5e"/><circle cx="709" cy="485" r="40" stroke="#ff4d5e" stroke-opacity=".35" stroke-width="14"/>
+            <rect x="514" y="306" width="92" height="48" stroke="#7ce0c3"/>
+            <rect x="484" y="318" width="26" height="24" stroke="#5bc0eb"/><rect x="610" y="318" width="26" height="24" stroke="#5bc0eb"/>
+            <rect x="190" y="566" width="100" height="40" stroke="#9b8cff"/><rect x="126" y="92" width="36" height="36" stroke="#7ce0c3"/><rect x="96" y="316" width="14" height="68" stroke="#9b8cff"/>
+          </g>
+          <g font-family="JetBrains Mono Variable, monospace" font-size="13" letter-spacing="1">
+            <text x="694" y="460" fill="#ff4d5e">PERSON 0.91</text><text x="514" y="298" fill="#7ce0c3">TABLE 0.88</text>
+            <text x="190" y="556" fill="#9b8cff">COUCH 0.79</text><text x="170" y="116" fill="#7ce0c3">PLANT 0.81</text><text x="118" y="410" fill="#9b8cff">DOOR 0.76</text>
+            <text x="748" y="534" fill="#ff4d5e" opacity=".8">PENALTY ↑</text>
+          </g>
+          <g transform="translate(320 250) rotate(-18)"><rect x="-17" y="-12" width="34" height="24" rx="4" fill="#1b1b1e" stroke="#fa520f" stroke-width="2"/><circle cx="6" r="5" fill="#ffb547"/></g>
+        </svg>
+        <div class="hero__labels" data-hero-labels aria-hidden="true"></div>
+      </div>
+      <div class="hero__shade" aria-hidden="true"></div>
+
+      <div class="hero__hud" aria-hidden="true">
+        <div class="hud hud--tl">
+          <span class="hud__k">Xplorer · live</span>
+          <span class="hud__v"><b data-hud-mode>Perception · LiDAR sweep</b></span>
+        </div>
+        <div class="hud hud--br">
+          <span class="hud__row"><span>Points</span><b data-hud="points">38,412</b></span>
+          <span class="hud__row"><span>Objects</span><b data-hud="objects">7 / 7</b></span>
+          <span class="hud__row"><span>Sweep</span><b data-hud="heading">126°</b></span>
+          <span class="hud__row"><span>Pose</span><b data-hud="pose">-4.6, -3.1</b></span>
+          <span class="hud__row"><span>Detector</span><b>YOLO26n · ASF</b></span>
+        </div>
+        <i class="hud-corner hud-corner--tl"></i><i class="hud-corner hud-corner--tr"></i><i class="hud-corner hud-corner--bl"></i><i class="hud-corner hud-corner--br"></i>
+      </div>
+
+      <div class="container hero__content">
+        <p class="eyebrow hero__eyebrow">SAIM · Systems for Autonomous Intelligent Mobility</p>
+        <h1 class="mega hero__title" id="hero-title"><span class="hero__line">Physical autonomy.</span> <span class="hero__line"><em class="fire-text">In the real world.</em></span></h1>
+        <p class="lead hero__lead">We build mobile robots, a humanoid, a quadruped and manipulation arms. Every one of them runs the same Semantic Autonomy Stack: it detects, maps, plans and reasons about what it sees, then acts.</p>
+        <div class="hero__ctas">
+          <a class="btn btn--fire" href="stack.html" data-magnetic>Explore the Autonomy Stack <span class="arrow">→</span></a>
+          <a class="btn btn--ghost" href="xplorer.html" data-magnetic>Meet the platforms</a>
+        </div>
+        <p class="hero__proof mono">Published in <b>Sensors 2025</b> · <b>Sensors 2026</b> · <b>Robotics and Autonomous Systems 2027</b></p>
+      </div>
+
+      <p class="hero__mapnote" aria-hidden="true"><span class="mono">Semantic map · top-down</span>The same room, as the robot stores it: classified objects, a penalised edge where a person walks, and the route planned around it.</p>
+      <div class="hero__cue mono" aria-hidden="true"><i></i>Scroll</div>
+    </section>
+
+    <!-- ============ CAPABILITY MARQUEE ============ -->
+    <section class="home-marquee" aria-label="Capabilities">
+      <div class="marquee marquee--big" data-marquee="42">
+        <div class="marquee__track">
+          <span>Semantic mapping</span><i aria-hidden="true"></i><span><em>LiDAR + camera fusion</em></span><i aria-hidden="true"></i>
+          <span>YOLO26n detection</span><i aria-hidden="true"></i><span><em>Route replanning</em></span><i aria-hidden="true"></i>
+          <span>VLM reasoning</span><i aria-hidden="true"></i><span><em>Shared operational memory</em></span><i aria-hidden="true"></i>
+          <span>Bipedal locomotion</span><i aria-hidden="true"></i><span><em>Grasp planning</em></span><i aria-hidden="true"></i>
+        </div>
+      </div>
+      <div class="marquee marquee--mono" data-marquee="-28">
+        <div class="marquee__track">
+          <span>Angular Sector Fusion</span><span>Nav2 Route Server</span><span>GeoJSON semantic map</span><span>EKF localisation</span>
+          <span>Deterministic-first resolver</span><span>Edge inference · Raspberry Pi 5</span><span>ROS 2</span><span>All-terrain navigation</span><span>Thermal + RGB sensing</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ MANIFESTO + NUMBERS ============ -->
+    <section class="section section--paper manifesto" aria-labelledby="manifesto-title">
+      <div class="container">
+        <div class="manifesto__head">
+          <p class="eyebrow" id="manifesto-title">What SAIM does</p>
+          <span class="mono manifesto__meta">FIIR · POLITEHNICA Bucharest · RO</span>
+        </div>
+        <p class="manifesto__text" data-scrub-words>We build robots that understand what they see well enough to act on it. Wheels, legs or arms, every SAIM body shares one Semantic Autonomy Stack: it finds objects, places them on a map, routes around what they mean and works out where an instruction should lead. <em>One stack. Every body.</em></p>
+
+        <div class="numbers">
+          <div class="numbers__group">
+            <p class="numbers__title mono">The fleet</p>
+            <div class="numbers__grid">
+              <div class="num"><span class="num__v" data-counter="4">4</span><span class="num__l">Xplorer generations, A to D</span></div>
+              <div class="num"><span class="num__v" data-counter="2">2</span><span class="num__l">Legged platforms, G1 humanoid and Go2 quadruped</span></div>
+              <div class="num"><span class="num__v"><span data-counter="6">6</span><small>DOF</small></span><span class="num__l">Manipulation arms, on Xplorer, G1 or a fixed base</span></div>
+              <div class="num"><span class="num__v" data-counter="1">1</span><span class="num__l">Semantic Autonomy Stack running on all of them</span></div>
+            </div>
+          </div>
+          <div class="numbers__group">
+            <p class="numbers__title mono">The evidence</p>
+            <div class="numbers__grid">
+              <div class="num"><span class="num__v fire-text" data-counter="97" data-suffix="%">97%</span><span class="num__l">Navigation success over 115 legs on 3 robots</span><span class="num__src mono">Sensors 2026</span></div>
+              <div class="num"><span class="num__v"><small>85→</small><span data-counter="48" data-suffix="%">48%</span></span><span class="num__l">Average CPU load once detection is offloaded</span><span class="num__src mono">Sensors 2026</span></div>
+              <div class="num"><span class="num__v"><span data-counter="112">112</span><small>/216</small></span><span class="num__l">Decision cycles resolved deterministically, at sub-millisecond resolver latency</span><span class="num__src mono">RAS 2027</span></div>
+              <div class="num"><span class="num__v" data-counter="0.0061" data-decimals="4">0.0061</span><span class="num__l">Pose estimation MAE with AI-predicted covariance</span><span class="num__src mono">Sensors 2025</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PLATFORMS ============ -->
+    <section class="plats" data-plats aria-labelledby="plats-title">
+      <div class="plats__pin">
+        <div class="container plats__head">
+          <div>
+            <p class="eyebrow">Platforms</p>
+            <h2 class="h2" id="plats-title" data-split>Wheels, legs <em>and arms.</em></h2>
+          </div>
+          <p class="muted plats__intro">Seven bodies, from a lightweight indoor AMR to a humanoid. The software does not change between them: the same perception, reasoning and planning layers run on each.</p>
+        </div>
+
+        <div class="plats__viewport">
+          <ol class="plats__track" data-plats-track>
+            <li class="plat" style="--accent:#5bc0eb">
+              <div class="plat__text">
+                <p class="plat__index mono"><span>01</span> Xplorer · Indoor</p>
+                <h3 class="plat__name">Xplorer <em>A</em></h3>
+                <p class="plat__desc">Lightweight AMR for indoor mapping and inspection. The entry platform for facilities getting started with autonomy.</p>
+                <ul class="plat__specs"><li><b>25 kg</b> payload</li><li><b>12 h</b> runtime</li><li><b>1.2 m/s</b> speed</li><li>LiDAR + stereo</li></ul>
+                <a class="link-arrow" href="xplorer.html">Xplorer series</a>
+              </div>
+              <div data-mark="A" class="plat__stage"><div class="plat__ring" aria-hidden="true"><i></i></div><img class="plat__img plat__img--xs" src="img/xplorer-a.webp" alt="SAIM Xplorer A, a blue four-wheeled indoor robot with a LiDAR on its top plate" width="355" height="234" loading="lazy" decoding="async"></div>
+            </li>
+            <li class="plat" style="--accent:#fa520f">
+              <div class="plat__text">
+                <p class="plat__index mono"><span>02</span> Xplorer · Warehouse</p>
+                <h3 class="plat__name">Xplorer <em>B</em></h3>
+                <p class="plat__desc">Warehouse-grade robot for repeat logistics routes, fleet coordination and dock-to-shelf transport. One of the two robots in our semantic autonomy study.</p>
+                <ul class="plat__specs"><li><b>150 kg</b> payload</li><li>Fleet-ready</li><li>Auto-charging</li><li>RAS 2027 platform</li></ul>
+                <a class="link-arrow" href="xplorer.html">Xplorer series</a>
+              </div>
+              <div data-mark="B" class="plat__stage"><div class="plat__ring" aria-hidden="true"><i></i></div><img class="plat__img plat__img--xs plat__img--tall" src="img/xplorer-b.webp" alt="SAIM Xplorer B, a blue robot with a camera mast and coloured cubes on its deck" width="398" height="458" loading="lazy" decoding="async"></div>
+            </li>
+            <li class="plat" style="--accent:#7ce0c3">
+              <div class="plat__text">
+                <p class="plat__index mono"><span>03</span> Xplorer · Outdoor</p>
+                <h3 class="plat__name">Xplorer <em>C</em></h3>
+                <p class="plat__desc">Ruggedised for uneven ground and outdoor weather: perimeter patrol and site inspection. Runs detection on a second, dedicated Raspberry Pi 5.</p>
+                <ul class="plat__specs"><li><b>IP65</b></li><li>All-terrain</li><li><b>8 h</b> runtime</li><li>Dual RPi 5</li></ul>
+                <a class="link-arrow" href="xplorer.html">Xplorer series</a>
+              </div>
+              <div data-mark="C" class="plat__stage"><div class="plat__ring" aria-hidden="true"><i></i></div><img class="plat__img plat__img--xs" src="img/xplorer-c.webp" alt="SAIM Xplorer C, a compact light-blue robot with off-road tyres" width="284" height="197" loading="lazy" decoding="async"></div>
+            </li>
+            <li class="plat" style="--accent:#e8c27a">
+              <div class="plat__text">
+                <p class="plat__index mono"><span>04</span> Xplorer · Field</p>
+                <h3 class="plat__name">Xplorer <em>D</em></h3>
+                <p class="plat__desc">Full off-road autonomy for unstructured terrain. The flagship Xplorer for defense and field-research deployments.</p>
+                <ul class="plat__specs"><li><b>4x4</b> drive</li><li>Long-range comms</li><li><b>48 h</b> endurance</li></ul>
+                <a class="link-arrow" href="xplorer.html">Xplorer series</a>
+              </div>
+              <div data-mark="D" class="plat__stage"><div class="plat__ring" aria-hidden="true"><i></i></div><img class="plat__img plat__img--xs" src="img/xplorer-d.webp" alt="SAIM Xplorer D, a sand-coloured four-wheel-drive field robot" width="353" height="233" loading="lazy" decoding="async"></div>
+            </li>
+            <li class="plat" style="--accent:#f3eee4">
+              <div class="plat__text">
+                <p class="plat__index mono"><span>05</span> Humanoid</p>
+                <h3 class="plat__name">G1 <em>FIIRION</em></h3>
+                <p class="plat__desc">A bipedal humanoid for tasks that need human-scale reach and dexterity: lab manipulation, guided interaction and shared workspaces.</p>
+                <ul class="plat__specs"><li><b>1.7 m</b> tall</li><li><b>43</b> DOF</li><li><b>2x</b> dexterous hands</li><li><b>2 h</b> active</li></ul>
+                <a class="link-arrow" href="g1.html">Meet G1</a>
+              </div>
+              <div data-mark="G1" class="plat__stage plat__stage--tall"><div class="plat__ring" aria-hidden="true"><i></i></div><img class="plat__img plat__img--g1" src="img/g1.webp" alt="SAIM G1 FIIRION humanoid robot waving" width="526" height="1172" loading="lazy" decoding="async"></div>
+            </li>
+            <li class="plat" style="--accent:#9b8cff">
+              <div class="plat__text">
+                <p class="plat__index mono"><span>06</span> Quadruped</p>
+                <h3 class="plat__name">Go2 <em>FIIRIDOG</em></h3>
+                <p class="plat__desc">A quadruped for rough terrain and confined spaces where wheels can't go: inspection, reconnaissance and payload delivery.</p>
+                <ul class="plat__specs"><li><b>45°</b> slopes</li><li><b>IP66</b></li><li><b>3 h</b> patrol</li><li>Thermal + RGB</li></ul>
+                <a class="link-arrow" href="go2.html">Meet Go2</a>
+              </div>
+              <div data-mark="Go2" class="plat__stage"><div class="plat__ring" aria-hidden="true"><i></i></div><img class="plat__img plat__img--go2" src="img/go2.webp" alt="SAIM Go2 FIIRIDOG quadruped robot with a sensor mast" width="833" height="1023" loading="lazy" decoding="async"></div>
+            </li>
+            <li class="plat" style="--accent:#ffb547">
+              <div class="plat__text">
+                <p class="plat__index mono"><span>07</span> Manipulation</p>
+                <h3 class="plat__name">Arm <em>series</em></h3>
+                <p class="plat__desc">6-DOF arms that mount on Xplorer, on G1 or on a fixed base, sharing the stack's perception and grasp-planning modules.</p>
+                <ul class="plat__specs"><li><b>6</b> DOF</li><li><b>5 kg</b> payload</li><li><b>850 mm</b> reach</li><li><b>±0.1 mm</b></li></ul>
+                <a class="link-arrow" href="arms.html">See the Arm series</a>
+              </div>
+              <div data-mark="Arm" class="plat__stage"><div class="plat__ring" aria-hidden="true"><i></i></div><img class="plat__img plat__img--arm" src="img/arm.webp" alt="SAIM 6-DOF robotic arm holding a yellow gripper" width="889" height="856" loading="lazy" decoding="async"></div>
+            </li>
+          </ol>
+        </div>
+
+        <div class="container plats__foot" aria-hidden="true">
+          <span class="mono"><b data-plats-count>01</b> / 07</span>
+          <span class="plats__bar"><i data-plats-bar></i></span>
+          <span class="mono plats__hint">Scroll to drive</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ STACK TEASER ============ -->
+  <section class="section" aria-label="Footage from the lab">
+    <div class="container">
+      <p class="eyebrow" data-reveal>Footage from the lab</p>
+      <h2 class="h2" style="margin-top:20px;max-width:16ch" data-split>Real robots. <em>Real runs.</em></h2>
+      <p class="lead" style="margin-top:20px" data-reveal>No renders here: every clip is a SAIM robot running the Semantic Autonomy Stack in the faculty building.</p>
+      <div style="margin-top:clamp(32px,4vw,56px)" data-reveal><div data-demo="video-reel" data-options='{"clips": [{"src": "media/xplorer-vlm-task.mp4", "poster": "media/xplorer-vlm-task.webp", "tag": "Xplorer \u00b7 VLM task", "title": "Go to the faculty entrance", "caption": "A natural-language mission resolved by the stack and driven down the faculty corridor, map overlay inset."}, {"src": "media/go2-wait-route.mp4", "poster": "media/go2-wait-route.webp", "tag": "Go2 \u00b7 deterministic task", "title": "No free route, so Go2 waits", "caption": "People block the doorway; the quadruped holds, then moves through as soon as the way clears."}, {"src": "media/g1-sas-nav.mp4", "poster": "media/g1-sas-nav.webp", "tag": "G1 FIIRION \u00b7 SAS L0-L1", "title": "Autonomous navigation on the humanoid", "caption": "The same stack running on the G1, with live localisation and goal telemetry."}, {"src": "media/go2-stairs.mp4", "poster": "media/go2-stairs.webp", "tag": "Go2 \u00b7 stair descent", "title": "Stairs, with full telemetry", "caption": "Landing, stair descent and ground-floor states tracked live on the quadruped."}, {"src": "media/go2-arm-pick.mp4", "poster": "media/go2-arm-pick.webp", "tag": "Go2 + Arm \u00b7 mobile manipulation", "title": "Go2 picks up a box", "caption": "The quadruped with an arm on its back reaches down, grasps a box and carries it, shown at 3x speed."}], "layout": "feature"}'></div></div>
+    </div>
+  </section>
+    <section class="section section--ink2 stack" data-stack aria-labelledby="stack-title">
+      <div class="container stack__grid">
+        <div class="stack__copy">
+          <p class="eyebrow">The Semantic Autonomy Stack</p>
+          <h2 class="h2" id="stack-title" data-split>One stack. <em>Every body.</em></h2>
+          <p class="lead">Six layers, from the motors to memory. Navigation and perception run on the robot. Reasoning tries a deterministic resolver first and only asks a vision-language model when the rules cannot settle an instruction.</p>
+          <ol class="stack__list" data-stack-list>
+            <li><button type="button" data-layer="5"><span class="mono">L5</span><b>Operational memory</b><small>Scoped memory M1 to M5: environment, temporal patterns, learned instruction-node associations, platform capabilities, task history.</small></button></li>
+            <li><button type="button" data-layer="4"><span class="mono">L4</span><b>Mission interface</b><small>Natural-language and structured operator or fleet commands enter here, through one stable interface.</small></button></li>
+            <li><button type="button" data-layer="3"><span class="mono">L3</span><b>Semantic reasoning</b><small>A seven-step deterministic-first resolver (L3a); unresolved or guarded cases escalate to a VLM (L3b).</small></button></li>
+            <li><button type="button" data-layer="2"><span class="mono">L2</span><b>Perception and semantic map</b><small>YOLO26n detection, camera and 2D LiDAR fused by Angular Sector Fusion, a persistent GeoJSON semantic map.</small></button></li>
+            <li><button type="button" data-layer="1"><span class="mono">L1</span><b>Navigation execution</b><small>ROS 2 and Nav2: localisation, penalty-weighted route planning, path following, obstacle avoidance.</small></button></li>
+            <li><button type="button" data-layer="0"><span class="mono">L0</span><b>Mobile platform</b><small>Wheels or legs, sensors, power, low-level control and onboard compute.</small></button></li>
+          </ol>
+        </div>
+
+        <div class="sas" data-sas aria-hidden="true">
+          <div class="sas__scene">
+            <div class="sas__plate" data-plate="0" style="--i:0"><span>L0 · Platform</span></div>
+            <div class="sas__plate" data-plate="1" style="--i:1"><span>L1 · Navigation</span></div>
+            <div class="sas__plate" data-plate="2" style="--i:2"><span>L2 · Perception</span></div>
+            <div class="sas__plate" data-plate="3" style="--i:3"><span>L3 · Reasoning</span></div>
+            <div class="sas__plate" data-plate="4" style="--i:4"><span>L4 · Mission</span></div>
+            <div class="sas__plate" data-plate="5" style="--i:5"><span>L5 · Memory</span></div>
+          </div>
+          <div class="sas__flow mono">
+            <span>Instruction</span><i></i><span>L4</span><i></i><span class="is-fast">L3a resolver</span><i class="is-dashed"></i><span class="is-slow">L3b VLM</span><i></i><span>L1 goal</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="container stack__montage">
+        <div class="stack__montage-head">
+          <p class="mono muted">One synchronised run · camera, LiDAR and route map</p>
+          <a class="link-arrow" href="stack.html">Explore the Autonomy Stack</a>
+        </div>
+        <div data-demo="sensor-montage" data-options='{"compact":true}'></div>
+      </div>
+    </section>
+
+    <!-- ============ RESEARCH ============ -->
+    <section class="section section--paper research" aria-labelledby="research-title">
+      <div class="container">
+        <div class="research__head">
+          <div>
+            <p class="eyebrow">Research</p>
+            <h2 class="h2" id="research-title" data-split>Measured on <em>real robots.</em></h2>
+          </div>
+          <p class="muted research__intro">The stack is built on peer-reviewed work, tested on our own platforms, with open code. <a class="link-arrow" href="research.html">All research</a></p>
+        </div>
+
+        <div class="research__line" aria-hidden="true">
+          <svg viewBox="0 0 1200 40" preserveAspectRatio="none" data-draw><path d="M0 20 H1200" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+          <span style="--x:16.6%">2025</span><span style="--x:50%">2026</span><span style="--x:83.3%">2027</span>
+        </div>
+
+        <div class="research__cards">
+          <a class="paper card" href="research-covariance.html" data-tilt="4" data-spotlight>
+            <div class="paper__top"><span class="chip">Sensors 2025</span><img src="img/research-ros2.webp" alt="" width="600" height="600" loading="lazy"></div>
+            <p class="paper__area mono">Localisation · Layer L1</p>
+            <h3 class="paper__title">AI-driven dynamic covariance for ROS 2 mobile robot localisation</h3>
+            <div class="paper__metric"><span class="paper__num" data-counter="0.0061" data-decimals="4">0.0061</span><span class="paper__unit">pose estimation MAE</span></div>
+            <p class="paper__sub">A Random Forest predicts EKF covariance in real time. Median yaw error 0.0362 rad in static runs.</p>
+            <span class="link-arrow">Read the research</span>
+          </a>
+          <a class="paper card" href="research-route-planning.html" data-tilt="4" data-spotlight>
+            <div class="paper__top"><span class="chip">Sensors 2026</span><img src="img/research-route.webp" alt="" width="600" height="600" loading="lazy"></div>
+            <p class="paper__area mono">Perception + routing · L1 and L2</p>
+            <h3 class="paper__title">Lightweight semantic-aware route planning on edge hardware</h3>
+            <div class="paper__metric"><span class="paper__num" data-counter="97" data-suffix="%">97%</span><span class="paper__unit">navigation success, 115 legs, 3 robots</span></div>
+            <p class="paper__sub">YOLO26n and 2D LiDAR fused on a Raspberry Pi 5. 42 replanning events; navigation-time spread down from σ 31.1 s to 11.0 s.</p>
+            <span class="link-arrow">Read the research</span>
+          </a>
+          <a class="paper card" href="research-vlm-autonomy.html" data-tilt="4" data-spotlight>
+            <div class="paper__top"><span class="chip">Robotics and Autonomous Systems 2027</span><img src="img/research-vlm.webp" alt="" width="600" height="600" loading="lazy"></div>
+            <p class="paper__area mono">Reasoning + memory · L3 to L5</p>
+            <h3 class="paper__title">A semantic autonomy framework for VLM-integrated indoor mobile robots</h3>
+            <div class="paper__metric"><span class="paper__num"><span data-counter="112">112</span><small>/216</small></span><span class="paper__unit">decision cycles resolved deterministically</span></div>
+            <p class="paper__sub">The six-layer SAS on two physical robots: a deterministic-first resolver, selective VLM escalation and reusable operational memory.</p>
+            <span class="link-arrow">Read the research</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ USE CASES ============ -->
+    <section class="section usecases" aria-labelledby="uses-title">
+      <div class="usecases__bg" aria-hidden="true"><div data-demo="lidar-scan" data-options='{"bare":true,"ambient":true,"aspect":1.5}'></div></div>
+      <div class="container">
+        <div class="usecases__head">
+          <p class="eyebrow">Use cases</p>
+          <h2 class="h2" id="uses-title" data-split>Where SAIM <em>operates.</em></h2>
+        </div>
+        <ul class="uses" data-uses>
+          <li class="use is-active" tabindex="0">
+            <span class="use__n mono">01</span>
+            <svg class="use__icon" viewBox="0 0 64 64" aria-hidden="true"><path d="M8 54V22l24-12 24 12v32M16 54V32h32v22M16 40h32M16 47h32M26 32v22M38 32v22"/></svg>
+            <h3 class="use__title">Warehousing</h3>
+            <div class="use__body"><div><p>Autonomous transport and inventory checks across dynamic floor layouts, with routes that adapt when people and objects move.</p><p class="use__tags mono">Xplorer B · Arm on Xplorer</p></div></div>
+          </li>
+          <li class="use" tabindex="0">
+            <span class="use__n mono">02</span>
+            <svg class="use__icon" viewBox="0 0 64 64" aria-hidden="true"><path d="M6 50l14-22 10 12 10-18 18 28zM32 8v8M32 8l8 3-8 3"/></svg>
+            <h3 class="use__title">Defense &amp; field ops</h3>
+            <div class="use__body"><div><p>Reconnaissance and payload delivery across unstructured, contested terrain, far from fixed infrastructure.</p><p class="use__tags mono">Xplorer D · Go2</p></div></div>
+          </li>
+          <li class="use" tabindex="0">
+            <span class="use__n mono">03</span>
+            <svg class="use__icon" viewBox="0 0 64 64" aria-hidden="true"><circle cx="27" cy="27" r="15"/><path d="M38 38l16 16M20 27h14M27 20v14"/></svg>
+            <h3 class="use__title">Industrial inspection</h3>
+            <div class="use__body"><div><p>Recurring facility and perimeter inspection without fixed infrastructure, day or night with thermal and RGB sensing.</p><p class="use__tags mono">Xplorer C · Go2</p></div></div>
+          </li>
+          <li class="use" tabindex="0">
+            <span class="use__n mono">04</span>
+            <svg class="use__icon" viewBox="0 0 64 64" aria-hidden="true"><path d="M24 8h16M28 8v16L12 52a4 4 0 0 0 4 4h32a4 4 0 0 0 4-4L36 24V8M20 40h24"/></svg>
+            <h3 class="use__title">Research</h3>
+            <div class="use__body"><div><p>A shared autonomy stack for labs prototyping new bodies and behaviours, built on ROS 2 and Nav2 with open code.</p><p class="use__tags mono">Every platform · SAS</p></div></div>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ ABOUT ============ -->
+    <section class="section section--paper about" id="about" aria-labelledby="about-title">
+      <div class="container about__grid">
+        <div class="about__visual">
+          <figure class="about__frame" data-reveal="clip">
+            <img src="img/lynx-team.webp" alt="Illustrated collage of the SAIM lynx mascot coding, building robots, reading and presenting" width="1536" height="1024" loading="lazy" data-parallax="0.12">
+          </figure>
+          <div class="about__badge" aria-hidden="true">
+            <svg viewBox="0 0 200 200"><defs><path id="badge-circle" d="M100 100 m-80 0 a80 80 0 1 1 160 0 a80 80 0 1 1 -160 0"/></defs><text><textPath href="#badge-circle">SAIM ROBOTICS · BUCHAREST · ROMANIA · EST. AT FIIR · </textPath></text></svg>
+            <img src="img/lynx-reading.webp" alt="" width="900" height="928" loading="lazy">
+          </div>
+        </div>
+        <div class="about__copy">
+          <p class="eyebrow">About the lab</p>
+          <h2 class="h2" id="about-title" data-split>Systems for Autonomous <em>Intelligent Mobility.</em></h2>
+          <p class="lead">SAIM Robotics is a Romanian robotics lab at the Faculty of Industrial Engineering and Robotics (FIIR), National University of Science and Technology POLITEHNICA Bucharest. It began as a class of innovation where students learn by building things in house.</p>
+          <blockquote class="about__quote" data-reveal>Our mission: make autonomy <em>portable across bodies</em>, not locked to one machine.</blockquote>
+          <p class="muted">We work with industrial, defense and field-research partners who need robots that understand what they see well enough to act on it, without a human in the loop.</p>
+          <ol class="about__path mono" data-stagger>
+            <li>Simple robots</li><li>Autonomous navigation</li><li>Robotic arms</li><li>A humanoid</li><li>A quadruped</li>
+          </ol>
+          <div class="about__links">
+            <a class="about__link" href="leadership.html"><span class="mono">Leadership</span><b>Magnum · Lumen · Novum</b><span class="arrow" aria-hidden="true">→</span></a>
+            <a class="about__link" href="constitution.html"><span class="mono">Constitution</span><b>What we value, and what we won't do</b><span class="arrow" aria-hidden="true">→</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script type="module" src="/src/pages/index.js"></script>
+</body>
+</html>

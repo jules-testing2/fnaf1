@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <script>try{if(localStorage.getItem('saim-theme')==='light')document.documentElement.dataset.theme='light'}catch(e){}</script>
+  <style>html{background:#0a0a0b;color-scheme:dark}html[data-theme=light]{background:#f6f1e7;color-scheme:light}body{opacity:0;animation:saim-show .01s 1.5s forwards}@keyframes saim-show{to{opacity:1}}</style>
+  <noscript><style>body{opacity:1;animation:none}</style></noscript>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI-Driven Dynamic Covariance for ROS 2 Localisation · SAIM Research</title>
+  <meta name="description" content="Learned, context-aware EKF covariance for ROS 2 mobile robot localisation. Sensors 2025, 25, 3026.">
+  <meta name="theme-color" content="#0a0a0b">
+  <meta property="og:title" content="AI-Driven Dynamic Covariance for ROS 2 Localisation · SAIM Research">
+  <meta property="og:description" content="Learned, context-aware EKF covariance for ROS 2 mobile robot localisation. Sensors 2025, 25, 3026.">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="img/research/cv-fig17-yaw-box.webp">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+</head>
+<body data-page="research-covariance">
+  <main id="main">
+
+    <!-- ============================================================ hero -->
+    <header class="paper-hero">
+      <div class="container paper-hero__grid">
+        <div class="paper-hero__text">
+          <nav class="paper-hero__crumbs" aria-label="Breadcrumb">
+            <a href="research.html">← All research</a>
+            <span class="paper-layers" data-layers aria-label="SAS layer L1"></span>
+          </nav>
+          <p class="eyebrow paper-hero__eyebrow">Localisation · Sensors 2025</p>
+          <h1 class="paper-title" data-split="words">AI-Driven Dynamic Covariance for <em>ROS 2</em> Mobile Robot Localization</h1>
+          <p class="paper-subtitle" data-reveal="blur">A Random Forest learns how wrong the EKF is likely to be, and tells it, live.</p>
+          <p class="paper-authors"><span>Bogdan Felician Abaza</span></p>
+          <p class="paper-affil">Manufacturing Engineering Department, National University of Science and Technology POLITEHNICA Bucharest, 060042 Bucharest, Romania</p>
+          <p class="paper-venue"><strong>Sensors</strong> <span class="mono">2025 · 25(10) · 3026 · Published 11 May 2025</span> <span class="chip">Open access · CC BY 4.0</span></p>
+          <nav class="paper-links" aria-label="Paper links">
+            <a class="btn btn--fire" href="https://doi.org/10.3390/s25103026" target="_blank" rel="noopener" data-magnetic>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h6"/></svg>
+              Paper</a>
+            <a class="btn btn--ghost" href="https://github.com/bogdan-abaza/ai_tools" target="_blank" rel="noopener" data-magnetic>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m8 6-6 6 6 6M16 6l6 6-6 6"/></svg>
+              ai_tools code + data</a>
+            <a class="btn btn--ghost" href="https://github.com/bogdan-abaza/ROS_ESP32_Bridge" target="_blank" rel="noopener" data-magnetic>ESP32 bridge</a>
+            <a class="btn btn--ghost" href="#in-motion" data-magnetic>
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+              Interactive demo</a>
+            <a class="btn btn--ghost" href="#citation" data-magnetic>BibTeX</a>
+          </nav>
+        </div>
+        <div class="hero-art" data-hero-art></div>
+      </div>
+      <div class="container">
+        <div class="paper-stats">
+          <div class="paper-stat"><div class="stat-value" data-counter="0.0061" data-decimals="4">0.0061</div><div class="stat-label">Test-set MAE</div></div>
+          <div class="paper-stat"><div class="stat-value" data-counter="0.989" data-decimals="3" data-prefix="R² ">R² 0.989</div><div class="stat-label">Test-set fit, 3 targets</div></div>
+          <div class="paper-stat"><div class="stat-value" data-counter="21000" data-suffix="+">21,000+</div><div class="stat-label">Logged samples by v7</div></div>
+          <div class="paper-stat"><div class="stat-value" data-counter="0.0362" data-decimals="4">0.0362</div><div class="stat-label">Median yaw prediction error, rad</div></div>
+        </div>
+      </div>
+    </header>
+
+    <nav class="paper-nav" aria-label="Sections">
+      <div class="paper-nav__inner">
+        <div class="paper-nav__track">
+          <span class="paper-nav__thumb" aria-hidden="true"></span>
+          <a href="#abstract"><span class="num">I</span>Abstract</a>
+          <a href="#contributions"><span class="num">II</span>Contributions</a>
+          <a href="#in-motion"><span class="num">III</span>In motion</a>
+          <a href="#method"><span class="num">IV</span>Method</a>
+          <a href="#results"><span class="num">V</span>Results</a>
+          <a href="#limitations"><span class="num">VI</span>Limits</a>
+          <a href="#citation"><span class="num">VII</span>Cite</a>
+        </div>
+        <div class="paper-nav__progress" aria-hidden="true"><i></i></div>
+      </div>
+    </nav>
+
+    <!-- ============================================================ I. abstract -->
+    <section class="psec psec--paper" id="abstract">
+      <div class="container">
+        <div class="sec-head"><span class="sec-num" aria-hidden="true">I</span><div><p class="eyebrow">Abstract</p><h2 class="h2" data-split>Trust the right sensor at the <em>right moment</em>.</h2></div></div>
+        <div class="abstract-grid">
+          <div>
+            <p class="lead-abstract" data-reveal>An Extended Kalman Filter is only as good as the covariances it is given. Most ROS users <em>type them in by hand</em> and never change them. This paper lets a model predict them while the robot drives.</p>
+            <div class="prose">
+              <p>Localisation robustness in dynamic conditions remains a critical challenge for ROS 2 systems, where sensor fusion is pivotal. This study evaluates an AI-driven approach that adjusts covariance parameters dynamically for pose estimation on a differential-drive robot. A regression model was integrated with the <code>robot_localization</code> package to adapt the EKF covariance in real time, and runs compared AI-predicted dynamic covariance against a static covariance baseline across <strong>Static, Moderate and Aggressive</strong> motion.</p>
+              <p>The AI-enabled system reached a <strong>Mean Absolute Error of 0.0061</strong> for pose estimation and reduced median yaw prediction errors to <strong>0.0362 rad</strong> (static) and <strong>0.0381 rad</strong> (moderate). Aggressive motion was harder: errors reached up to <strong>0.9491 rad</strong>, traced to data distribution bias and Random Forest limits. Dataset augmentation, LSTM modelling and online learning are proposed to close the gap, and datalogging already enables iterative re-training.</p>
+            </div>
+            <div class="kw" data-stagger>
+              <span class="chip">Dynamic covariance</span><span class="chip">Localization</span><span class="chip">ROS 2</span><span class="chip">Sensor fusion</span><span class="chip">EKF</span><span class="chip">Differential drive</span><span class="chip">Datalogging</span>
+            </div>
+          </div>
+          <div class="findings" data-stagger>
+            <p class="mono" style="color:var(--red)">Highlights, as stated in the paper</p>
+            <div class="finding"><i>01</i><span><b>AI-driven dynamic covariance reduced yaw prediction errors</b> in static and moderate motion for ROS 2 localisation.</span></div>
+            <div class="finding"><i>02</i><span><b>Aggressive dynamics increased errors</b>, revealing limits in the training data for rapid rotation.</span></div>
+            <div class="finding"><i>03</i><span><b>Dynamic covariance prediction strengthens localisation in stable conditions</b>, a scalable option for robots in variable environments.</span></div>
+            <div class="finding"><i>04</i><span><b>Datalogging and online learning</b> are the route to better real-time adaptability in dynamic scenarios.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ II. contributions -->
+    <section class="psec" id="contributions">
+      <div class="container">
+        <div class="sec-head"><span class="sec-num" aria-hidden="true">II</span><div><p class="eyebrow">Contributions</p><h2 class="h2" data-split>Hybrid, not <em>end-to-end</em>.</h2></div></div>
+        <div class="prose" style="margin-bottom:clamp(28px,4vw,48px)" data-reveal>
+          <p>The paper positions itself firmly in the hybrid camp: AI is used to <strong>augment</strong> a classical EKF, not to replace it, so the filter stays interpretable, physically grounded and compatible with standard ROS 2 tooling, while running on a Raspberry Pi.</p>
+        </div>
+        <div class="contribs" data-stagger>
+          <article class="contrib card" data-tilt="5" data-spotlight><span class="contrib__id">C1</span><h3>A reproducible framework</h3><p>AI-assisted covariance tuning for the EKF, integrated into ROS 2 and compatible with robot_localization, keeping standard data flows and message types.</p><span class="mono">ROS 2 Humble</span></article>
+          <article class="contrib card" data-tilt="5" data-spotlight><span class="contrib__id">C2</span><h3>A lightweight model</h3><p>A regression model that predicts odometry and orientation error from live motion and sensor data, sized for inference on a Raspberry Pi 4.</p><span class="mono">≈10 ms per prediction</span></article>
+          <article class="contrib card" data-tilt="5" data-spotlight><span class="contrib__id">C3</span><h3>A dual-node architecture</h3><p>One node infers error from sensor data, a second rewrites the EKF covariance from those predictions, closing the loop between perception and state estimation.</p><span class="mono">predict → update</span></article>
+          <article class="contrib card" data-tilt="5" data-spotlight><span class="contrib__id">C4</span><h3>A dataset and method</h3><p>A structured dataset and a training and evaluation methodology built from controlled motion on a student-designed robot, published openly.</p><span class="mono">16,000 → 21,000+ samples</span></article>
+          <article class="contrib card" data-tilt="5" data-spotlight><span class="contrib__id">C5</span><h3>A real-robot comparison</h3><p>Static vs AI-predicted covariance on the same path and floor, analysed across three motion regimes, including where the approach falls short.</p><span class="mono">Static · Moderate · Aggressive</span></article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ III. in motion -->
+    <section class="psec psec--ink2" id="in-motion">
+      <div class="container">
+        <div class="sec-head"><span class="sec-num" aria-hidden="true">III</span><div><p class="eyebrow">Method in motion</p><h2 class="h2" data-split>Uncertainty that <em>breathes</em>.</h2></div></div>
+        <div class="picker" role="tablist" aria-label="Demo" data-picker data-caption="#motion-caption">
+          <button type="button" role="tab" id="tab-ekf" aria-controls="panel-ekf" aria-selected="true" data-text="<b>Static vs learned covariance.</b> Switch between motion regimes to see how a fixed covariance and the Random Forest's predicted covariance shape the EKF's uncertainty. Yaw readouts use the paper's numbers: median prediction error 0.0362 rad static, 0.0381 rad moderate, and up to 0.9491 rad in aggressive turns.">EKF explainer <span class="mono">Static / Moderate / Aggressive</span></button>
+          <button type="button" role="tab" id="tab-flow" aria-controls="panel-flow" aria-selected="false" tabindex="-1" data-text="<b>The ai_tools dataflow.</b> Every 0.2 s the inference node builds a 15-feature vector from /odom, the BNO055 IMU and /cmd_vel, predicts x, y and yaw error, and publishes it. The updater squares the errors into covariances, writes them to the EKF through its parameter service, and every sample is logged to CSV for the next re-training round. The readout replays the prediction messages shown in Fig. 9 of the paper.">ROS 2 dataflow <span class="mono">ai_tools</span></button>
+        </div>
+        <div class="motion-stage">
+          <div role="tabpanel" id="panel-ekf" aria-labelledby="tab-ekf"><div class="demo-slot" data-demo="ekf-covariance"></div></div>
+          <div role="tabpanel" id="panel-flow" aria-labelledby="tab-flow" hidden>
+            <div class="dataflow demo-frame">
+              <div class="demo-frame__bar"><span class="mono">ai_tools · ROS 2 Humble · Raspberry Pi 4</span><span class="chip chip--live">enable_ai = true</span></div>
+              <div class="dataflow__scroll">
+                <svg data-dataflow viewBox="0 0 1000 430" role="img" aria-label="Dataflow: odometry, IMU and command velocity topics feed ai_covariance_node, which publishes predicted errors to ai_covariance_updater, which sets EKF covariance; the EKF publishes filtered odometry, and predictions are logged to CSV for re-training.">
+                  <g class="df-node" data-stage="0"><rect x="20" y="40" width="190" height="56" rx="12"/><text x="40" y="66">/odom</text><text class="df-sub" x="40" y="84">wheel odometry</text></g>
+                  <g class="df-node" data-stage="0"><rect x="20" y="150" width="190" height="56" rx="12"/><text x="40" y="176">/bno055/imu_raw</text><text class="df-sub" x="40" y="194">accel + gyro</text></g>
+                  <g class="df-node" data-stage="0"><rect x="20" y="260" width="190" height="56" rx="12"/><text x="40" y="286">/cmd_vel</text><text class="df-sub" x="40" y="304">commanded motion</text></g>
+                  <g class="df-node df-node--hot" data-stage="1"><rect x="290" y="120" width="230" height="130" rx="16"/><text x="310" y="152">ai_covariance_node</text><text class="df-sub" x="310" y="178">Random Forest · 100 trees</text><text class="df-sub" x="310" y="198">15 features · every 0.2 s</text><text class="df-sub" x="310" y="218">→ error_x, error_y, error_yaw</text></g>
+                  <g class="df-node df-node--hot" data-stage="2"><rect x="590" y="140" width="200" height="96" rx="16"/><text x="610" y="172">ai_covariance_updater</text><text class="df-sub" x="610" y="196">cov = error²</text><text class="df-sub" x="610" y="216">diag 0, 7, 35 of 6 × 6</text></g>
+                  <g class="df-node" data-stage="3"><rect x="840" y="140" width="140" height="96" rx="16"/><text x="858" y="172">ekf_node</text><text class="df-sub" x="858" y="196">robot_</text><text class="df-sub" x="858" y="214">localization</text></g>
+                  <g class="df-node" data-stage="4"><rect x="800" y="320" width="180" height="56" rx="12"/><text x="818" y="346">/platform/odom/</text><text class="df-sub" x="818" y="364">filtered</text></g>
+                  <g class="df-node" data-stage="3"><rect x="290" y="320" width="230" height="56" rx="12"/><text x="310" y="346">ai_log_*.csv</text><text class="df-sub" x="310" y="364">→ re-training, v1 … v7</text></g>
+                  <path class="df-edge" data-stage="0" d="M210,68 C250,68 250,150 290,160"/>
+                  <path class="df-edge" data-stage="0" d="M210,178 C250,178 250,185 290,185"/>
+                  <path class="df-edge" data-stage="0" d="M210,288 C250,288 250,220 290,212"/>
+                  <path class="df-edge df-edge--dim" data-stage="0" data-tone="b" d="M210,60 C520,0 800,40 900,140"/>
+                  <path class="df-edge" data-stage="1" d="M520,185 C555,185 555,188 590,188"/>
+                  <path class="df-edge" data-stage="1" data-tone="b" d="M405,250 C405,285 405,290 405,320"/>
+                  <path class="df-edge" data-stage="2" d="M790,188 C815,188 815,188 840,188"/>
+                  <path class="df-edge" data-stage="3" d="M910,236 C910,270 900,290 890,320"/>
+                  <text class="df-topic" x="526" y="176">/ai_tools/covariance_prediction</text>
+                  <text class="df-topic" x="700" y="128" text-anchor="middle">/ekf_node/set_parameters</text>
+                  <text class="df-readout" x="20" y="410" data-df-readout data-lines="error_x 0.1382 · error_y 0.0721 · error_yaw −0.0006 rad|error_x 0.1393 · error_y 0.0721 · error_yaw −0.0006 rad">error_x 0.1382 · error_y 0.0721 · error_yaw −0.0006 rad</text>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="motion-caption" id="motion-caption" aria-live="polite"><b>Static vs learned covariance.</b> Switch between motion regimes to see how a fixed covariance and the Random Forest's predicted covariance shape the EKF's uncertainty. Yaw readouts use the paper's numbers: median prediction error 0.0362 rad static, 0.0381 rad moderate, and up to 0.9491 rad in aggressive turns.</p>
+      </div>
+    </section>
+
+    <!-- ============================================================ IV. method -->
+    <section class="psec" id="method">
+      <div class="container">
+        <div class="sec-head"><span class="sec-num" aria-hidden="true">IV</span><div><p class="eyebrow">Method</p><h2 class="h2" data-split>A student-built robot, a <em>small forest</em>.</h2></div></div>
+
+        <h3 class="sub-head"><span class="lt">A.</span>AMR2AX: designed and built with students</h3>
+        <div class="split">
+          <div class="prose" data-reveal>
+            <p>The experiments ran on <strong>AMR2AX</strong>, a differential-drive robot designed by the author with a team of students through iterative CAD-to-prototype cycles, following New Product Development principles and project-based pedagogy. The chassis is aluminium U-channel, so builds repeat and can be reconfigured (omni-wheels, casters) to study how the chassis affects odometry.</p>
+            <p>A <strong>Raspberry Pi 4 (4 GB)</strong> runs Ubuntu 22.04 and ROS 2 Humble for fusion, AI inference and navigation. An ESP32 NodeMCU-32S drives two NeveRest 40 gearmotors through a Pololu VNH5019 shield and streams encoder data over a custom full-duplex serial bridge (<code>ROS_ESP32_Bridge</code>). Sensors: a BNO-055 IMU, an LDROBOT STL-19 2D LiDAR and a Logitech C922 camera. ros2_control's diff_drive_controller and robot_localization's EKF complete the baseline stack.</p>
+          </div>
+          <div class="fig-row" style="--cols:2;margin:0">
+            <figure class="fig" data-reveal>
+              <button type="button" class="fig-plate" data-zoom aria-label="Enlarge Figure 2a"><img src="img/research/cv-fig2a-cad.webp" width="763" height="591" alt="CAD model of the AMR2AX chassis with aluminium channel frame, motors and wheels." loading="lazy"></button>
+              <figcaption><b>Fig. 2a.</b> AMR2AX CAD design.<span class="credit">Figure 2 from Abaza, Sensors 2025, CC BY 4.0</span></figcaption>
+            </figure>
+            <figure class="fig" data-reveal data-reveal-delay="0.1">
+              <button type="button" class="fig-plate" data-zoom aria-label="Enlarge Figure 2b"><img src="img/research/cv-fig2b-prototype.webp" width="900" height="777" alt="Photo of the physical AMR2AX prototype with electronics on the frame." loading="lazy"></button>
+              <figcaption><b>Fig. 2b.</b> The physical prototype.<span class="credit">Figure 2 from Abaza, Sensors 2025, CC BY 4.0</span></figcaption>
+            </figure>
+          </div>
+        </div>
+        <div class="fig-row" style="--cols:2">
+          <figure class="fig" data-reveal>
+            <button type="button" class="fig-plate" data-zoom aria-label="Enlarge Figure 1"><img src="img/research/cv-fig1-student-robots.webp" width="1200" height="637" alt="Several student-built autonomous mobile robots on a lab floor." loading="lazy"></button>
+            <figcaption><b>Fig. 1.</b> Student-built autonomous mobile robots used for localisation and navigation experiments in a ROS 2 educational environment.<span class="credit">Figure 1 from Abaza, Sensors 2025, CC BY 4.0</span></figcaption>
+          </figure>
+          <figure class="fig" data-reveal data-reveal-delay="0.1">
+            <button type="button" class="fig-plate" data-zoom aria-label="Enlarge Figure 3"><img src="img/research/cv-fig3-system.webp" width="980" height="847" alt="System diagram of AMR2AX: Raspberry Pi 4 with ROS 2 Humble, ESP32 bridge, motor controller, encoders, IMU, LiDAR and camera." loading="lazy"></button>
+            <figcaption><b>Fig. 3.</b> System-level diagram of AMR2AX: hardware (ESP32, Raspberry Pi, sensors) and the ROS 2 software stack for localisation and navigation.<span class="credit">Figure 3 from Abaza, Sensors 2025, CC BY 4.0</span></figcaption>
+          </figure>
+        </div>
+
+        <h3 class="sub-head"><span class="lt">B.</span>Why fixed covariances break</h3>
+        <div class="split">
+          <div class="prose" data-reveal>
+            <p>The baseline EKF trusts odometry for linear motion and yaw drift (in differential mode) and the IMU for rotation. Those fixed values fail exactly when it matters: <strong>motor slip under acceleration, irregular floors, and sensor noise that rises with heat or power fluctuations</strong>. On student-built robots, where sensor quality and mechanical tolerances vary unit to unit, hand-tuned values age badly.</p>
+          </div>
+          <div class="prose" data-reveal>
+            <p>The model learns the EKF's error instead. Training labels are computed by comparing filtered output with raw odometry: <code>error_x</code>, <code>error_y</code> and <code>error_yaw</code>. Fifteen input features cover accelerations, gyro yaw rate, odometry and commanded velocities, yaw estimates and their difference, two interaction terms and two temporal deltas.</p>
+          </div>
+        </div>
+
+        <h3 class="sub-head"><span class="lt">C.</span>Model choice on a Raspberry Pi 4</h3>
+        <div class="split">
+          <div class="tbl" data-reveal style="margin-block:0">
+            <table>
+              <caption><b>Section 2.4.</b> Candidate models, as characterised in the paper for the Raspberry Pi 4. The LightGBM and compact-MLP figures are reported characteristics from the literature, not measurements on this robot.</caption>
+              <thead><tr><th scope="col">Model</th><th scope="col">Latency</th><th scope="col">CPU</th><th scope="col">Memory</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">Random Forest, 100 trees</th><td class="best">≈10 ms</td><td>≈15%</td><td>≈120 MB</td></tr>
+                <tr><th scope="row">LightGBM</th><td>15–20 ms</td><td>≈20–25%</td><td>≈150–200 MB</td></tr>
+                <tr><th scope="row">Compact MLP (TF Lite)</th><td>5–10 ms</td><td>≈25–30%</td><td>≈200 MB</td></tr>
+                <tr><th scope="row">Gaussian process</th><td colspan="3">O(n³) training, infeasible at this dataset size</td></tr>
+                <tr><th scope="row">LSTM / deep nets</th><td colspan="3">too heavy for real-time inference on the Pi 4</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <figure class="fig" style="margin-block:0" data-reveal>
+            <button type="button" class="fig-plate" data-zoom aria-label="Enlarge Figure 7"><img src="img/research/cv-fig7-oob.webp" width="1400" height="841" alt="Out-of-bag MAE against number of trees for error_x, error_y and error_yaw; curves flatten after about 30 trees." loading="lazy"></button>
+            <figcaption><b>Fig. 7.</b> Training loss (out-of-bag MAE) against number of trees per target. The error stabilises after about 30 trees.<span class="credit">Figure 7 from Abaza, Sensors 2025, CC BY 4.0</span></figcaption>
+          </figure>
+        </div>
+
+        <h3 class="sub-head"><span class="lt">D.</span>Closing the loop in ROS 2</h3>
+        <ol class="pipeline" style="--cols:4" data-stagger>
+          <li><b>Subscribe</b>/odom, /bno055/imu_raw and /cmd_vel with sensor-data QoS.</li>
+          <li><b>Predict</b>Every 0.2 s, 15 features in, error_x, error_y, error_yaw out, on /ai_tools/covariance_prediction.</li>
+          <li><b>Update</b>The updater squares each error into a covariance and sets the EKF's 6 × 6 matrix (diagonal 0, 7, 35) through /ekf_node/set_parameters.</li>
+          <li><b>Log</b>Every cycle goes to a timestamped CSV, AI on or off, feeding the next training round.</li>
+        </ol>
+        <p class="callout" data-reveal>A single <b>enable_ai</b> launch parameter switches the whole package: with AI off, the node publishes zero errors and the updater leaves the EKF on its defaults, so the robot keeps navigating without the AI overhead.</p>
+      </div>
+    </section>
+
+    <!-- ============================================================ V. results -->
+    <section class="psec psec--paper" id="results">
+      <div class="container">
+        <div class="sec-head"><span class="sec-num" aria-hidden="true">V</span><div><p class="eyebrow">Results</p><h2 class="h2" data-split>Strong when steady. <em>Honest when turning hard.</em></h2></div></div>
+
+        <h3 class="sub-head" style="margin-top:0"><span class="lt">A.</span>Training: data that keeps growing</h3>
+        <div class="result-grid">
+          <div class="chart-slot" data-demo="chart-training-growth" data-options='{"theme":"paper"}'></div>
+          <div class="prose" data-reveal>
+            <p>The first dataset came from teleoperation: over <strong>16,000 records</strong> of forward and backward driving, turns and mixed trajectories with acceleration changes, recorded with <code>ros2 bag</code>. Every later run logged itself through the AI node, and merging those logs grew the set past <strong>21,000 samples by version 7</strong>, split 90:10 for training and testing.</p>
+            <p>On the held-out test set the Random Forest reached <strong>MAE 0.0061</strong> and <strong>R² 0.989</strong> overall (0.98, 0.97 and 0.99 for x, y and yaw), with residuals tightly centred on zero.</p>
+          </div>
+        </div>
+        <figure class="fig" data-reveal>
+          <button type="button" class="fig-plate" data-zoom aria-label="Enlarge Figure 13"><img src="img/research/cv-fig13-pred-actual.webp" width="1600" height="446" alt="Three scatter plots of predicted versus actual error for x, y and yaw on the test set, points along the diagonal." loading="lazy"></button>
+          <figcaption><b>Fig. 13.</b> Predicted vs actual position and orientation error on the test set.<span class="credit">Figure 13 from Abaza, Sensors 2025, CC BY 4.0</span></figcaption>
+        </figure>
+
+        <h3 class="sub-head"><span class="lt">B.</span>On the robot: three motion regimes</h3>
+        <div class="split">
+          <div class="prose" data-reveal>
+            <p>The robot followed a similar Nav2 path between points 1 → 2 → 3 → 4 in the same lab, once with AI-predicted covariance and once with static covariance, under the same light and floor. Data were split by commanded angular velocity: <strong>Static</strong> (|ω| ≤ 0.01 rad/s), <strong>Moderate</strong> (up to 0.7 rad/s) and <strong>Aggressive</strong>. No sample exceeded 0.7 rad/s (the peak was ±0.667), so the paper reports Aggressive as |ω| &gt; 0.5 rad/s, consistent with its earlier analyses. Outliers above 1.5 rad were removed.</p>
+            <p>On the Pi 4 the AI-enabled stack ran at up to 20 Hz (50 Hz baseline), stable at 5–10 Hz, averaging 25% CPU (40% peak) and about 350 MB of memory.</p>
+          </div>
+          <figure class="fig" style="margin-block:0" data-reveal>
+            <button type="button" class="fig-plate" data-zoom aria-label="Enlarge Figure 14"><img src="img/research/cv-fig14-test-route.webp" width="809" height="502" alt="Costmap of the lab with numbered waypoints 1 to 4 for autonomous Nav2 navigation." loading="lazy"></button>
+            <figcaption><b>Fig. 14.</b> Real-world testing by autonomous Nav2 navigation between points 1, 2, 3 and 4.<span class="credit">Figure 14 from Abaza, Sensors 2025, CC BY 4.0</span></figcaption>
+          </figure>
+        </div>
+        <div class="result-grid" style="--cols:1">
+          <div class="chart-slot" data-demo="chart-yaw-regimes" data-options='{"theme":"paper"}'></div>
+        </div>
+        <div class="fig-row">
+          <figure class="fig" data-reveal>
+            <button type="button" class="fig-plate" data-zoom aria-label="Enlarge Figure 16"><img src="img/research/cv-fig16-yaw-scatter.webp" width="1300" height="953" alt="Scatter of predicted error_yaw against actual yaw_diff coloured by regime; static and moderate points lie on the diagonal, aggressive points deviate." loading="lazy"></button>
+            <figcaption><b>Fig. 16.</b> Predicted error_yaw vs actual yaw_diff, AI-enabled run. Static (green) and Moderate (yellow) cluster along y = x; Aggressive (red) deviates, up to 0.9491 rad at t = 7.5 s.<span class="credit">Figure 16 from Abaza, Sensors 2025, CC BY 4.0</span></figcaption>
+          </figure>
+          <figure class="fig" data-reveal data-reveal-delay="0.1">
+            <button type="button" class="fig-plate" data-zoom aria-label="Enlarge Figure 17"><img src="img/research/cv-fig17-yaw-box.webp" width="1600" height="961" alt="Box plots of yaw difference across Static, Moderate and Aggressive dynamics, with and without AI." loading="lazy"></button>
+            <figcaption><b>Fig. 17.</b> yaw_diff across dynamics for AI-enabled and AI-disabled runs. IQRs: 0.0489 / 0.1069 / 0.2695 rad with AI; 0.0222 / 0.1399 rad without (no aggressive samples).<span class="credit">Figure 17 from Abaza, Sensors 2025, CC BY 4.0</span></figcaption>
+          </figure>
+        </div>
+        <div class="tbl" data-reveal>
+          <table>
+            <caption><b>Table 2.</b> Real-world spatial error by dynamics, AI-enabled (m).</caption>
+            <thead><tr><th scope="col">Dynamics</th><th scope="col">error_x mean</th><th scope="col">std</th><th scope="col">min</th><th scope="col">max</th><th scope="col">error_y mean</th><th scope="col">std</th><th scope="col">min</th><th scope="col">max</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Static</th><td>−0.0021</td><td>0.0892</td><td>−0.3095</td><td>0.1295</td><td>0.0526</td><td>0.0926</td><td>−0.0598</td><td>0.2325</td></tr>
+              <tr><th scope="row">Moderate</th><td>−0.0570</td><td>0.0935</td><td>−0.3095</td><td>0.1275</td><td>0.0573</td><td>0.0790</td><td>−0.0562</td><td>0.2325</td></tr>
+              <tr><th scope="row">Aggressive</th><td>−0.1596</td><td>0.0829</td><td>−0.3095</td><td>0.1075</td><td>0.0927</td><td>0.0825</td><td>−0.0359</td><td>0.2238</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <figure class="fig" data-reveal>
+          <button type="button" class="fig-plate" data-zoom aria-label="Enlarge Figure 15"><img src="img/research/cv-fig15-error-trends.webp" width="1800" height="802" alt="Time series of pose estimation errors with AI enabled and yaw difference with AI disabled." loading="lazy"></button>
+          <figcaption><b>Fig. 15.</b> Pose estimation errors over time. Top: AI-enabled run (error_x, error_y, |error_yaw − yaw_diff| and yaw_diff); spikes coincide with cmd_angular_z near ±0.667 rad/s. Bottom: AI-disabled run, yaw_diff only, with spikes such as 0.577 rad at 713.02 s.<span class="credit">Figure 15 from Abaza, Sensors 2025, CC BY 4.0</span></figcaption>
+        </figure>
+        <p class="callout" data-reveal>Real-world spatial errors (−0.3095 to 0.2325 m) were much wider than the training MAEs of 0.0052 m (x) and 0.0035 m (y): the environment and dynamic motion not fully captured in training show up on the robot. <b>The paper reports this gap rather than hiding it.</b></p>
+      </div>
+    </section>
+
+    <!-- ============================================================ VI. limitations -->
+    <section class="psec" id="limitations">
+      <div class="container">
+        <div class="sec-head"><span class="sec-num" aria-hidden="true">VI</span><div><p class="eyebrow">Limitations and future work</p><h2 class="h2" data-split>The hard turn is the <em>open problem</em>.</h2></div></div>
+        <div class="limits">
+          <div>
+            <h3>Limitations, as the paper states them</h3>
+            <ul data-stagger>
+              <li><b>Aggressive rotation.</b> Yaw prediction error reached 0.9491 rad; mean 0.2257 rad (σ 0.2600) in the aggressive band.</li>
+              <li><b>Training-data bias.</b> The initial dataset was mostly stable and moderate motion, with few high-dynamic transitions.</li>
+              <li><b>Random Forest extrapolation</b> is limited under extreme inputs it has not seen.</li>
+              <li><b>Inference only.</b> The model was trained offline; no online learning ran during operation.</li>
+              <li><b>A train/runtime mismatch.</b> Runtime smooths yaw_filtered with an EMA (α = 0.7) that the training data did not apply.</li>
+              <li><b>Mixed maxima.</b> Max |yaw_diff| was 0.4943 rad with AI vs 0.5771 rad without, but the filtered ROS-log peak with AI (0.689 rad) exceeds the baseline's raw yaw_diff; no significance test was run yet.</li>
+            </ul>
+          </div>
+          <div class="future">
+            <h3>Future work</h3>
+            <ul data-stagger>
+              <li><b>More aggressive data:</b> augment the dataset with rapid rotational sequences.</li>
+              <li><b>LSTM temporal models</b> on sliding windows, quantised to stay inside ROS 2's 50–100 Hz budget on the Pi 4.</li>
+              <li><b>Visual features</b> from the RGB camera for spatial context.</li>
+              <li><b>Online, continual or federated learning</b> across robots, built on the existing datalogging.</li>
+              <li><b>Hybrid switching</b> between AI and static fallback settings, with dynamic thresholds, to avoid estimation jumps.</li>
+              <li><b>Statistics:</b> a Wilcoxon signed-rank test to formally validate the static and moderate improvements, and industrial deployments with variable loads and uneven floors.</li>
+            </ul>
+          </div>
+        </div>
+        <p class="callout" data-reveal style="margin-top:clamp(36px,5vw,64px)">Where it led: the 2026 route-planning paper cites this work as the <b>author-controlled, full-stack ROS 2 baseline previously validated on real robots</b> that its Xplorer platforms build on, with AMCL plus an EKF (robot_localization) at 20 Hz under the semantic layers.</p>
+      </div>
+    </section>
+
+    <!-- ============================================================ VII. citation -->
+    <section class="psec psec--ink2" id="citation">
+      <div class="container">
+        <div class="sec-head"><span class="sec-num" aria-hidden="true">VII</span><div><p class="eyebrow">Citation</p><h2 class="h2" data-split>Cite this <em>work</em>.</h2></div></div>
+        <div class="cite" data-reveal>
+          <div class="cite__bar"><span class="mono">BibTeX · MDPI</span><button type="button" class="copy-btn" data-copy="#bibtex"><span>Copy</span></button></div>
+          <pre id="bibtex" data-bibtex></pre>
+        </div>
+        <p class="cite-plain" data-reveal>Abaza, B.F. AI-Driven Dynamic Covariance for ROS 2 Mobile Robot Localization. <i>Sensors</i> <b>2025</b>, 25, 3026. https://doi.org/10.3390/s25103026</p>
+        <div class="cite-links" data-reveal>
+          <a class="btn btn--fire btn--sm" href="https://doi.org/10.3390/s25103026" target="_blank" rel="noopener">Read on MDPI <span class="arrow">↗</span></a>
+          <a class="btn btn--ghost btn--sm" href="https://github.com/bogdan-abaza/ai_tools" target="_blank" rel="noopener">ai_tools: code, dataset, logs <span class="arrow">↗</span></a>
+          <a class="btn btn--ghost btn--sm" href="https://github.com/bogdan-abaza/ROS_ESP32_Bridge" target="_blank" rel="noopener">ROS_ESP32_Bridge <span class="arrow">↗</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="psec" aria-labelledby="more-research">
+      <div class="container">
+        <p class="eyebrow">More research</p>
+        <h2 class="h2" id="more-research" style="margin:18px 0 clamp(28px,4vw,48px)" data-split>Built on <em>this foundation</em>.</h2>
+        <div class="related" data-related></div>
+      </div>
+    </section>
+  </main>
+  <script type="module" src="/src/pages/research-covariance.js"></script>
+</body>
+</html>

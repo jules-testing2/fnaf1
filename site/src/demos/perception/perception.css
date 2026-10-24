@@ -1,0 +1,151 @@
+/* Perception demos: yolo-detect, asf-fusion, sensor-montage. Scoped under .pcp. */
+
+.pcp-host { width: 100%; }
+.pcp { --pcp-fg: var(--fg); --pcp-dim: var(--fg-dim); --pcp-mute: var(--fg-mute); --pcp-line: var(--line); --pcp-panel: var(--ink-3); color: var(--pcp-fg); width: 100%; }
+.pcp--bare { position: relative; }
+.pcp--paper { --pcp-fg: var(--fg-ink); --pcp-dim: var(--fg-ink-dim); --pcp-mute: rgba(23, 22, 26, 0.5); --pcp-line: var(--line-ink); --pcp-panel: #fffaf0; }
+.pcp--paper.demo-frame { background: var(--paper-2); box-shadow: inset 0 0 0 1px var(--line-ink), 0 40px 80px -50px rgba(60, 40, 20, 0.35); }
+.pcp--paper .demo-frame__bar { border-bottom-color: var(--line-ink); }
+.pcp--paper .demo-frame__bar .mono { color: var(--fg-ink-dim); }
+
+/* Title bar */
+.pcp-bar { flex-wrap: wrap; row-gap: 8px; }
+.pcp-bar__title { display: inline-flex; align-items: center; gap: 10px; min-width: 0; }
+.pcp-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 10px var(--orange); flex: none; }
+.pcp-bar__right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.pcp-chip { height: 24px; font-size: 0.64rem; }
+.pcp-btn {
+  height: 28px; padding: 0 12px; border-radius: 999px; font-size: 0.66rem; color: var(--pcp-dim);
+  box-shadow: inset 0 0 0 1px var(--pcp-line); transition: color 0.3s, box-shadow 0.3s;
+}
+.pcp-btn:hover { color: var(--pcp-fg); box-shadow: inset 0 0 0 1px var(--orange); }
+@media (max-width: 560px) { .pcp-bar__meta { display: none; } }
+
+/* Canvases fill their stage */
+.pcp-stage, .asf-main, .asf-cam, .asf-hist, .mtg-stage, .mtg-spark__plot { position: relative; overflow: hidden; }
+.pcp-sized { aspect-ratio: var(--pcp-aspect); }
+@media (max-width: 720px) { .pcp-sized { aspect-ratio: var(--pcp-aspect-sm); } }
+.pcp-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.pcp-stage--cam { background: #1d1c1a; }
+.pcp-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: fill; background: #000; }
+
+/* Legend */
+.pcp-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; padding: 14px 16px; border-top: 1px solid var(--pcp-line); font-size: 0.8rem; color: var(--pcp-dim); }
+.pcp-legend__item { display: inline-flex; align-items: center; gap: 7px; }
+.pcp-legend__item i { width: 10px; height: 10px; border-radius: 2px; }
+.pcp-legend__item em { font-style: normal; font-family: var(--font-mono); font-size: 0.64rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--pcp-mute); }
+.pcp-legend__note { margin-left: auto; color: var(--pcp-mute); font-size: 0.64rem; }
+@media (max-width: 760px) { .pcp-legend__note { margin-left: 0; } }
+
+/* ---------- ASF ---------- */
+.asf-grid { display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr); border-bottom: 1px solid var(--pcp-line); }
+.asf-main { align-self: stretch; }
+/* The map keeps at least its aspect ratio but may grow to match a taller side column. */
+.asf-main.pcp-sized { aspect-ratio: auto; }
+.asf-main.pcp-sized::before { content: ''; display: block; padding-top: calc(100% / var(--pcp-aspect)); }
+@media (max-width: 720px) { .asf-main.pcp-sized::before { padding-top: calc(100% / var(--pcp-aspect-sm)); } }
+.asf-side { display: flex; flex-direction: column; border-left: 1px solid var(--pcp-line); min-width: 0; }
+.asf-card { display: flex; flex-direction: column; min-height: 0; }
+.asf-card figcaption { padding: 10px 14px; color: var(--pcp-mute); font-size: 0.64rem; border-bottom: 1px solid var(--pcp-line); }
+.asf-card--hist { flex: 1; border-top: 1px solid var(--pcp-line); }
+.asf-cam { aspect-ratio: 4 / 3; background: #1d1c1a; }
+.asf-hist { flex: 1; min-height: 120px; }
+.asf-geo { display: none; flex: 1; margin: 0; padding: 12px 14px; font-family: var(--font-mono); font-size: 0.68rem; line-height: 1.6; color: var(--pcp-dim); white-space: pre-wrap; word-break: break-word; overflow: auto; }
+.asf-card--hist.is-geo .asf-hist { display: none; }
+.asf-card--hist.is-geo .asf-geo { display: block; }
+
+.asf-read { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 0; border-bottom: 1px solid var(--pcp-line); }
+.asf-read > div { padding: 10px 14px; border-right: 1px solid var(--pcp-line); border-top: 1px solid var(--pcp-line); margin-top: -1px; min-width: 0; transition: background 0.4s; }
+.asf-read > div:nth-child(4n) { border-right: 0; }
+.asf-read dt { color: var(--pcp-mute); font-size: 0.6rem; margin-bottom: 3px; }
+.asf-read dd { margin: 0; font-family: var(--font-mono); font-size: 0.8rem; color: var(--pcp-mute); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums; }
+.asf-read .is-on dd { color: var(--pcp-fg); }
+
+.asf-steps { display: grid; gap: 12px; padding: 14px 16px 16px; }
+.asf-steps__list { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; margin: 0; padding: 0; list-style: none; }
+.asf-step {
+  display: flex; align-items: center; gap: 8px; width: 100%; height: 100%; padding: 8px 10px; border-radius: 10px; text-align: left;
+  font-size: 0.76rem; line-height: 1.2; color: var(--pcp-mute); box-shadow: inset 0 0 0 1px var(--pcp-line);
+  transition: color 0.3s, box-shadow 0.3s, background 0.3s;
+}
+.asf-step:hover { color: var(--pcp-fg); }
+.asf-step__n { flex: none; display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; font-family: var(--font-mono); font-size: 0.66rem; box-shadow: inset 0 0 0 1px currentColor; }
+.asf-step.is-done { color: var(--pcp-dim); }
+.asf-step.is-active { color: var(--pcp-fg); background: rgba(250, 82, 15, 0.1); box-shadow: inset 0 0 0 1px var(--orange); }
+.asf-step.is-active .asf-step__n { background: var(--orange); color: var(--ink); box-shadow: none; }
+.asf-caption { min-height: 3.2em; font-size: 0.92rem; line-height: 1.55; color: var(--pcp-dim); max-width: 92ch; }
+.asf-caption b { color: var(--pcp-fg); font-weight: 600; }
+.asf-caption__n { font-family: var(--font-mono); font-size: 0.7rem; color: var(--orange); margin-right: 6px; }
+.pcp--paper .asf-caption__n { color: var(--red); }
+
+.pcp--compact .asf-read, .pcp--compact .asf-card--hist { display: none; }
+.pcp--compact .asf-step__t { display: none; }
+.pcp--compact .asf-steps__list { grid-template-columns: repeat(6, auto); justify-content: start; }
+.pcp--compact .asf-step { padding: 4px; border-radius: 50%; box-shadow: none; }
+.pcp--compact .asf-caption { font-size: 0.85rem; }
+
+@media (max-width: 900px) {
+  .asf-step__t { font-size: 0.7rem; }
+  .asf-read { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .asf-read > div:nth-child(4n) { border-right: 1px solid var(--pcp-line); }
+  .asf-read > div:nth-child(2n) { border-right: 0; }
+}
+@media (max-width: 720px) {
+  .asf-grid { grid-template-columns: 1fr; }
+  .asf-side { flex-direction: row; border-left: 0; border-top: 1px solid var(--pcp-line); }
+  .asf-card { flex: 1 1 50%; min-width: 0; }
+  .asf-card--hist { border-top: 0; border-left: 1px solid var(--pcp-line); }
+  .pcp--compact .asf-card--cam { flex-basis: 100%; }
+  .pcp--compact .asf-cam { aspect-ratio: 16 / 9; } /* vertical crop only: pixel columns stay true */
+  .asf-steps__list { grid-template-columns: repeat(6, auto); justify-content: start; }
+  .asf-step { padding: 4px; border-radius: 50%; box-shadow: none; }
+  .asf-step__t { display: none; }
+  .asf-caption { font-size: 0.86rem; }
+}
+
+/* ---------- Montage ---------- */
+.mtg-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: var(--pcp-line); }
+.mtg-panel { display: flex; flex-direction: column; min-width: 0; background: var(--ink-2); }
+.pcp--paper .mtg-panel { background: var(--paper-2); }
+.mtg-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 9px 12px; font-size: 0.62rem; color: var(--pcp-mute); border-bottom: 1px solid var(--pcp-line); white-space: nowrap; }
+.mtg-head > span:first-child { overflow: hidden; text-overflow: ellipsis; }
+.mtg-head b { color: var(--orange); font-weight: 600; margin-right: 6px; }
+.pcp--paper .mtg-head b { color: var(--red); }
+.mtg-stat { color: var(--pcp-dim); font-variant-numeric: tabular-nums; }
+.mtg-stage { aspect-ratio: 16 / 10; }
+.mtg-stage--cam { background: #1d1c1a; }
+.mtg-route-host { position: absolute; inset: 0; overflow: hidden; }
+.mtg-telem { flex: 1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-auto-rows: minmax(0, 1fr); gap: 1px; background: var(--pcp-line); }
+.mtg-tile { display: flex; flex-direction: column; justify-content: center; gap: 4px; padding: 10px 14px; background: var(--ink-2); min-width: 0; transition: background 0.6s; }
+.pcp--paper .mtg-tile, .pcp--paper .mtg-spark { background: var(--paper-2); }
+.mtg-tile > span { font-size: 0.58rem; color: var(--pcp-mute); }
+.mtg-tile strong { font-family: var(--font-serif); font-weight: 420; font-size: clamp(1.25rem, 2.1vw, 2rem); line-height: 1.05; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mtg-tile small { font-family: var(--font-mono); font-size: 0.62rem; color: var(--pcp-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mtg-tile--limit.is-flash { animation: mtg-flash 1.6s var(--ease-out); }
+@keyframes mtg-flash { 0% { box-shadow: inset 0 0 0 999px rgba(250, 82, 15, 0.42); } 100% { box-shadow: inset 0 0 0 999px rgba(250, 82, 15, 0); } }
+.mtg-cpu { display: flex; height: 5px; border-radius: 3px; overflow: hidden; background: var(--pcp-line); }
+.mtg-cpu i { display: block; height: 100%; transition: width 0.4s; }
+.mtg-cpu .a { background: var(--cyan); } .mtg-cpu .b { background: var(--orange); } .mtg-cpu .c { background: var(--mint); }
+.mtg-spark { grid-column: 1 / -1; display: flex; flex-direction: column; gap: 4px; padding: 8px 14px 10px; background: var(--ink-2); min-height: 0; }
+.mtg-spark__plot { flex: 1; min-height: 34px; }
+.mtg-spark .mono { font-size: 0.56rem; color: var(--pcp-mute); display: flex; align-items: center; gap: 6px; }
+.mtg-spark .mono i { width: 10px; height: 2px; display: inline-block; }
+.mtg-spark .is-cpu { background: var(--orange); } .mtg-spark .is-fps { background: var(--cyan); margin-left: 6px; }
+
+.mtg-timeline { display: flex; align-items: center; gap: 14px; padding: 12px 16px; }
+.mtg-timeline__bar { position: relative; flex: 1; height: 4px; border-radius: 2px; background: var(--pcp-line); }
+.mtg-timeline__bar > i { position: absolute; inset: 0 auto 0 0; border-radius: 2px; background: var(--grad-fire); }
+.mtg-timeline__bar > b { position: absolute; top: -4px; width: 3px; height: 12px; margin-left: -1px; border-radius: 1px; background: var(--fg-dim); }
+.mtg-timeline__bar > b.is-dynamic { background: var(--orange); }
+.mtg-timeline__bar > b.is-static { background: var(--cyan); }
+.mtg-timeline__bar > b.is-minor { background: var(--amber); }
+.mtg-timeline .mono { color: var(--pcp-mute); font-size: 0.62rem; white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+.pcp--compact .mtg-tile small, .pcp--compact .mtg-spark { display: none; }
+.pcp--compact .mtg-telem { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+@media (max-width: 760px) {
+  .mtg-grid { grid-template-columns: 1fr; }
+  .mtg-telem { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .mtg-tile { padding: 10px 12px; }
+}
