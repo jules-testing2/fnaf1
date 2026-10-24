@@ -78,3 +78,7 @@
 .rc-tip.is-on { opacity: 1; transform: none; }
 .rc-tip b { font-weight: 600; }
 .rc-tip .mono { display: block; color: var(--fg-mute); margin-bottom: 2px; }
+
+.rc-slider { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; color: var(--rc-dim); width: 100%; }
+.rc-slider input { flex: 1 1 180px; accent-color: var(--rc-a); height: 28px; cursor: pointer; }
+.rc-slider output { min-width: 9ch; color: var(--rc-ink); }

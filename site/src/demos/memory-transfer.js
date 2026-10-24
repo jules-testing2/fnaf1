@@ -50,6 +50,7 @@ export default function mount(el, { options = {}, reducedMotion }) {
   cards.M5.append(m5count);
   const m3entry = h('div.mt-m3entry.mono', `${KEY} → ${DEST}`);
   cards.M3.append(m3entry);
+  cards.M3.classList.add('mt-mem--m3');
 
   const candRows = CANDIDATES.map((c) => {
     const fill = h('i.mt-cand__fill');
@@ -154,10 +155,10 @@ export default function mount(el, { options = {}, reducedMotion }) {
     // 6 · Reuse at Step 0 on Xplorer-B, then a near-miss falls back to L3b.
     t.call(() => setPhase(5), null, at);
     for (let i = 1; i <= 4; i++) {
-      t.call(() => row(B.log, 'is-reuse', `reuse ${i}`, 'Step 0 · Jaccard 1.00 · no VLM call', `→ ${DEST}`), null, at + 0.15);
+      t.call(() => { row(B.log, 'is-reuse', `reuse ${i}`, 'Step 0 · Jaccard 1.00 · no VLM call', `→ ${DEST}`); bumpRecords(); }, null, at + 0.15);
       at += 0.55;
     }
-    t.call(() => row(B.log, 'is-vlm', 'near-miss', 'no stored match · L3b · VLM', '→ escalated'), null, at + 0.4);
+    t.call(() => { row(B.log, 'is-vlm', 'near-miss', 'no stored match · L3b · VLM', '→ escalated'); bumpRecords(); }, null, at + 0.4);
     t.to({}, { duration: 4.5 }, at + 0.6);
     return t;
   }
@@ -172,7 +173,7 @@ export default function mount(el, { options = {}, reducedMotion }) {
     root.classList.add('is-promoted', 'is-compiled', 'is-installed');
     gsap.set(digest, { autoAlpha: 1, y: 0 });
     B.badge.textContent = 'digest installed · 1 association';
-    records = 9; m5count.textContent = '9 records';
+    records = 10; m5count.textContent = '10 records';
     setPhase(6);
   }
 

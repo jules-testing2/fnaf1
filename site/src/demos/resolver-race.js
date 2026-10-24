@@ -153,7 +153,7 @@ export default function mount(el, { options = {}, reducedMotion }) {
     s += 0.5;
     t.call(() => slowVlm.classList.add('is-on', 'is-busy'), null, s);
     const elapsed = { ms: 0 };
-    const wait = (E.vlmMeanS * 1000) / 1000 / PLAYBACK;
+    const wait = E.vlmMeanS / PLAYBACK;
     t.to(elapsed, {
       ms: E.vlmMeanS * 1000, duration: wait, ease: 'none',
       onUpdate: () => {

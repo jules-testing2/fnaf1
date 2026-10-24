@@ -25,8 +25,8 @@ const RAMPS = {
   'w--novum': ['#6fa59a', '#d9b25a'],
 };
 
-function splitChars(el, ramp) {
-  const split = SplitText.create(el, { type: 'chars', charsClass: 'ch', aria: 'none' });
+function splitChars(el, ramp, aria = 'auto') {
+  const split = SplitText.create(el, { type: 'chars', charsClass: 'ch', aria });
   if (ramp) {
     const lerp = gsap.utils.interpolate(ramp[0], ramp[1]);
     split.chars.forEach((c, i, all) => (c.style.color = lerp(all.length > 1 ? i / (all.length - 1) : 0)));
@@ -37,11 +37,13 @@ function splitChars(el, ramp) {
 /* ---------------- Hero ---------------- */
 function hero() {
   const words = $$('.lab-hero__title .w');
-  const charsOf = words.map((w) => splitChars(w, RAMPS[[...w.classList].find((c) => RAMPS[c])]));
+  // The h1 carries the aria-label; the visual words are aria-hidden.
+  const charsOf = words.map((w) => splitChars(w, RAMPS[[...w.classList].find((c) => RAMPS[c])], 'none'));
+  gsap.set(charsOf[1], { opacity: 0 });
   const tl = gsap.timeline({ delay: 0.35 });
   // Each word enters in its own character: stone drops, flame flickers on, butterflies flutter in.
   tl.from(charsOf[0], { yPercent: -90, opacity: 0, duration: 1.3, ease: 'thud', stagger: 0.06 })
-    .from(charsOf[1], { opacity: 0, duration: 0.9, keyframes: { opacity: [0, 0.9, 0.2, 1] }, stagger: { each: 0.06, from: 'random' } }, '-=0.6')
+    .to(charsOf[1], { duration: 0.9, keyframes: { opacity: [0, 0.9, 0.2, 1] }, stagger: { each: 0.06, from: 'random' } }, '-=0.6')
     .from(charsOf[2], { y: 50, rotation: () => gsap.utils.random(-40, 40), opacity: 0, duration: 1.1, ease: 'back.out(2.2)', stagger: { each: 0.05, from: 'random' } }, '-=0.5')
     .from('.lab-hero__eyebrow, .lab-hero__lead', { opacity: 0, y: 24, duration: 1, stagger: 0.1 }, 0.2)
     .from('.emblem', { opacity: 0, y: 80, scale: 0.92, duration: 1.4, stagger: 0.14 }, 0.6)
@@ -91,11 +93,13 @@ function strata() {
 }
 
 /* ---------------- Chapters ---------------- */
-function chapterWord(chapter, entrance) {
-  const word = $('.chapter__word', chapter);
-  const chars = splitChars(word);
-  gsap.set(chars, { display: 'inline-block' });
-  ScrollTrigger.create({ trigger: word, start: 'top 85%', once: true, onEnter: () => entrance(chars) });
+// Splits a chapter's big Latin word and gives it the chapter's own entrance. Pass `from` vars for a
+// from-tween, or `to` vars (with keyframes) for an entrance that starts fully transparent.
+function chapterWord(chapter, { from, to }) {
+  const chars = splitChars($('.chapter__word', chapter));
+  const scrollTrigger = { trigger: $('.chapter__word', chapter), start: 'top 85%' };
+  if (from) gsap.from(chars, { ...from, scrollTrigger });
+  else { gsap.set(chars, { opacity: 0 }); gsap.to(chars, { ...to, scrollTrigger }); }
 }
 
 function chapterHead(chapter) {
@@ -107,7 +111,7 @@ function chapterHead(chapter) {
 function magnum() {
   const ch = $('.chapter--magnum');
   chapterHead(ch);
-  chapterWord(ch, (chars) => gsap.from(chars, { yPercent: -110, opacity: 0, duration: 1.6, ease: 'thud', stagger: 0.09 }));
+  chapterWord(ch, { from: { yPercent: -110, opacity: 0, duration: 1.6, ease: 'thud', stagger: 0.09 } });
   gsap.from($('.chapter__emblem img', ch), { y: -120, opacity: 0, duration: 2, ease: 'thud', scrollTrigger: { trigger: $('.chapter__emblem', ch), start: 'top 80%' } });
   gsap.from($$('.person', ch), { y: -70, opacity: 0, duration: 1.7, ease: 'thud', stagger: 0.3, scrollTrigger: { trigger: $('.people', ch), start: 'top 80%' } });
 }
@@ -115,7 +119,7 @@ function magnum() {
 function lumen() {
   const ch = $('.chapter--lumen');
   chapterHead(ch);
-  chapterWord(ch, (chars) => gsap.from(chars, { duration: 1.2, keyframes: { opacity: [0, 1, 0.25, 0.9, 0.4, 1] }, stagger: { each: 0.08, from: 'random' } }));
+  chapterWord(ch, { to: { duration: 1.2, keyframes: { opacity: [0, 1, 0.25, 0.9, 0.4, 1] }, stagger: { each: 0.08, from: 'random' } } });
   gsap.from($$('.person', ch), { y: 50, opacity: 0, duration: 1.3, stagger: 0.15, scrollTrigger: { trigger: $('.people', ch), start: 'top 80%' } });
 
   // A warm light that follows the pointer (or drifts by itself on touch) and flickers like a flame.
@@ -146,7 +150,7 @@ function lumen() {
 function novum() {
   const ch = $('.chapter--novum');
   chapterHead(ch);
-  chapterWord(ch, (chars) => gsap.from(chars, { y: 70, rotation: () => gsap.utils.random(-50, 50), opacity: 0, duration: 1.2, ease: 'back.out(2.4)', stagger: { each: 0.06, from: 'random' } }));
+  chapterWord(ch, { from: { y: 70, rotation: () => gsap.utils.random(-50, 50), opacity: 0, duration: 1.2, ease: 'back.out(2.4)', stagger: { each: 0.06, from: 'random' } } });
   // Playful staggered grid: cards pop in from scattered angles, in a random order.
   gsap.from($$('.person', ch), {
     y: 90, scale: 0.86, rotation: () => gsap.utils.random(-12, 12), opacity: 0, duration: 1.1, ease: 'back.out(1.7)',
@@ -162,9 +166,14 @@ function interludes() {
   });
 }
 
-if (!reducedMotion) {
+// Split text needs final font metrics, so the choreography starts once fonts are ready.
+// Until then the hero stays hidden (see .lab-ready in lab.css) to avoid a flash of unsplit text.
+const ready = () => document.documentElement.classList.add('lab-ready');
+if (reducedMotion) ready();
+else {
   document.fonts.ready.then(() => {
     hero();
+    ready();
     strata();
     magnum();
     lumen();
