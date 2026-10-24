@@ -3,7 +3,8 @@
 // detector's real cadence on the Raspberry Pi 5 (NCNN, 5.5 +/- 0.7 FPS, 167 +/- 21 ms per inference).
 // Real mode plays `options.video` and draws boxes from `options.detections` (JSON, see detector.js).
 //
-// Options: compact, bare, theme ("dark" | "paper"), height, aspect, video, detections, start (seconds).
+// Options: compact, bare, theme ("dark" | "paper"), height, aspect, video, detections, start (seconds),
+// title / meta / label (override the frame title, meta line and aria-label, e.g. to name the model behind real footage).
 
 import './perception/perception.css';
 import { buildFrame, createLoop, applySize, palette } from './perception/common.js';
@@ -18,8 +19,8 @@ export default function mount(el, { options = {}, reducedMotion = false } = {}) 
   const compact = !!options.compact;
   const pal = palette(options.theme);
   const { root, right, body } = buildFrame(el, {
-    title: 'YOLO26n · /yolo26/detections',
-    meta: compact ? '' : 'NCNN · Raspberry Pi 5 · CPU only',
+    title: options.title || 'YOLO26n · /yolo26/detections',
+    meta: compact ? '' : (options.meta || 'NCNN · Raspberry Pi 5 · CPU only'),
     options, kind: 'yolo',
   });
   if (right) right.insertAdjacentHTML('afterbegin', '<span class="chip chip--live pcp-chip">Live</span>');
@@ -32,7 +33,7 @@ export default function mount(el, { options = {}, reducedMotion = false } = {}) 
   // A resize clears the canvas; repaint the last frame so a paused or static view never goes blank.
   let last = null;
   const view = createCameraView(stage, {
-    sceneAt: (t) => sceneAt(t), compact, video: options.video, detections: options.detections, label: LABEL,
+    sceneAt: (t) => sceneAt(t), compact, video: options.video, detections: options.detections, label: options.label || LABEL,
     onResize: () => { if (last !== null && !loop.playing) view.render(last, 0); },
   });
 
