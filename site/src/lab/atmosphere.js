@@ -83,11 +83,12 @@ export function initAtmosphere(root = document) {
 
   function lookAt(scrollY) {
     const y = scrollY + h * 0.55; // the reading line, a little below centre
-    let a = stops[0], b = stops[stops.length - 1];
-    for (let i = 0; i < stops.length - 1; i++) {
-      if (y >= stops[i].y && y <= stops[i + 1].y) { a = stops[i]; b = stops[i + 1]; break; }
-      if (y < stops[0].y) { b = a; break; }
-    }
+    const first = stops[0], last = stops[stops.length - 1];
+    if (y <= first.y) return first;
+    if (y >= last.y) return last;
+    let i = 0;
+    while (y > stops[i + 1].y) i++;
+    const a = stops[i], b = stops[i + 1];
     const t = b.y === a.y ? 0 : gsap.utils.clamp(0, 1, (y - a.y) / (b.y - a.y));
     const e = t * t * (3 - 2 * t); // smoothstep: morphs ease in and out of each interlude
     return { bg: mixRgb(a.bg, b.bg, e), fg: mixRgb(a.fg, b.fg, e), mode: mix(a.mode, b.mode, e) };
@@ -151,8 +152,10 @@ export function initAtmosphere(root = document) {
   }
 
   const tick = (_, dt) => draw(performance.now(), Math.min(dt, 50));
-  const setRunning = (on) => {
-    if (reducedMotion || on === running) return;
+  let inView = true;
+  const update = () => {
+    const on = !reducedMotion && inView && !document.hidden;
+    if (on === running) return;
     running = on;
     on ? gsap.ticker.add(tick) : gsap.ticker.remove(tick);
   };
@@ -163,9 +166,9 @@ export function initAtmosphere(root = document) {
   ScrollTrigger.addEventListener('refresh', () => { measure(); onScroll(window.scrollY); });
   ScrollTrigger.create({ start: 0, end: 'max', onUpdate: (self) => onScroll(self.scroll()) });
   // Animate only while the page body (not the footer) fills the screen.
-  ScrollTrigger.create({ trigger: root.querySelector('.lab') || document.body, start: 'top bottom', end: 'bottom top', onToggle: (s) => setRunning(s.isActive) });
-  setRunning(true);
-  document.addEventListener('visibilitychange', () => setRunning(!document.hidden));
+  ScrollTrigger.create({ trigger: root.querySelector('.lab') || document.body, start: 'top bottom', end: 'bottom top', onToggle: (s) => { inView = s.isActive; update(); } });
+  update();
+  document.addEventListener('visibilitychange', update);
 
   let rt;
   window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(resize, 150); });
