@@ -19,7 +19,7 @@ export const NAV = [
       { href: 'research.html', title: 'All research', sub: 'Papers behind the stack' },
       { href: 'research-route-planning.html', title: 'Semantic route planning', sub: 'Sensors 2026 · YOLO + LiDAR + Nav2' },
       { href: 'research-covariance.html', title: 'AI dynamic covariance', sub: 'Sensors 2025 · ROS 2 localisation' },
-      { href: 'research-vlm-autonomy.html', title: 'VLM semantic autonomy', sub: 'Resolver + cross-robot memory' },
+      { href: 'research-vlm-autonomy.html', title: 'VLM semantic autonomy', sub: 'Robotics and Autonomous Systems 2027' },
     ],
   },
   {
