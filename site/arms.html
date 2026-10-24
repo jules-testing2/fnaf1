@@ -13,7 +13,53 @@
 </head>
 <body data-page="arms">
   <main id="main">
-    <section class="section"><div class="container"><p class="eyebrow">Coming soon</p><h1 class="h1">SAIM Arm series</h1></div></section>
+    <section class="pp-hero go-hero" aria-labelledby="arm-title">
+      <div class="pp-hero__grid-bg" aria-hidden="true"></div>
+      <div class="container go-hero__grid">
+        <div class="go-hero__copy stack" style="--stack-gap:1.6rem">
+          <div class="pp-hero__head"><p class="eyebrow" data-scramble>Manipulation</p><span class="chip chip--live">6-DOF</span></div>
+          <h1 class="h1 go-hero__title" id="arm-title"><span class="go-hero__line">SAIM Arm</span> <span class="go-hero__line"><em class="fire-text">series</em></span></h1>
+          <p class="lead" data-reveal>6-DOF robotic arms that mount on Xplorer, G1, or a fixed base, sharing the same perception and grasp-planning modules from the Autonomy Stack.</p>
+          <div class="pp-hero__ctas" data-reveal>
+            <a class="btn btn--fire" href="mailto:contact@saimrobotics.com?subject=SAIM%20Arm%20series%20%C2%B7%20spec%20sheet%20request" data-magnetic>Request specs <span class="arrow">→</span></a>
+            <a class="btn btn--ghost" href="#mounts" data-magnetic>Mount configurations</a>
+          </div>
+        </div>
+        <div class="arm-hero__fig"><span class="arm-hero__disc" aria-hidden="true"></span><img src="img/arm.webp" alt="A black 6-DOF SAIM robotic arm on a base plate, holding a yellow block in its gripper" width="889" height="856"></div>
+      </div>
+    </section>
+    <section class="section section--tight pp-stats" aria-label="Arm key specifications">
+      <div class="container grid grid-4" data-stagger>
+        <div><div class="stat-value" data-counter="6">6</div><div class="stat-label">Degrees of freedom</div></div>
+        <div><div class="stat-value" data-counter="5" data-suffix=" kg">5 kg</div><div class="stat-label">Payload capacity</div></div>
+        <div><div class="stat-value" data-counter="850" data-suffix=" mm">850 mm</div><div class="stat-label">Reach</div></div>
+        <div><div class="stat-value" data-counter="0.1" data-decimals="1" data-prefix="±" data-suffix=" mm">±0.1 mm</div><div class="stat-label">Repeatability</div></div>
+      </div>
+    </section>
+    <section class="section" id="mounts" aria-labelledby="arm-mounts-title">
+      <div class="container">
+        <div class="pp-section-head"><p class="eyebrow" data-reveal>Mount configurations</p><h2 class="h2" id="arm-mounts-title" data-split>One arm, <em>three homes.</em></h2></div>
+        <div class="grid grid-3" data-stagger>
+          <article class="card pp-cap" data-tilt="4" data-spotlight><span class="pp-xlink__img"><img src="img/xplorer-b.webp" alt="Xplorer B carrying an arm-mounted camera" width="398" height="458" loading="lazy"></span><h3 class="h3">On Xplorer</h3><p class="muted">Mobile manipulation for pick-and-place tasks across a facility.</p></article>
+          <article class="card pp-cap" data-tilt="4" data-spotlight><span class="pp-xlink__img"><img src="img/g1.webp" alt="The G1 humanoid" width="526" height="1172" loading="lazy"></span><h3 class="h3">On G1</h3><p class="muted">Native arms on the humanoid platform for full dexterity.</p></article>
+          <article class="card pp-cap" data-tilt="4" data-spotlight><span class="pp-xlink__img"><img src="img/arm.webp" alt="The arm on its fixed base plate" width="889" height="856" loading="lazy"></span><h3 class="h3">Fixed base</h3><p class="muted">Bench-mounted for stationary manipulation cells.</p></article>
+        </div>
+      </div>
+    </section>
+    <section class="section section--paper" aria-labelledby="arm-spec-title">
+      <div class="container">
+        <div class="pp-section-head"><p class="eyebrow" data-reveal>Specifications</p><h2 class="h2" id="arm-spec-title" data-split>Precision <em>by design.</em></h2></div>
+        <dl class="pp-spec pp-spec--table" data-stagger>
+          <div><dt>Degrees of freedom</dt><dd>6</dd></div>
+          <div><dt>Payload capacity</dt><dd>5 kg</dd></div>
+          <div><dt>Reach</dt><dd>850 mm</dd></div>
+          <div><dt>Repeatability</dt><dd>±0.1 mm</dd></div>
+          <div><dt>End effector</dt><dd>Interchangeable gripper</dd></div>
+          <div><dt>Control</dt><dd>Autonomy Stack grasp planner</dd></div>
+        </dl>
+      </div>
+    </section>
+    <div data-product-bands></div>
   </main>
   <script type="module" src="/src/pages/arms.js"></script>
 </body>

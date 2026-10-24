@@ -460,3 +460,12 @@
 .go-legs li.is-on { background: rgba(250, 82, 15, 0.08); box-shadow: inset 0 0 0 1px rgba(250, 82, 15, 0.45); transform: translateX(-6px); }
 .go-legs li.is-on .mono { color: var(--orange); }
 @media (max-width: 960px) { .go-patrol__grid { grid-template-columns: 1fr; } .go-legs { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); } .go-legs li.is-on { transform: none; } }
+
+/* ======================================================================
+   Arm series
+   ====================================================================== */
+.arm-hero__fig { position: relative; display: grid; place-items: center; }
+/* Cream plinth so the black arm reads on the dark page. */
+.arm-hero__disc { position: absolute; width: min(90%, 520px); aspect-ratio: 1; border-radius: 50%; background: radial-gradient(closest-side, var(--paper), var(--paper-2) 70%, rgba(236, 228, 212, 0) 100%); }
+.arm-hero__fig img { position: relative; width: min(100%, 540px); }
+@media (max-width: 960px) { .g1-labels, .g1-lead { display: none; } }
