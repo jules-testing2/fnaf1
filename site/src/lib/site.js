@@ -8,6 +8,9 @@ import { initDemos } from './demos.js';
 
 export function initSite() {
   document.documentElement.classList.add('js-motion');
+  // Each page's <head> hides the body until styles are in, to avoid a flash of unstyled content.
+  document.body.style.animation = 'none';
+  document.body.style.opacity = '1';
   mountChrome();
   initSmoothScroll();
   initPageTransitions();
