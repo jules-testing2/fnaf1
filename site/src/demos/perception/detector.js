@@ -101,6 +101,7 @@ const iou = (a, b) => {
 export class VideoTracks {
   constructor(data) {
     this.width = data.width || 1280;
+    this.model = data.model || null;
     this.height = data.height || 720;
     this.fps = data.fps || 30;
     this.frames = (data.frames || []).map((f) => ({ t: +f.t, boxes: (f.boxes || []).map((b) => ({ ...b })) })).sort((a, b) => a.t - b.t);

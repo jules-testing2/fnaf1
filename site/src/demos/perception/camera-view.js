@@ -99,7 +99,7 @@ export function createCameraView(host, { sceneAt, compact = false, video, detect
     text(narrow ? info.source : `${info.source}  ·  ${info.res}`, rect.x + pad + 13, top);
     text(info.clock, rect.x + rect.w - pad, top, 'right');
     if (!compact) text(`FRM ${String(info.frame).padStart(6, '0')}`, rect.x + rect.w - pad, top + f * 1.5, 'right', 'rgba(255,255,255,0.6)');
-    text(narrow ? 'YOLO26n · NCNN' : 'YOLO26n · NCNN · 416×416 · RPi 5 CPU', rect.x + pad, bottom);
+    text(info.model || (narrow ? 'YOLO26n · NCNN' : 'YOLO26n · NCNN · 416×416 · RPi 5 CPU'), rect.x + pad, bottom);
     ctx.fillStyle = tk.amber;
     text(info.rate, rect.x + rect.w - pad, bottom, 'right', tk.amber);
 
@@ -145,7 +145,7 @@ export function createCameraView(host, { sceneAt, compact = false, video, detect
     if (mode === 'video') {
       const vt = vid.currentTime;
       drawDetections(ctx, rect, tracks.at(vt), vt, tk, { font: clamp(Math.round(size.w / 58), 9, 12) });
-      hud(t, rect, { source: 'REAL FOOTAGE', res: `${tracks.width}×${tracks.height}`, clock: clock(vt), frame: Math.floor(vt * tracks.fps), rate: 'YOLO26n detections' });
+      hud(t, rect, { source: 'REAL FOOTAGE', res: `${tracks.width}×${tracks.height}`, clock: clock(vt), frame: Math.floor(vt * tracks.fps), rate: 'offline detections', model: tracks.model || 'YOLO · offline' });
       return;
     }
     // Wheel vibration on terrazzo: a few hundredths of a degree of pitch shake.
