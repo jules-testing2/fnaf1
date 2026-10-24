@@ -62,3 +62,33 @@
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
   --dur: 0.8s;
 }
+
+/* Light theme: the same tokens, re-pointed at a warm paper palette. Toggled from the nav (chrome.js). */
+:root[data-theme='light'] {
+  color-scheme: light;
+  --ink: #f6f1e7;
+  --ink-2: #efe8da;
+  --ink-3: #e6dcc9;
+  --ink-4: #d9cdb6;
+  --paper: #fffdf8;
+  --paper-2: #f4ede0;
+  --paper-3: #e9dfcc;
+  --fg: #17161a;
+  --fg-dim: rgba(23, 22, 26, 0.7);
+  --fg-mute: rgba(23, 22, 26, 0.48);
+  --line: rgba(23, 22, 26, 0.12);
+  --line-strong: rgba(23, 22, 26, 0.24);
+  --grad-ink: radial-gradient(120% 80% at 50% 0%, #efe4d2 0%, var(--ink) 60%);
+}
+
+/* The home hero is a robot's-eye WebGL scene built for a dark backdrop; it stays dark in the light theme. */
+:root[data-theme='light'] .hero {
+  --ink: #0a0a0b; --ink-2: #121214; --ink-3: #1b1b1e; --ink-4: #26262a;
+  --fg: #f3eee4; --fg-dim: rgba(243, 238, 228, 0.66); --fg-mute: rgba(243, 238, 228, 0.42);
+  --line: rgba(243, 238, 228, 0.12); --line-strong: rgba(243, 238, 228, 0.22);
+  background: var(--ink); color: var(--fg);
+}
+:root[data-theme='light'] body[data-page='index'] .site-nav:not(.is-scrolled) {
+  --fg: #f3eee4; --fg-dim: rgba(243, 238, 228, 0.66); --line-strong: rgba(243, 238, 228, 0.22);
+}
+:root[data-theme='light'] body[data-page='index'] .site-nav:not(.is-scrolled) img[src$='logo-white.webp'] { filter: none; }

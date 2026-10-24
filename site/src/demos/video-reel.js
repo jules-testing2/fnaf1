@@ -46,6 +46,7 @@ export default function mount(el, { options = {}, reducedMotion }) {
 
   const videos = [...el.querySelectorAll('video')];
   const items = [...el.querySelectorAll('.reel__item')];
+  const lift = [el, el.parentElement].filter(Boolean);
 
   // Grow toward the free side: clips on the left edge grow rightwards, on the right edge leftwards.
   items.forEach((item) => item.addEventListener('pointerenter', () => {
@@ -53,7 +54,10 @@ export default function mount(el, { options = {}, reducedMotion }) {
     const x = r.left < innerWidth * 0.25 ? 'left' : r.right > innerWidth * 0.75 ? 'right' : 'center';
     const y = r.top < innerHeight * 0.3 ? 'top' : r.bottom > innerHeight * 0.7 ? 'bottom' : 'center';
     item.style.transformOrigin = `${x} ${y}`;
+    // Wrappers animated by GSAP keep a transform, which traps z-index; lift them while hovering.
+    lift.forEach((n) => { n.style.position ||= 'relative'; n.style.zIndex = '30'; });
   }));
+  items.forEach((item) => item.addEventListener('pointerleave', () => lift.forEach((n) => (n.style.zIndex = ''))));
 
   // Click opens the clip large, with controls; Escape or a click outside closes it.
   items.forEach((item, i) => item.addEventListener('click', () => {

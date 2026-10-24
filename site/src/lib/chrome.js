@@ -61,6 +61,7 @@ function navHTML(file) {
       <div class="site-nav__links">${links}</div>
       <div class="site-nav__cta">
         <a class="btn btn--fire btn--sm" href="${DEMO_HREF}" data-magnetic>Request a demo <span class="arrow">→</span></a>
+        <button class="theme-toggle" type="button" aria-label="Switch colour theme" title="Light / dark"><svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/></svg><svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg></button>
         <button class="site-nav__burger" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span></button>
       </div>
     </div>
@@ -109,6 +110,14 @@ export function mountChrome() {
   document.body.insertAdjacentHTML('beforeend',
     '<div class="page-wipe" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>' +
     '<div class="cursor" aria-hidden="true"><div class="cursor__dot"></div><div class="cursor__ring"></div></div>');
+
+  // Theme: the inline script in each page's <head> applies the saved choice before first paint.
+  document.querySelector('.theme-toggle').addEventListener('click', () => {
+    const light = document.documentElement.dataset.theme !== 'light';
+    if (light) document.documentElement.dataset.theme = 'light'; else delete document.documentElement.dataset.theme;
+    try { localStorage.setItem('saim-theme', light ? 'light' : 'dark'); } catch {}
+    window.dispatchEvent(new CustomEvent('saim:theme', { detail: { light } }));
+  });
 
   const burger = document.querySelector('.site-nav__burger');
   burger.addEventListener('click', () => {
