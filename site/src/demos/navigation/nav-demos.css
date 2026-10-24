@@ -57,7 +57,7 @@
 .navd .tag { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--nd-mute); }
 
 /* ---------- route-replan HUD ---------- */
-.rr__box { position: absolute; display: grid; gap: 4px; padding: 10px 12px; border-radius: 12px; background: var(--nd-panel); box-shadow: inset 0 0 0 1px var(--nd-line); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.rr__box { position: absolute; display: grid; gap: 4px; padding: 10px 12px; border-radius: 12px; background: var(--nd-panel); box-shadow: inset 0 0 0 1px var(--nd-line); }
 .rr__tl { left: 12px; top: 12px; max-width: calc(62% - 12px); }
 .rr__tr { right: 12px; top: 12px; text-align: right; justify-items: end; }
 .rr__bl { left: 12px; bottom: 12px; width: min(300px, calc(55% - 12px)); }

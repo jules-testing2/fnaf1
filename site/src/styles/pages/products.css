@@ -128,7 +128,7 @@
    ====================================================================== */
 
 .xp-hero { padding-bottom: 0; }
-.xp-hero__title { margin-top: 18px; font-size: clamp(4rem, 17vw, 17rem); line-height: 0.82; letter-spacing: -0.055em; white-space: nowrap; }
+.xp-hero__title { margin-top: 18px; font-size: clamp(4rem, 20.5vw, 21rem); line-height: 0.82; letter-spacing: -0.055em; white-space: nowrap; }
 .xp-hero__saim { font-size: 0.3em; letter-spacing: -0.02em; vertical-align: 0.9em; color: var(--fg-dim); margin-right: 0.08em; }
 .xp-hero__fleet { position: relative; z-index: 2; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(8px, 2vw, 28px); align-items: end; margin-top: clamp(-90px, -5vw, -24px); }
 .xp-hero__bot { display: grid; justify-items: center; gap: 12px; padding: 10px; border-radius: var(--radius); transition: background 0.4s; }
@@ -254,3 +254,115 @@
   @keyframes xp-wire-v { from { transform: translateY(-24px); } to { transform: translateY(60px); } }
 }
 @media (max-width: 520px) { .xp-arch__sw { grid-template-columns: 1fr; } }
+
+/* ======================================================================
+   G1 · FIIRION
+   ====================================================================== */
+
+.g1-hero { min-height: min(100svh, 1100px); padding-bottom: clamp(40px, 6vw, 80px); }
+.g1-hero__word {
+  position: absolute; left: 0; bottom: 4%; white-space: nowrap; pointer-events: none; user-select: none;
+  font-family: var(--font-serif); font-style: italic; font-size: clamp(8rem, 30vw, 30rem); line-height: 0.8; letter-spacing: -0.05em;
+  color: transparent; -webkit-text-stroke: 1px rgba(243, 238, 228, 0.1);
+}
+.g1-hero__grid { position: relative; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 40px; align-items: center; }
+.g1-hero__title { display: grid; font-size: clamp(3.2rem, 8.4vw, 8.6rem); line-height: 0.9; }
+.g1-hero__line { display: block; overflow: hidden; padding-bottom: 0.06em; }
+.g1-hero__figure { position: relative; display: grid; justify-items: center; }
+.g1-hero__halo { position: absolute; inset: 8% 0 0; border-radius: 50%; background: radial-gradient(closest-side, rgba(250, 82, 15, 0.28), rgba(193, 18, 31, 0.08) 55%, transparent); filter: blur(10px); }
+.g1-scan { position: relative; height: min(78svh, 820px); aspect-ratio: 526 / 1172; }
+.g1-scan img { position: relative; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 40px 50px rgba(0, 0, 0, 0.6)); }
+/* A glowing band that only lights the robot's own pixels (masked by the cut-out). */
+.g1-scan__beam, .g1-figure__scan {
+  position: absolute; inset: 0; pointer-events: none; mix-blend-mode: screen;
+  -webkit-mask-size: 100% 100%; mask-size: 100% 100%; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+}
+.g1-scan__beam {
+  background: linear-gradient(180deg, transparent 0%, rgba(91, 192, 235, 0) 44%, rgba(91, 192, 235, 0.55) 49.5%, rgba(255, 255, 255, 0.9) 50%, rgba(250, 82, 15, 0.35) 51%, transparent 58%);
+  background-size: 100% 300%; animation: g1-scan 4.8s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+@keyframes g1-scan { from { background-position: 0 100%; } to { background-position: 0 0%; } }
+.g1-hero__tele { position: absolute; right: 0; top: 18%; margin: 0; display: grid; gap: 10px; }
+.g1-hero__tele div { display: grid; grid-template-columns: 56px auto; gap: 8px; padding: 8px 12px; border-left: 1px solid var(--orange); background: rgba(10, 10, 11, 0.5); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.g1-hero__tele dt { color: var(--fg-mute); }
+.g1-hero__tele dd { margin: 0; color: var(--fg); }
+@media (max-width: 860px) {
+  .g1-hero__grid { grid-template-columns: 1fr; }
+  .g1-scan { height: min(64svh, 560px); }
+  .g1-hero__tele { top: auto; bottom: 6%; }
+}
+
+/* Anatomy */
+.g1-anat { padding-bottom: 0; }
+.g1-anat__head { margin-bottom: 0; }
+.g1-anat__stage { position: relative; display: grid; grid-template-columns: 1fr auto 1fr; gap: clamp(24px, 4vw, 64px); align-items: center; }
+.g1-steps { list-style: none; margin: 0; padding: 0; position: relative; }
+.g1-step { display: grid; gap: 10px; }
+.g1-step .mono { color: var(--orange); }
+.g1-step p { max-width: 42ch; }
+.g1-step .link-arrow { display: inline; }
+
+.g1-figure { position: relative; height: min(76svh, 760px); aspect-ratio: 526 / 1172; margin-inline: auto; }
+.g1-figure img { width: 100%; height: 100%; object-fit: contain; filter: brightness(0.82) drop-shadow(0 30px 40px rgba(0, 0, 0, 0.6)); }
+.g1-figure__scan {
+  background: linear-gradient(180deg, transparent calc(var(--scan, 0) * 100% - 14%), rgba(91, 192, 235, 0.4) calc(var(--scan, 0) * 100% - 1%), #fff calc(var(--scan, 0) * 100%), transparent calc(var(--scan, 0) * 100% + 1.5%));
+}
+.g1-figure__svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.g1-dim line { stroke: var(--fg-mute); stroke-width: 2; vector-effect: non-scaling-stroke; opacity: 0; transition: opacity 0.6s; }
+.g1-figure.show-dim .g1-dim line { opacity: 1; }
+.g1-lead { fill: none; stroke: var(--orange); stroke-width: 1.4; vector-effect: non-scaling-stroke; stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 0.9s var(--ease-out), opacity 0.5s; opacity: 0; }
+.g1-lead.is-on { stroke-dashoffset: 0; opacity: 1; }
+.g1-lead.is-past { stroke-dashoffset: 0; opacity: 0.22; }
+.g1-dot { opacity: 0; transform-box: fill-box; transform-origin: center; transform: scale(0.3); transition: opacity 0.5s var(--d, 0s), transform 0.7s var(--ease-out) var(--d, 0s); }
+.g1-dot.is-on { opacity: 1; transform: scale(1); }
+.g1-dot.is-past { opacity: 0.35; transform: scale(0.8); }
+.g1-dot__ring { fill: rgba(250, 82, 15, 0.12); stroke: var(--orange); stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+.g1-dot__core { fill: var(--amber); }
+.g1-dot.is-on .g1-dot__ring { animation: g1-ping 1.8s var(--ease-out) infinite; transform-box: fill-box; transform-origin: center; }
+@keyframes g1-ping { 0% { transform: scale(0.6); opacity: 1; } 100% { transform: scale(1.6); opacity: 0; } }
+.g1-labels { position: absolute; inset: 0; pointer-events: none; }
+.g1-label { position: absolute; transform: translate(8px, -50%); white-space: nowrap; padding: 6px 10px; border-radius: 6px; background: rgba(10, 10, 11, 0.8); box-shadow: inset 0 0 0 1px rgba(250, 82, 15, 0.45); color: var(--fg); opacity: 0; transition: opacity 0.5s 0.3s, transform 0.6s var(--ease-out) 0.3s; }
+.g1-label.is-left { transform: translate(calc(-100% - 8px), -50%); }
+.g1-label.is-on { opacity: 1; }
+.g1-label.is-past { opacity: 0.3; }
+
+.g1-readout { display: grid; gap: 10px; justify-self: end; width: min(100%, 300px); }
+.g1-readout__row { position: relative; display: flex; justify-content: space-between; align-items: baseline; padding: 14px 16px; border-radius: 14px; box-shadow: inset 0 0 0 1px var(--line); color: var(--fg-mute); transition: box-shadow 0.4s, color 0.4s, background 0.4s; }
+.g1-readout__row b { font-family: var(--font-serif); font-weight: 420; font-size: 2rem; line-height: 1; color: var(--fg-dim); font-variant-numeric: tabular-nums; }
+.g1-readout__row.is-on { color: var(--orange); box-shadow: inset 0 0 0 1px rgba(250, 82, 15, 0.4); background: rgba(250, 82, 15, 0.06); }
+.g1-readout__row.is-on b { color: var(--fg); }
+.g1-gauge { position: absolute; right: -52px; top: 50%; width: 40px; height: 40px; transform: translateY(-50%) rotate(-90deg); }
+.g1-gauge circle { fill: none; stroke: var(--line-strong); stroke-width: 3; }
+.g1-gauge .g1-gauge__fill { stroke: var(--orange); stroke-dasharray: 100.5; stroke-dashoffset: 100.5; transition: stroke-dashoffset 1.4s var(--ease-out); }
+.g1-gauge .g1-gauge__fill.is-on { stroke-dashoffset: 0; }
+.g1-progress { height: 2px; background: var(--line); margin-top: 6px; border-radius: 2px; overflow: hidden; }
+.g1-progress i { display: block; height: 100%; background: var(--grad-fire); transform-origin: left; transform: scaleX(var(--scan, 0)); }
+
+/* Pinned (desktop): one step at a time, figure centred */
+.g1-anat.is-pinned .g1-anat__pin { height: 100svh; display: grid; align-items: center; }
+.g1-anat.is-pinned .g1-steps { min-height: 260px; }
+.g1-anat.is-pinned .g1-step { position: absolute; inset: 0 0 auto; opacity: 0; transform: translateY(24px); transition: opacity 0.5s, transform 0.7s var(--ease-out); pointer-events: none; }
+.g1-anat.is-pinned .g1-step.is-active { opacity: 1; transform: none; pointer-events: auto; }
+.g1-anat.is-pinned .g1-readout { margin-right: 52px; }
+
+/* Static (mobile, short screens, reduced motion): figure with all hotspots, list of steps */
+.g1-anat.is-static { padding-bottom: clamp(88px, 12vw, 180px); }
+.g1-anat.is-static .g1-anat__stage { grid-template-columns: 1fr; padding-top: clamp(32px, 5vw, 56px); }
+.g1-anat.is-static .g1-figure { order: -1; height: min(80svh, 640px); }
+.g1-anat.is-static .g1-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.g1-anat.is-static .g1-step { padding: 18px; border-radius: 16px; box-shadow: inset 0 0 0 1px var(--line); }
+.g1-anat.is-static .g1-readout, .g1-anat.is-static .g1-dim, .g1-anat.is-static .g1-figure__scan { display: none; }
+.g1-anat.is-static .g1-dot__ring { animation: none; }
+@media (max-width: 960px) {
+  /* Labels would run off narrow screens; the numbered list carries the content instead. */
+  .g1-anat.is-static .g1-labels, .g1-anat.is-static .g1-lead { display: none; }
+}
+
+/* Use cases */
+.g1-uses__list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.g1-uses__list li { display: grid; grid-template-columns: 60px minmax(0, 1.4fr) 1fr; gap: 24px; align-items: baseline; padding-block: clamp(22px, 3vw, 40px); border-bottom: 1px solid var(--line); transition: padding 0.6s var(--ease-out); }
+.g1-uses__list li:hover { padding-left: 16px; }
+.g1-uses__list .mono { color: var(--orange); }
+.g1-uses__list .h1 { font-size: clamp(2.2rem, 5vw, 4.8rem); }
+.g1-uses__list li:hover .h1 em, .g1-uses__list li:hover .h1 { color: var(--amber); transition: color 0.4s; }
+@media (max-width: 760px) { .g1-uses__list li { grid-template-columns: 40px 1fr; } .g1-uses__list p { grid-column: 2; } }

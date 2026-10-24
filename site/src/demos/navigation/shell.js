@@ -127,7 +127,7 @@ export function createCanvas(parent, onResize) {
   const canvas = document.createElement('canvas');
   canvas.className = 'navd__canvas';
   parent.append(canvas);
-  const ctx = canvas.getContext('2d');
+  const ctx = canvas.getContext('2d', { willReadFrequently: true });
   const s = { canvas, ctx, w: 1, h: 1, dpr: 1 };
   const resize = () => {
     const w = Math.max(1, parent.clientWidth), h = Math.max(1, parent.clientHeight);

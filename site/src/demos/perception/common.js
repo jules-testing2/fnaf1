@@ -2,7 +2,6 @@
 // design tokens, colour maths, DPR-aware canvases, a pausable rAF clock, seeded noise and the
 // `.demo-frame` chrome every demo renders unless `options.bare` is set.
 
-import './perception.css';
 
 /* ---------- Tokens & colour ---------- */
 
@@ -103,7 +102,7 @@ export function noise1(x, seed = 0) {
 
 /**
  * Creates a canvas that fills `host`, keeps its backing store at devicePixelRatio (capped at 2)
- * and calls `onResize({ w, h, dpr })` whenever the host changes size.
+ * and calls `onResize({ w, h, dpr })` whenever the host changes size after creation.
  */
 export function createCanvas(host, { label, className = '', onResize } = {}) {
   const canvas = document.createElement('canvas');
@@ -112,6 +111,7 @@ export function createCanvas(host, { label, className = '', onResize } = {}) {
   host.appendChild(canvas);
   const ctx = canvas.getContext('2d');
   const size = { w: 1, h: 1, dpr: 1 };
+  let initial = true;
   const fit = () => {
     const r = host.getBoundingClientRect();
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -121,11 +121,12 @@ export function createCanvas(host, { label, className = '', onResize } = {}) {
     canvas.width = Math.round(w * dpr);
     canvas.height = Math.round(h * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    onResize?.(size);
+    if (!initial) onResize?.(size); // the first paint is the caller's job
   };
   const ro = new ResizeObserver(fit);
   ro.observe(host);
   fit();
+  initial = false;
   return { canvas, ctx, size, fit, destroy: () => { ro.disconnect(); canvas.remove(); } };
 }
 

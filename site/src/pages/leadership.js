@@ -135,7 +135,7 @@ function lumen() {
       c.style.setProperty('--ly', `${y - (r.top - r0.top)}px`);
     });
   };
-  const flicker = gsap.to(glow, { opacity: () => gsap.utils.random(0.7, 1), scale: () => gsap.utils.random(0.94, 1.06), duration: () => gsap.utils.random(0.06, 0.22), ease: 'none', repeat: -1, repeatRefresh: true, paused: true });
+  const flicker = gsap.to(glow, { opacity: () => gsap.utils.random(0.7, 1), duration: () => gsap.utils.random(0.06, 0.22), ease: 'none', repeat: -1, repeatRefresh: true, paused: true });
   let drift;
   if (isTouch) {
     const pos = { t: 0 };
@@ -172,8 +172,8 @@ const ready = () => document.documentElement.classList.add('lab-ready');
 if (reducedMotion) ready();
 else {
   document.fonts.ready.then(() => {
+    ready(); // from-tweens below render their start state immediately, so there is no flash
     hero();
-    ready();
     strata();
     magnum();
     lumen();

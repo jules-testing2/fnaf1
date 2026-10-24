@@ -9,15 +9,15 @@ import { createXplorerModel, blendTwin } from './xplorer-model.js';
 
 const RAYS = 503;
 const HALF_FOV = (24.9 * Math.PI) / 180;
-const ROOM = 2.1; // half-size of the square room, metres
+const ROOM = 1.7; // half-size of the square room, metres
 
 // Obstacle footprints in the room (x, z in metres): boxes {x,z,w,d,h} and cylinders {x,z,r,h}.
 const OBSTACLES = [
-  { x: 1.15, z: 0.35, w: 0.45, d: 0.45, h: 0.85 },      // chair
-  { x: 0.85, z: -0.85, r: 0.2, h: 1.7 },                // person
-  { x: -0.95, z: 1.05, r: 0.2, h: 0.75 },               // potted plant
-  { x: -1.25, z: -0.75, w: 0.9, d: 0.55, h: 0.75 },     // table
-  { x: 0.2, z: 1.35, w: 1.2, d: 0.3, h: 0.45 },         // bench
+  { x: 1.0, z: 0.3, w: 0.4, d: 0.4, h: 0.85 },        // chair
+  { x: 0.75, z: -0.7, r: 0.18, h: 1.7 },              // person
+  { x: -0.8, z: 0.9, r: 0.18, h: 0.75 },              // potted plant
+  { x: -1.05, z: -0.65, w: 0.8, d: 0.5, h: 0.75 },    // table
+  { x: 0.25, z: 1.2, w: 1.0, d: 0.28, h: 0.45 },      // bench
 ];
 
 /** Distance along a 2D ray from (ox, oz) at angle a to the first obstacle or wall. */
@@ -88,7 +88,7 @@ export function mountXplorerTwin(container, { build, reducedMotion = false } = {
   const obstacles = new THREE.Group();
   for (const o of OBSTACLES) {
     const geo = o.r ? new THREE.CylinderGeometry(o.r, o.r, o.h, 14, 1) : new THREE.BoxGeometry(o.w, o.h, o.d);
-    const edges = new THREE.LineSegments(new THREE.EdgesGeometry(geo, 20), obstacleMat);
+    const edges = new THREE.LineSegments(new THREE.EdgesGeometry(geo, 30), obstacleMat);
     edges.position.set(o.x, o.h / 2, o.z);
     obstacles.add(edges);
   }
@@ -191,9 +191,9 @@ export function mountXplorerTwin(container, { build, reducedMotion = false } = {
 
   function frame() {
     const aspect = stage.size.w / stage.size.h;
-    const dist = aspect < 1 ? 3.6 / Math.max(aspect, 0.55) : 3.4;
-    camera.position.set(dist * 0.62, dist * 0.42, dist * 0.62);
-    camera.lookAt(0, 0.12, 0);
+    const dist = aspect < 1 ? 4.4 / Math.max(aspect, 0.6) : 4.4;
+    camera.position.set(dist * 0.52, dist * 0.62, dist * 0.52);
+    camera.lookAt(0, 0.05, 0);
   }
 
   let spin = 0.6, velocity = 0, travel = 0;

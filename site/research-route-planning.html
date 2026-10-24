@@ -8,12 +8,418 @@
   <meta name="theme-color" content="#0a0a0b">
   <meta property="og:title" content="Semantic-Aware Route Planning on Edge Hardware · SAIM Research">
   <meta property="og:description" content="Monocular camera and 2D LiDAR fusion with penalty-weighted Nav2 Route Server replanning on a Raspberry Pi 5. Sensors 2026, 26, 2232.">
-  <meta property="og:type" content="website">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="img/research/rp-fig7-environment.webp">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
 </head>
 <body data-page="research-route-planning">
   <main id="main">
-    <section class="section"><div class="container"><p class="eyebrow">Coming soon</p><h1 class="h1">Semantic-Aware Route Planning on Edge Hardware</h1></div></section>
+
+    <!-- ============================================================ hero -->
+    <header class="paper-hero">
+      <div class="container paper-hero__grid">
+        <div class="paper-hero__text">
+          <nav class="paper-hero__crumbs" aria-label="Breadcrumb">
+            <a href="research.html">← All research</a>
+            <span class="paper-layers" data-layers aria-label="SAS layers L1 and L2"></span>
+          </nav>
+          <p class="eyebrow paper-hero__eyebrow">Perception + routing · Sensors 2026</p>
+          <h1 class="paper-title" data-split="words">Lightweight Semantic-Aware Route Planning on Edge Hardware for <em>Indoor Mobile Robots</em></h1>
+          <p class="paper-subtitle" data-reveal="blur">Monocular Camera–2D LiDAR Fusion with Penalty-Weighted Nav2 Route Server Replanning</p>
+          <p class="paper-authors">
+            <span>Bogdan Felician Abaza<sup>*</sup></span>
+            <span>Andrei-Alexandru Staicu</span>
+            <span>Cristian Vasile Doicin</span>
+          </p>
+          <p class="paper-affil">Faculty of Industrial Engineering and Robotics (FIIR), National University of Science and Technology POLITEHNICA Bucharest, 060042 Bucharest, Romania · <sup>*</sup>Corresponding author</p>
+          <p class="paper-venue"><strong>Sensors</strong> <span class="mono">2026 · 26(7) · 2232 · Published 4 April 2026</span> <span class="chip">Open access · CC BY 4.0</span></p>
+          <nav class="paper-links" aria-label="Paper links">
+            <a class="btn btn--fire" href="https://doi.org/10.3390/s26072232" target="_blank" rel="noopener" data-magnetic>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h6"/></svg>
+              Paper</a>
+            <a class="btn btn--ghost" href="https://github.com/bogdan-abaza/nav2-semantic-route-server" target="_blank" rel="noopener" data-magnetic>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m8 6-6 6 6 6M16 6l6 6-6 6"/></svg>
+              Code + data</a>
+            <a class="btn btn--ghost" href="#in-motion" data-magnetic>
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+              Interactive demo</a>
+            <a class="btn btn--ghost" href="#citation" data-magnetic>BibTeX</a>
+          </nav>
+        </div>
+        <div class="hero-art" data-hero-art></div>
+      </div>
+      <div class="container">
+        <div class="paper-stats">
+          <div class="paper-stat"><div class="stat-value" data-counter="97" data-suffix="%">97%</div><div class="stat-label">Success over 115 legs</div></div>
+          <div class="paper-stat"><div class="stat-value" data-counter="42">42</div><div class="stat-label">Replanning events</div></div>
+          <div class="paper-stat"><div class="stat-value" data-counter="11.0" data-decimals="1" data-prefix="σ " data-suffix=" s">σ 11.0 s</div><div class="stat-label">Nav-time spread, vs 31.1 s</div></div>
+          <div class="paper-stat"><div class="stat-value" data-counter="48" data-prefix="85→" data-suffix="%">85→48%</div><div class="stat-label">CPU with inference offloading</div></div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ============================================================ section nav -->
+    <nav class="paper-nav" aria-label="Sections">
+      <div class="paper-nav__inner">
+        <div class="paper-nav__track">
+          <span class="paper-nav__thumb" aria-hidden="true"></span>
+          <a href="#abstract"><span class="num">I</span>Abstract</a>
+          <a href="#contributions"><span class="num">II</span>Contributions</a>
+          <a href="#in-motion"><span class="num">III</span>In motion</a>
+          <a href="#method"><span class="num">IV</span>Method</a>
+          <a href="#results"><span class="num">V</span>Results</a>
+          <a href="#limitations"><span class="num">VI</span>Limits</a>
+          <a href="#citation"><span class="num">VII</span>Cite</a>
+        </div>
+        <div class="paper-nav__progress" aria-hidden="true"><i></i></div>
+      </div>
+    </nav>
+
+    <!-- ============================================================ I. abstract -->
+    <section class="psec psec--paper" id="abstract">
+      <div class="container">
+        <div class="sec-head"><span class="sec-num" aria-hidden="true">I</span><div><p class="eyebrow">Abstract</p><h2 class="h2" data-split>From a camera box to a <em>route decision</em>.</h2></div></div>
+        <div class="abstract-grid">
+          <div>
+            <p class="lead-abstract" data-reveal>Standard Nav2 treats a corridor as geometry. This work closes the loop from <em>what the robot sees</em> to <em>which route it chooses</em>, in real time, on a CPU-only Raspberry Pi 5.</p>
+            <div class="prose">
+              <p>The paper introduces a computationally efficient semantic-aware route planning framework for indoor mobile robots. Monocular object detection is fused with 2D LiDAR range estimation, and the resulting semantic annotations feed the Nav2 Route Server for penalty-weighted route selection. Object localisation in the map frame uses <strong>Angular Sector Fusion (ASF)</strong>, a deterministic geometric method that needs no parameter tuning: it projects YOLO bounding boxes onto LiDAR angular sectors and takes a 25th-percentile range, which stays robust to sparse returns and partial occlusions.</p>
+              <p>All intrinsic and extrinsic sensor parameters are resolved at runtime from ROS 2 topics and the URDF transform tree. Detected entities are classified by mobility (dynamic, static, minor), persisted in a GeoJSON semantic map and propagated to navigation-graph edges as additive penalties and velocity constraints. A reactive module watches semantic cost updates during execution and recomputes the route when a threshold is crossed.</p>
+              <p>Over <strong>115 navigation legs</strong> on three heterogeneous robots, the system reached a <strong>97% overall success rate</strong> (baseline 100%, adaptive 94%) with <strong>42 replanning events</strong> in 57% of adaptive legs. Mean navigation time did not change significantly (Mann–Whitney p = 0.157), but its spread fell from σ = 31.1 s to 11.0 s, mainly by avoiding AMCL recovery outliers. YOLO26n ran at 5.5 ± 0.7 FPS through NCNN, and offloading inference cut CPU load from 85% to 48%.</p>
+            </div>
+            <div class="kw" data-stagger>
+              <span class="chip">AMR</span><span class="chip">Semantic navigation</span><span class="chip">Nav2 Route Server</span><span class="chip">Camera–LiDAR fusion</span><span class="chip">Edge computing</span><span class="chip">Raspberry Pi 5</span><span class="chip">YOLO</span><span class="chip">ROS 2</span>
+            </div>
+          </div>
+          <div class="findings" data-stagger>
+            <p class="mono" style="color:var(--red)">Highlights, as stated in the paper</p>
+            <div class="finding"><i>01</i><span><b>ASF localises objects in the map frame on CPU-only hardware</b> with minimal overhead and no learned fusion parameters.</span></div>
+            <div class="finding"><i>02</i><span><b>Penalty-weighted routing with the Nav2 Route Server works on physical robots</b>, replanning online from runtime-updated penalties across multi-robot, multi-session trials.</span></div>
+            <div class="finding"><i>03</i><span><b>Semantics enter at the route level</b>, without replacing Nav2's proven execution stack: a practical path from perception to route decisions on low-cost platforms.</span></div>
+            <div class="finding"><i>04</i><span><b>Reproducible deployment patterns</b> for the Nav2 community: graph export constraints, route execution edge cases and configuration details.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ II. contributions -->
+    <section class="psec" id="contributions">
+      <div class="container">
+        <div class="sec-head"><span class="sec-num" aria-hidden="true">II</span><div><p class="eyebrow">Contributions</p><h2 class="h2" data-split>Three things the paper <em>adds</em>.</h2></div></div>
+        <div class="contribs" data-stagger>
+          <article class="contrib card" data-tilt="5" data-spotlight>
+            <span class="contrib__id">C1</span>
+            <h3>Angular Sector Fusion</h3>
+            <p>A lightweight geometric method that fuses monocular bounding boxes with 2D LiDAR ranges to place detected objects in the map frame. Zero learned parameters, auto-configured from standard ROS 2 topics and the URDF tree, under 5% CPU at 3 Hz on the RPi 5.</p>
+            <span class="mono">&lt; 1 ms per detection</span>
+          </article>
+          <article class="contrib card" data-tilt="5" data-spotlight>
+            <span class="contrib__id">C2</span>
+            <h3>Semantic routing, validated on hardware</h3>
+            <p>A controlled ablation (baseline vs adaptive) on physical robots: penalty-weighted route selection with online replanning under real sensing noise and localisation drift, across three robots and two compute architectures.</p>
+            <span class="mono">115 legs · 42 replans · 97%</span>
+          </article>
+          <article class="contrib card" data-tilt="5" data-spotlight>
+            <span class="contrib__id">C3</span>
+            <h3>Deployment characterisation</h3>
+            <p>Documented Route Server constraints and fixes on edge hardware: the GeoJSON scalar-metadata limitation, the path-gap phenomenon and the <code class="mono-inline">use_start</code> requirement, written up so the Nav2 community can reuse them.</p>
+            <span class="mono">Nav2 1.3.10 · ROS 2 Jazzy</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ III. in motion -->
+    <section class="psec psec--ink2" id="in-motion">
+      <div class="container">
+        <div class="sec-head"><span class="sec-num" aria-hidden="true">III</span><div><p class="eyebrow">Method in motion</p><h2 class="h2" data-split>Detect. Fuse. <em>Replan.</em></h2></div></div>
+        <div class="motion-steps" aria-hidden="true">
+          <span class="motion-step is-done" data-step><b>01</b>Detect</span>
+          <span class="motion-step" data-step><b>02</b>Fuse</span>
+          <span class="motion-step" data-step><b>03</b>Replan</span>
+        </div>
+        <div class="picker" role="tablist" aria-label="Pipeline stage" data-picker data-caption="#motion-caption">
+          <button type="button" role="tab" id="tab-detect" aria-controls="panel-detect" aria-selected="true" data-text="<b>YOLO26n on the robot.</b> A C++ lifecycle node runs YOLO26n through NCNN on the Raspberry Pi 5's four Cortex-A76 cores at 416 × 416, rate-limited to 15 Hz; the measured throughput was 5.5 ± 0.7 FPS (167 ± 21 ms per inference). Boxes are published on /yolo26/detections.">Detect <span class="mono">YOLO26n</span></button>
+          <button type="button" role="tab" id="tab-fuse" aria-controls="panel-fuse" aria-selected="false" tabindex="-1" data-text="<b>Angular Sector Fusion.</b> A box's horizontal extent becomes an angular sector of the 360° scan (the camera's ±24.9° covers about 70 of 503 rays). The 25th percentile of valid ranges in that sector is the object distance; TF2 carries the point into the map frame and a 5-sample median stabilises it.">Fuse <span class="mono">ASF</span></button>
+          <button type="button" role="tab" id="tab-replan" aria-controls="panel-replan" aria-selected="false" tabindex="-1" data-text="<b>Penalty-weighted replanning.</b> Objects near an edge add mobility-weighted penalties (person 50, chair 15, bottle 5). Every 2 s the executor compares penalties on the active route; a change above δ = 2.0 cancels FollowPath and asks the Route Server for a new route from the robot's current AMCL pose.">Replan <span class="mono">Route Server</span></button>
+        </div>
+        <div class="motion-stage">
+          <div role="tabpanel" id="panel-detect" aria-labelledby="tab-detect"><div class="demo-slot" data-demo="yolo-detect" data-options='{"aspect":1.7}'></div></div>
+          <div role="tabpanel" id="panel-fuse" aria-labelledby="tab-fuse" hidden><div class="demo-slot" data-demo="asf-fusion" data-options='{"aspect":1.7}'></div></div>
+          <div role="tabpanel" id="panel-replan" aria-labelledby="tab-replan" hidden><div class="demo-slot" data-demo="route-replan" data-options='{"interactive":true,"aspect":1.7}'></div></div>
+        </div>
+        <p class="motion-caption" id="motion-caption" aria-live="polite"><b>YOLO26n on the robot.</b> A C++ lifecycle node runs YOLO26n through NCNN on the Raspberry Pi 5's four Cortex-A76 cores at 416 × 416, rate-limited to 15 Hz; the measured throughput was 5.5 ± 0.7 FPS (167 ± 21 ms per inference). Boxes are published on /yolo26/detections.</p>
+      </div>
+    </section>
+
+    <!-- ============================================================ IV. method -->
+    <section class="psec" id="method">
+      <div class="container">
+        <div class="sec-head"><span class="sec-num" aria-hidden="true">IV</span><div><p class="eyebrow">Method</p><h2 class="h2" data-split>A semantic layer that <em>leaves Nav2 alone</em>.</h2></div></div>
+
+        <h3 class="sub-head"><span class="lt">A.</span>Three Xplorer robots, one Raspberry Pi 5 each</h3>
+        <div class="split">
+          <div class="prose" data-reveal>
+            <p>Experiments ran on three in-house, four-wheel differential robots, Xplorer-A, B and C, designed and built within the university's robotics teams. Each runs an author-developed ROS 2 baseline (ros2_control hardware interface, odometry, IMU and LiDAR integration, state estimation), so differences between baseline and adaptive runs come from the semantic routing layer, not from hidden software changes.</p>
+            <p>All computation runs on a <strong>Raspberry Pi 5 (16 GB, Cortex-A76, no GPU or NPU)</strong> with a Logitech C920 at 640 × 480, an STL-19P 2D LiDAR (360°, ≈503 rays, 10 Hz) and a BNO055 IMU. The stack is ROS 2 Jazzy with Nav2 1.3.10: AMCL, an EKF at 20 Hz, MPPI at 20 Hz and SmacPlannerHybrid. Xplorer-C splits compute across two RPi 5 boards over Ethernet, with the detector alone on the second board.</p>
+          </div>
+          <figure class="fig" style="margin-block:0" data-reveal>
+            <button type="button" class="fig-plate" data-zoom aria-label="Enlarge Figure 2"><img src="img/research/rp-fig2-robots.webp" width="787" height="409" alt="Three Xplorer differential-drive robots side by side on a tiled floor." loading="lazy"></button>
+            <figcaption><b>Fig. 2.</b> Xplorer robots A (left), B (center) and C (right).<span class="credit">Figure 2 from Abaza et al., Sensors 2026, CC BY 4.0</span></figcaption>
+          </figure>
+        </div>
+        <figure class="fig" data-reveal>
+          <button type="button" class="fig-plate" data-zoom aria-label="Enlarge Figure 1"><img src="img/research/rp-fig1-architecture.webp" width="1600" height="938" alt="System architecture block diagram: Raspberry Pi 5 software (bringup, Nav2, Route Server, YOLO26 inference, semantic localizer, test framework) connected to motor controllers, LiDAR, camera, IMU and battery." loading="lazy"></button>
+          <figcaption><b>Fig. 1.</b> System architecture of Xplorer A and B. Software components run on a Raspberry Pi 5 (16 GB). The Nav2 Route Server runs as a standalone lifecycle node, separate from the main Nav2 stack. The YOLO26 detector publishes detections and inference diagnostics; the Semantic Localizer fuses camera and LiDAR data to annotate the navigation graph with penalties.<span class="credit">Figure 1 from Abaza et al., Sensors 2026, CC BY 4.0</span></figcaption>
+        </figure>
+
+        <h3 class="sub-head"><span class="lt">B.</span>Angular Sector Fusion, step by step</h3>
+        <div class="prose" data-reveal>
+          <p>ASF hardcodes nothing. Focal length and principal point come from the first <code>CameraInfo</code> message (f<sub>x</sub> = 687.54 px, c<sub>x</sub> = 308.11 px for the C920), scan geometry from the first <code>LaserScan</code> (503 rays at 0.716°), and every frame relation from TF2. Moving the pipeline to a new robot needs only standard topics and a valid URDF; the paper confirmed identical behaviour on all three robots.</p>
+        </div>
+        <ol class="pipeline" data-stagger>
+          <li><b>Box → angles</b>Pinhole model turns x<sub>min</sub>, x<sub>max</sub> into θ<sub>left</sub>, θ<sub>right</sub>.</li>
+          <li><b>Angles → sector</b>Sign flip plus a yaw offset maps them onto LiDAR ray indices.</li>
+          <li><b>Sector → range</b>25th percentile of valid returns; at least two rays required.</li>
+          <li><b>Polar → point</b>Range and sector centre become x, y in the laser frame.</li>
+          <li><b>Laser → map</b>TF2 chain base_laser → base_link → odom → map, queried at time zero.</li>
+          <li><b>Track</b>Match by class within 0.5 m, median of the last 5 positions.</li>
+        </ol>
+        <div class="eq" data-reveal><span class="c"># Step 1, camera angles from the box edges (runtime f_x, c_x)</span>
+θ_left  = atan2(x_min − c_x, f_x)        θ_right = atan2(x_max − c_x, f_x)
+<span class="c"># Step 3, the nearest consistent surface in the sector is most likely the object</span>
+d = percentile_25(valid_ranges)          <span class="c"># mean or median would let the far wall leak in</span></div>
+        <div class="fig-row">
+          <figure class="fig" data-reveal>
+            <button type="button" class="fig-plate" data-zoom aria-label="Enlarge Figure 3"><img src="img/research/rp-fig3-sensor-geometry.webp" width="1600" height="823" alt="Top-down sensor layout and angular sector projection between camera and LiDAR." loading="lazy"></button>
+            <figcaption><b>Fig. 3.</b> Camera and 2D LiDAR geometry. (a) Co-located sensors, top-down. (b) The camera's ±24.9° horizontal field of view is covered by about 70 LiDAR rays at 0.72°; each box maps to a sector of rays from which the distance is estimated.<span class="credit">Figure 3 from Abaza et al., Sensors 2026, CC BY 4.0</span></figcaption>
+          </figure>
+          <figure class="fig" data-reveal data-reveal-delay="0.1">
+            <button type="button" class="fig-plate" data-zoom aria-label="Enlarge Figure 4"><img src="img/research/rp-fig4-asf-pipeline.webp" width="2000" height="378" alt="ASF pipeline diagram: YOLO detection, camera angles, LiDAR sector, distance estimate, TF2 transform, temporal tracking, semantic map." loading="lazy"></button>
+            <figcaption><b>Fig. 4.</b> The ASF pipeline: boxes become angular sectors, the 25th percentile of valid ranges gives the distance, TF2 moves the point to the map frame and a temporal median stabilises it. The whole chain takes under 1 ms per detection on the RPi 5.<span class="credit">Figure 4 from Abaza et al., Sensors 2026, CC BY 4.0</span></figcaption>
+          </figure>
+        </div>
+
+        <h3 class="sub-head"><span class="lt">C.</span>A semantic map that remembers what moves</h3>
+        <div class="split">
+          <div class="prose" data-reveal>
+            <p>Localised objects go into a persistent store serialised as a GeoJSON FeatureCollection (<code>semantic_objects.geojson</code>), readable in QGIS and recoverable after restarts. Each class carries a mobility category that decides how much it matters to routing and how long it is remembered. Static and minor objects are refined with an exponential moving average (α = 0.7); people are simply overwritten, because they move.</p>
+            <p>A cleanup timer removes expired objects every 10 s, and the graph annotations follow at the next save, so a corridor clears itself when a person walks away.</p>
+          </div>
+          <div class="tbl" data-reveal>
+            <table>
+              <caption><b>Table 4.</b> Object mobility classification with persistence parameters. Speed limit is a percentage of maximum velocity.</caption>
+              <thead><tr><th scope="col">Category</th><th scope="col">Classes</th><th scope="col">Penalty</th><th scope="col">Speed</th><th scope="col">TTL</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">Dynamic</th><td>person, cat, dog</td><td class="best">50.0</td><td>30%</td><td>60 s</td></tr>
+                <tr><th scope="row">Static</th><td class="wrap">chair, bench, couch, tv, refrigerator</td><td>15.0</td><td>60%</td><td>permanent</td></tr>
+                <tr><th scope="row">Minor</th><td class="wrap">bottle, cup, book, remote</td><td>5.0</td><td>90%</td><td>120 s</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <h3 class="sub-head"><span class="lt">D.</span>From objects to edge penalties to a new route</h3>
+        <div class="prose" data-reveal>
+          <p>Every object within 1.5 m of a graph edge contributes to that edge's penalty, scaled by how close it is and how confident the detector was. The Route Server then scores edges with a <strong>DistanceScorer (weight 1.0)</strong> and a <strong>PenaltyScorer (weight 5.0)</strong>; the 5:1 ratio makes semantics dominate when objects are present. A person near an edge adds roughly 25–40 penalty, 125–200 weighted cost units, against 1–3 units for a 1–2 m edge.</p>
+        </div>
+        <div class="eq" data-reveal>penalty_edge     = Σ_i  P_base(mobility_i) × proximity_factor_i × confidence_i
+proximity_factor = max(0.1, 1.0 − d_object_to_edge / d_proximity)      <span class="c"># d_proximity = 1.5 m</span>
+speed_limit_edge = min_i S(mobility_i)                                  <span class="c"># 30 %, 60 % or 90 %</span></div>
+        <div class="fig-row" style="--cols:2">
+          <figure class="fig" data-reveal>
+            <button type="button" class="fig-plate" data-zoom aria-label="Enlarge Figure 5"><img src="img/research/rp-fig5-graph.webp" width="1600" height="674" alt="Navigation graph with seven nodes: start, in_top, in_bot, center, out_top, out_bot, goal; direct route and upper route highlighted." loading="lazy"></button>
+            <figcaption><b>Fig. 5.</b> Navigation graph for the FIIR corridor: seven nodes, 20 directed edges. Start (node 0) and goal (node 7) are joined by an upper route through 3–2–5, a lower route through 4–2–6 and a direct path through the central hub.<span class="credit">Figure 5 from Abaza et al., Sensors 2026, CC BY 4.0</span></figcaption>
+          </figure>
+          <figure class="fig" data-reveal data-reveal-delay="0.1">
+            <button type="button" class="fig-plate" data-zoom aria-label="Enlarge Figure 7"><img src="img/research/rp-fig7-environment.webp" width="1400" height="1357" alt="Occupancy map of the FIIR corridor with the navigation graph and a detected potted plant at 0.7 m, 42 LiDAR rays, inset photo of the plant." loading="lazy"></button>
+            <figcaption><b>Fig. 7.</b> Experimental environment: the FIIR second-floor corridor with the 7-node graph overlaid. Objects detected by the semantic pipeline appear as coloured markers.<span class="credit">Figure 7 from Abaza et al., Sensors 2026, CC BY 4.0</span></figcaption>
+          </figure>
+        </div>
+        <div class="split" style="margin-top:clamp(28px,4vw,48px)">
+          <div class="prose" data-reveal>
+            <p><strong>Adaptive navigation</strong> starts with a prescan: two 180° spins (about 10 s), a 35 s wait while the pipeline annotates the graph, an explicit <code>set_route_graph</code> reload and a heading realignment. Navigation then loops: ComputeRoute from the current AMCL pose, path-gap correction if needed, FollowPath with MPPI, and a penalty check every 2 s. A change above δ = 2.0 on any active edge cancels FollowPath and replans; if route planning fails entirely, the robot falls back to NavigateToPose.</p>
+            <p><strong>Notes for Nav2 users.</strong> Route Server 1.3.10 accepts only scalar numeric edge metadata, so the system writes two graphs: a rich diagnostic one and a stripped Nav2-safe one. ComputeRoute needs <code>use_start = True</code> with an explicit AMCL pose after any reinitialisation. When the dense path starts more than 1 m from the robot, waypoints are prepended every 0.15 m, otherwise MPPI reports success without moving.</p>
+          </div>
+          <figure class="fig" style="margin-block:0" data-reveal>
+            <button type="button" class="fig-plate" data-zoom aria-label="Enlarge Figure 6"><img src="img/research/rp-fig6-flowchart.webp" width="1146" height="1500" alt="Flowchart of the adaptive forward leg: prescan phase, then ComputeRoute, path-gap correction, FollowPath and the penalty-monitoring loop with reroute." loading="lazy"></button>
+            <figcaption><b>Fig. 6.</b> Adaptive navigation flowchart for the forward leg: prescan (orange bracket) and navigation with penalty monitoring (blue bracket).<span class="credit">Figure 6 from Abaza et al., Sensors 2026, CC BY 4.0</span></figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ V. results -->
+    <section class="psec psec--paper" id="results">
+      <div class="container">
+        <div class="sec-head"><span class="sec-num" aria-hidden="true">V</span><div><p class="eyebrow">Results</p><h2 class="h2" data-split>Not faster on average. <em>Far more predictable.</em></h2></div></div>
+        <div class="prose" data-reveal>
+          <p>A controlled ablation with repeated measures: the only manipulation is the navigation mode, repeated across robots and sessions. <strong>115 legs</strong> were collected (45 baseline, 70 adaptive) over 27 sessions, and 111 met the validation criteria (goal reached, ≥ 1 m travelled, XY error ≤ 2 m, duration ≥ 3 s). The whole dataset is public.</p>
+        </div>
+        <div class="kpis" data-stagger>
+          <div class="kpi"><div class="stat-value" data-counter="115">115</div><p>navigation legs on Xplorer-A, B and C, 45 baseline and 70 adaptive</p></div>
+          <div class="kpi"><div class="stat-value" data-counter="17.8" data-decimals="1" data-suffix=" ms">17.8 ms</div><p>mean ComputeRoute planning time (7.8 to 47.1 ms) over 17 sessions</p></div>
+          <div class="kpi"><div class="stat-value" data-counter="7">7</div><p>distinct route configurations in adaptive forward legs</p></div>
+          <div class="kpi"><div class="stat-value" data-counter="5.5" data-decimals="1" data-suffix=" FPS">5.5 FPS</div><p>YOLO26n through NCNN on the RPi 5 CPU, 167 ± 21 ms per frame</p></div>
+        </div>
+
+        <h3 class="sub-head"><span class="lt">A.</span>Navigation time: the spread collapses</h3>
+        <div class="result-grid" style="--cols:1">
+          <div class="chart-slot" data-demo="chart-nav-variance" data-options='{"theme":"paper"}'></div>
+        </div>
+        <div class="split">
+          <div class="prose" data-reveal>
+            <p>Forward legs took <strong>37.3 ± 31.1 s</strong> in the baseline and <strong>32.5 ± 11.0 s</strong> adaptive; the medians are close (25.4 s vs 29.8 s). Both distributions are non-normal (Shapiro–Wilk p &lt; 0.005), so the comparison is non-parametric: no significant difference in central tendency, and a marginally significant drop in dispersion. Two baseline runs of 97.4 s and 142.0 s came from AMCL recovery cycles stalling the free-space planner. No adaptive run exceeded 62 s.</p>
+            <p>The paper is explicit that the adaptive mode was not designed to be faster, but more predictable. The variance reduction held on all three robots and in both leg directions.</p>
+          </div>
+          <figure class="fig" style="margin-block:0" data-reveal>
+            <button type="button" class="fig-plate" data-zoom aria-label="Enlarge Figure 8"><img src="img/research/rp-fig8-nav-time.webp" width="1600" height="747" alt="Box plots of forward-leg navigation time per robot and aggregated, baseline in blue and adaptive in red." loading="lazy"></button>
+            <figcaption><b>Fig. 8.</b> Forward-leg navigation time. (a) Per robot, baseline (blue) vs adaptive (red). (b) All robots (n = 23 baseline, n = 33 adaptive); diamonds mark means. The outliers at 97.4 s and 142.0 s are AMCL recovery stalls.<span class="credit">Figure 8 from Abaza et al., Sensors 2026, CC BY 4.0</span></figcaption>
+          </figure>
+        </div>
+        <div class="tbl" data-reveal>
+          <table>
+            <caption><b>Table 8.</b> Forward legs, validated runs only. Navigation time excludes the prescan. Xplorer-C offloads YOLO inference to a second RPi 5.</caption>
+            <thead><tr><th scope="col">Robot</th><th scope="col">Condition</th><th scope="col">n</th><th scope="col">Nav time (s)</th><th scope="col">Distance (m)</th><th scope="col">XY error (m)</th><th scope="col">Reroutes</th><th scope="col">CPU (%)</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Xplorer-A</th><td>Baseline</td><td>5</td><td>45.0 ± 23.5</td><td>6.7 ± 0.5</td><td>0.12 ± 0.06</td><td>0</td><td>85.3 ± 3.0</td></tr>
+              <tr><th scope="row">Xplorer-A</th><td>Adaptive</td><td>11</td><td>33.1 ± 8.6</td><td>6.9 ± 0.8</td><td>0.12 ± 0.06</td><td>0.7 ± 0.5</td><td>85.4 ± 2.3</td></tr>
+              <tr><th scope="row">Xplorer-B</th><td>Baseline</td><td>10</td><td>35.9 ± 39.5</td><td>7.3 ± 2.6</td><td>0.25 ± 0.09</td><td>0</td><td>86.7 ± 2.9</td></tr>
+              <tr><th scope="row">Xplorer-B</th><td>Adaptive</td><td>15</td><td>33.3 ± 13.9</td><td>7.0 ± 0.7</td><td>0.20 ± 0.08</td><td>0.5 ± 0.6</td><td>83.1 ± 3.1</td></tr>
+              <tr><th scope="row">Xplorer-C</th><td>Baseline</td><td>8</td><td>34.2 ± 25.7</td><td>6.4 ± 0.4</td><td>0.15 ± 0.07</td><td>0</td><td>50.9 ± 5.6</td></tr>
+              <tr><th scope="row">Xplorer-C</th><td>Adaptive</td><td>7</td><td>29.7 ± 8.0</td><td>6.2 ± 0.7</td><td>0.38 ± 0.51</td><td>1.0 ± 0.0</td><td>47.3 ± 6.8</td></tr>
+              <tr class="total"><th scope="row">All</th><td>Baseline</td><td>23</td><td>37.3 ± 31.1</td><td>6.8 ± 1.7</td><td>0.18 ± 0.09</td><td>0</td><td>73.9 ± 17.6</td></tr>
+              <tr class="total"><th scope="row">All</th><td>Adaptive</td><td>33</td><td class="best">32.5 ± 11.0</td><td>6.8 ± 0.8</td><td>0.21 ± 0.25</td><td>0.7 ± 0.5</td><td>76.3 ± 15.8</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="sub-head"><span class="lt">B.</span>Success and replanning</h3>
+        <div class="result-grid" style="--cols:1">
+          <div class="chart-slot" data-demo="chart-replan-rate" data-options='{"theme":"paper"}'></div>
+        </div>
+        <div class="split">
+          <figure class="fig" style="margin-block:0" data-reveal>
+            <button type="button" class="fig-plate" data-zoom aria-label="Enlarge Figure 10"><img src="img/research/rp-fig10-reroute.webp" width="1600" height="669" alt="Trajectory plot of an adaptive forward leg: initial route 0, 2, 7 in blue, reroute point marked, new route 2, 5, 7 in red." loading="lazy"></button>
+            <figcaption><b>Fig. 10.</b> An adaptive forward leg on Xplorer-B with a reroute. The initial route (0, 2, 7) in blue was replanned mid-navigation to (2, 5, 7) in red after penalty changes; the orange diamond marks where FollowPath was cancelled and a new ComputeRoute issued.<span class="credit">Figure 10 from Abaza et al., Sensors 2026, CC BY 4.0</span></figcaption>
+          </figure>
+          <div class="tbl" style="margin-block:0" data-reveal>
+            <table>
+              <caption><b>Table 10.</b> Route diversity in validated adaptive forward legs.</caption>
+              <thead><tr><th scope="col">Node sequence</th><th scope="col">Count</th><th scope="col">Class</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">[0, 2, 7]</th><td class="best">17</td><td>Direct</td></tr>
+                <tr><th scope="row">[2, 7] after reroute</th><td>6</td><td>Direct (partial)</td></tr>
+                <tr><th scope="row">[0, 2, 5, 7]</th><td>3</td><td>Upper</td></tr>
+                <tr><th scope="row">[2, 5, 7] after reroute</th><td>3</td><td>Upper (partial)</td></tr>
+                <tr><th scope="row">[3, 2, 7]</th><td>2</td><td>Bottom (entry)</td></tr>
+                <tr><th scope="row">[0, 3, 2, 7]</th><td>1</td><td>Upper</td></tr>
+                <tr><th scope="row">[3, 2, 5, 7]</th><td>1</td><td>Upper</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p class="callout" data-reveal>On a clean graph the Route Server always chose the direct route at cost 5.7. With semantic penalties the same start–goal pair cost 42 to 107, and routes through nodes 3 or 5 appeared. Many replans truncated the route, (0, 2, 7) → (2, 7), rather than switching it, which the paper attributes to the small graph. <b>No route through the lower nodes 4 and 6 was ever selected.</b></p>
+
+        <h3 class="sub-head"><span class="lt">C.</span>What the robots saw</h3>
+        <div class="split">
+          <div class="prose" data-reveal>
+            <p>Across all adaptive sessions ASF recorded nine object classes. People were detected on all three robots: real passers-by, not staged actors. The minimum distance between trajectory and nearest semantic object was 0.4 ± 0.8 m baseline and 0.3 ± 0.3 m adaptive; the paper reads this carefully: in a 5.7 m graph every route passes within the 1.5 m proximity radius of something, so the benefit shows up at route level, not centimetres.</p>
+          </div>
+          <div class="tbl" data-reveal style="margin-block:0">
+            <table>
+              <caption><b>Detections.</b> Cumulative counts across adaptive sessions (Section 5.4.1).</caption>
+              <thead><tr><th scope="col">Class</th><th scope="col">Detections</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">potted plant</th><td>535</td></tr><tr><th scope="row">bench</th><td>140</td></tr><tr><th scope="row">dining table</th><td>99</td></tr>
+                <tr><th scope="row">person</th><td>85</td></tr><tr><th scope="row">chair</th><td>73</td></tr><tr><th scope="row">bottle</th><td>43</td></tr>
+                <tr><th scope="row">cup · bowl · bed</th><td>4 · 3 · 3</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <h3 class="sub-head"><span class="lt">D.</span>Compute: offloading frees 40 points of CPU</h3>
+        <div class="result-grid">
+          <div class="chart-slot" data-demo="chart-cpu-offload" data-options='{"theme":"paper"}'></div>
+          <figure class="fig" style="margin-block:0" data-reveal>
+            <button type="button" class="fig-plate" data-zoom aria-label="Enlarge Figure 12"><img src="img/research/rp-fig12-cpu.webp" width="1200" height="756" alt="Bar chart of CPU utilisation: Xplorer-A 86 and 85 percent, Xplorer-B 88 and 83 percent, Xplorer-C 51 and 46 percent." loading="lazy"></button>
+            <figcaption><b>Fig. 12.</b> CPU utilisation across compute architectures. Xplorer-A and B (single RPi 5) run at about 85%; Xplorer-C (dual RPi 5 with inference offloading) at about 48%, a reduction of 40 percentage points.<span class="credit">Figure 12 from Abaza et al., Sensors 2026, CC BY 4.0</span></figcaption>
+          </figure>
+        </div>
+        <div class="tbl" data-reveal>
+          <table>
+            <caption><b>Table 12, condensed.</b> Against the closest related system, Alqobali et al. (Sensors 2024).</caption>
+            <thead><tr><th scope="col">Aspect</th><th scope="col">Alqobali et al.</th><th scope="col">This work</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Environment</th><td>Simulation (Gazebo)</td><td>Real indoor corridor, 3 robots</td></tr>
+              <tr><th scope="row">Hardware</th><td>RPi 4 (4 GB)</td><td>RPi 5 (16 GB), Logitech C920</td></tr>
+              <tr><th scope="row">Detector</th><td>YOLOv3, Python, ~4 FPS (estimated)</td><td>YOLO26n, C++ NCNN, 5.5 ± 0.7 FPS (measured)</td></tr>
+              <tr><th scope="row">Fusion</th><td>Box centre + one LiDAR bearing</td><td>ASF: angular sector + percentile</td></tr>
+              <tr><th scope="row">Route planning</th><td>None (costmap only)</td><td>Nav2 Route Server, PenaltyScorer</td></tr>
+              <tr><th scope="row">Replanning</th><td>Not implemented</td><td class="best">42 events across 70 adaptive legs</td></tr>
+              <tr><th scope="row">Sensor configuration</th><td>Not reported</td><td>All parameters from ROS topics + URDF</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ VI. limitations -->
+    <section class="psec" id="limitations">
+      <div class="container">
+        <div class="sec-head"><span class="sec-num" aria-hidden="true">VI</span><div><p class="eyebrow">Limitations and future work</p><h2 class="h2" data-split>What it does not <em>prove yet</em>.</h2></div></div>
+        <div class="limits">
+          <div>
+            <h3>Limitations, as the paper states them</h3>
+            <ul data-stagger>
+              <li><b>The 2D LiDAR plane.</b> With the scanner about 16 cm above the floor, wall-mounted or elevated objects get no range return and are filtered out.</li>
+              <li><b>Prescan overhead.</b> A narrow ≈50° camera needs a 360° prescan; the 35 s wait plus ≈11 s rotation make an adaptive forward leg ≈79 s wall-clock against 37.3 s baseline. Best for semi-static spaces.</li>
+              <li><b>A small graph.</b> 7 nodes over ≈5.7 m limits route diversity: the direct route won 52% of forward legs, and the lower route never appeared.</li>
+              <li><b>No centimetre gain.</b> Minimum object distance did not improve (0.3 vs 0.4 m); the benefit is at route level.</li>
+              <li><b>Localisation is the real bottleneck.</b> All four failures were AMCL drift on Xplorer-B, and object positions inherit any map→odom error.</li>
+              <li><b>One corridor, no external ground truth</b> for object positions; residual within-session correlation is possible.</li>
+            </ul>
+          </div>
+          <div class="future">
+            <h3>Future work</h3>
+            <ul data-stagger>
+              <li><b>Harder environments:</b> people deliberately entering routes to force full route switches; multi-room offices, open-plan spaces with movable furniture, warehouse-like narrow aisles.</li>
+              <li><b>Bigger graphs:</b> a 20–30 node graph across FIIR corridors (≈40 m path), then a full-floor graph with 50+ nodes and ≈200 m of path.</li>
+              <li><b>3D depth sensing</b> (for example a RealSense D435i) to localise elevated and wall-mounted objects.</li>
+              <li><b>Continuous, incremental graph updates</b> during navigation, removing the dedicated scan-and-wait phase.</li>
+              <li><b>Mixed-effects statistics</b> with robot and session as random factors, and motion capture for object ground truth.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ VII. citation -->
+    <section class="psec psec--ink2" id="citation">
+      <div class="container">
+        <div class="sec-head"><span class="sec-num" aria-hidden="true">VII</span><div><p class="eyebrow">Citation</p><h2 class="h2" data-split>Cite this <em>work</em>.</h2></div></div>
+        <div class="cite" data-reveal>
+          <div class="cite__bar"><span class="mono">BibTeX · MDPI</span><button type="button" class="copy-btn" data-copy="#bibtex"><span>Copy</span></button></div>
+          <pre id="bibtex" data-bibtex></pre>
+        </div>
+        <p class="cite-plain" data-reveal>Abaza, B.F.; Staicu, A.-A.; Doicin, C.V. Lightweight Semantic-Aware Route Planning on Edge Hardware for Indoor Mobile Robots: Monocular Camera–2D LiDAR Fusion with Penalty-Weighted Nav2 Route Server Replanning. <i>Sensors</i> <b>2026</b>, 26, 2232. https://doi.org/10.3390/s26072232</p>
+        <div class="cite-links" data-reveal>
+          <a class="btn btn--fire btn--sm" href="https://doi.org/10.3390/s26072232" target="_blank" rel="noopener">Read on MDPI <span class="arrow">↗</span></a>
+          <a class="btn btn--ghost btn--sm" href="https://github.com/bogdan-abaza/nav2-semantic-route-server" target="_blank" rel="noopener">Code, 115-leg dataset, test framework <span class="arrow">↗</span></a>
+          <a class="btn btn--ghost btn--sm" href="stack.html">Where it sits in the Autonomy Stack</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ more research -->
+    <section class="psec" aria-labelledby="more-research">
+      <div class="container">
+        <p class="eyebrow">More research</p>
+        <h2 class="h2" id="more-research" style="margin:18px 0 clamp(28px,4vw,48px)" data-split>Below and above <em>this layer</em>.</h2>
+        <div class="related" data-related></div>
+      </div>
+    </section>
   </main>
   <script type="module" src="/src/pages/research-route-planning.js"></script>
 </body>

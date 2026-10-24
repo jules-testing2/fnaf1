@@ -13,7 +13,10 @@
   <!-- First visit of the session gets a short boot intro; decided before first paint to avoid a flash. -->
   <script>
     try {
-      if (!sessionStorage.getItem('saim:intro') && !matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('has-intro');
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.documentElement.classList.add('hero-pending');
+        if (!sessionStorage.getItem('saim:intro')) document.documentElement.classList.add('has-intro');
+      }
     } catch (e) {}
   </script>
 </head>
@@ -54,7 +57,7 @@
           <circle cx="320" cy="250" r="230" fill="url(#hp-glow)" opacity=".5"/>
           <g fill="none" stroke="#ffb547" stroke-opacity=".22" stroke-dasharray="2 8"><circle cx="320" cy="250" r="90"/><circle cx="320" cy="250" r="180"/><circle cx="320" cy="250" r="270"/></g>
           <path d="M320 250 L590 250 A270 270 0 0 0 551 110 Z" fill="url(#hp-wedge)"/>
-          <g stroke="#f3eee4" stroke-opacity=".18" stroke-width="1.5">
+          <g fill="none" stroke="#f3eee4" stroke-opacity=".18" stroke-width="1.5">
             <path d="M200 470 L200 290 L260 150 M200 290 L440 210 M200 470 L340 550 L440 450 L440 210 L560 222 L700 210 L820 250 L820 450 L700 382 L560 438 L440 450 M700 382 L700 210 M560 438 L640 550 L340 550"/>
           </g>
           <path d="M820 450 L640 550" stroke="#ff4d5e" stroke-width="3" stroke-dasharray="6 6"/>

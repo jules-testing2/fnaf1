@@ -4,16 +4,346 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Semantic Autonomy Stack · SAIM Robotics</title>
-  <meta name="description" content="Six layers from hardware to memory-driven operational intelligence: YOLO perception, LiDAR fusion, semantic routing, a deterministic resolver and cross-robot memory.">
+  <meta name="description" content="Six layers from the mobile platform to operational memory: YOLO perception and LiDAR fusion, semantic routing on Nav2, a deterministic-first resolver with selective VLM escalation, and scoped memory reused across robots.">
   <meta name="theme-color" content="#0a0a0b">
   <meta property="og:title" content="Semantic Autonomy Stack · SAIM Robotics">
-  <meta property="og:description" content="Six layers from hardware to memory-driven operational intelligence: YOLO perception, LiDAR fusion, semantic routing, a deterministic resolver and cross-robot memory.">
+  <meta property="og:description" content="Six layers from the mobile platform to operational memory: perception, semantic routing, a deterministic-first resolver with selective VLM escalation, and scoped memory reused across robots.">
   <meta property="og:type" content="website">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
 </head>
 <body data-page="stack">
-  <main id="main">
-    <section class="section"><div class="container"><p class="eyebrow">Coming soon</p><h1 class="h1">Semantic Autonomy Stack</h1></div></section>
+  <main id="main" class="stack-page">
+
+    <!-- Hero + layer story share one sticky 3D stage: the stack assembles in the hero, then slides left and explodes. -->
+    <div class="sas-scroll">
+      <div class="sas-stage">
+        <div class="sas-stage__canvas" data-demo="sas-stack-3d" data-options='{"bare":true,"height":"100%","progress":0,"labels":"full"}'></div>
+        <nav class="sas-rail" aria-label="Stack layers">
+          <a href="#layer-5" data-i="5"><b>L5</b><span>Memory</span></a>
+          <a href="#layer-4" data-i="4"><b>L4</b><span>Mission</span></a>
+          <a href="#layer-3" data-i="3"><b>L3</b><span>Reasoning</span></a>
+          <a href="#layer-2" data-i="2"><b>L2</b><span>Perception</span></a>
+          <a href="#layer-1" data-i="1"><b>L1</b><span>Navigation</span></a>
+          <a href="#layer-0" data-i="0"><b>L0</b><span>Platform</span></a>
+        </nav>
+      </div>
+
+      <section class="sas-hero" aria-labelledby="sas-title">
+        <div class="container sas-hero__inner">
+          <div class="sas-hero__copy">
+            <p class="eyebrow" data-scramble>Semantic Autonomy Stack · SAS</p>
+            <h1 class="mega sas-hero__title" id="sas-title" data-split="words">Intent in. <em class="fire-text">Motion</em> out.</h1>
+            <p class="lead" data-reveal data-reveal-delay="0.2">SAS is our six-layer integration framework for indoor robots. It turns an operator's words into a graph-grounded destination, hands that goal to Nav2, checks what the robot finds on arrival, and keeps a scoped memory of what worked. Rules first. A vision-language model only when the rules abstain.</p>
+            <div class="sas-hero__cta" data-reveal data-reveal-delay="0.35">
+              <a class="btn btn--fire" href="#layers" data-magnetic>Walk the six layers <span class="arrow">↓</span></a>
+              <a class="btn btn--ghost" href="research-vlm-autonomy.html">Read the paper <span class="arrow">→</span></a>
+            </div>
+          </div>
+        </div>
+        <div class="container">
+          <dl class="sas-stats" data-stagger>
+            <div><dt class="stat-label">Layers, platform to memory</dt><dd class="stat-value"><span data-counter="6">6</span></dd></div>
+            <div><dt class="stat-label">Session E decisions resolved without a model call</dt><dd class="stat-value"><span data-counter="112">112</span><small>/216</small></dd></div>
+            <div><dt class="stat-label">Deterministic resolver compute · median 0.245 ms</dt><dd class="stat-value">&lt;1<small> ms</small></dd></div>
+            <div><dt class="stat-label">GPUs on the robots · L0–L2 run on Raspberry Pi 5</dt><dd class="stat-value"><span data-counter="0">0</span></dd></div>
+          </dl>
+        </div>
+        <p class="sas-hero__hint mono" aria-hidden="true"><i></i>Scroll · L0 → L5</p>
+      </section>
+
+      <section class="sas-layers" id="layers" aria-labelledby="layers-title">
+        <div class="container">
+          <header class="sas-layers__intro sas-col">
+            <p class="eyebrow">Six layers · one boundary each</p>
+            <h2 class="h2" id="layers-title" data-split="lines">Read the stack from the <em>wheels</em> up.</h2>
+            <p class="lead">Each layer prescribes a capability and an interface, not one implementation. L0 to L2 are the navigation and perception foundation validated in our Sensors 2026 study. L3 to L5 are the reasoning, mission and memory layers developed and evaluated in the published SAS paper.</p>
+          </header>
+
+          <!-- L0 -->
+          <article class="sas-layer sas-col" id="layer-0" data-layer="0" style="--c:#a49d92">
+            <header class="sas-layer__head">
+              <span class="sas-badge sas-badge--hollow">L0</span>
+              <div><p class="mono sas-layer__kicker">Inherited foundation</p><h3 class="h3">Mobile platform</h3></div>
+            </header>
+            <p class="sas-layer__text">Locomotion, onboard sensing, power, low-level control and the compute that rides on the robot. SAS prescribes no particular body: L0 supplies the platform-specific capabilities that every higher layer depends on.</p>
+            <p class="sas-io mono"><span>I/O</span>cmd_vel → sensor streams</p>
+            <div class="sas-bodies" aria-label="SAIM robot platforms on one shared layer contract">
+              <div class="sas-bodies__stage">
+                <div class="sas-bodies__stack" aria-hidden="true"><i>L5</i><i>L4</i><i>L3</i><i>L2</i><i>L1</i></div>
+                <div class="sas-bodies__slot">
+                  <figure class="is-on"><img src="img/xplorer-b.webp" alt="Xplorer-B, single Raspberry Pi 5 configuration" width="398" height="458" loading="lazy"><figcaption class="mono">Xplorer-B · single RPi 5 · validated</figcaption></figure>
+                  <figure><img src="img/xplorer-c.webp" alt="Xplorer-C, dual Raspberry Pi 5 configuration" width="284" height="197" loading="lazy"><figcaption class="mono">Xplorer-C · dual RPi 5 · validated</figcaption></figure>
+                  <figure><img src="img/go2.webp" alt="SAIM Go2 quadruped" width="833" height="1023" loading="lazy"><figcaption class="mono">Go2 · quadruped</figcaption></figure>
+                  <figure><img src="img/g1.webp" alt="SAIM G1 humanoid" width="526" height="1172" loading="lazy"><figcaption class="mono">G1 · humanoid</figcaption></figure>
+                  <figure><img src="img/xplorer-d.webp" alt="Xplorer-D mobile robot" width="353" height="233" loading="lazy"><figcaption class="mono">Xplorer-D · AMR</figcaption></figure>
+                </div>
+                <div class="sas-bodies__plinth mono" aria-hidden="true">L0 contract · cmd_vel in · sensor streams out</div>
+              </div>
+              <p class="sas-note">One stack, every body is a design goal: the layers above L0 do not change when the body does. The published physical validation covers two differential-drive configurations, Xplorer-B and Xplorer-C, in one indoor environment.</p>
+            </div>
+          </article>
+
+          <!-- L1 -->
+          <article class="sas-layer sas-col" id="layer-1" data-layer="1" style="--c:#7ce0c3">
+            <header class="sas-layer__head">
+              <span class="sas-badge sas-badge--hollow">L1</span>
+              <div><p class="mono sas-layer__kicker">Inherited foundation</p><h3 class="h3">Navigation execution</h3></div>
+            </header>
+            <p class="sas-layer__text">Localization, route planning, path following and local obstacle avoidance, all in metric space. L1 receives an admissible goal or route from L3 and executes it with ROS 2 and Nav2, without needing to know what the destination means.</p>
+            <p class="sas-io mono"><span>I/O</span>goal / route / action → cmd_vel + action result</p>
+            <ul class="sas-chips" aria-label="L1 implementation"><li class="chip">AMCL + EKF</li><li class="chip">Nav2 Route Server</li><li class="chip">MPPI controller</li><li class="chip">penalty-weighted replanning</li></ul>
+            <div class="sas-demo" data-demo="route-replan" data-options='{"compact":true}'></div>
+            <p class="sas-note">Semantic penalties on graph edges re-score the route; when an edge on the current route changes by more than a threshold, the route is recomputed. Sensors 2026: 115 navigation legs on three robots, 97% overall success, 42 replanning events.</p>
+          </article>
+
+          <!-- L2 -->
+          <article class="sas-layer sas-col" id="layer-2" data-layer="2" style="--c:#5bc0eb">
+            <header class="sas-layer__head">
+              <span class="sas-badge sas-badge--hollow">L2</span>
+              <div><p class="mono sas-layer__kicker">Inherited foundation</p><h3 class="h3">Perception &amp; semantic map</h3></div>
+            </header>
+            <p class="sas-layer__text">Camera frames and LiDAR scans become localized semantic context: what is where, in the map frame. L2 feeds L3 with objects to reason about, and it can push semantics straight into L1 as edge penalties.</p>
+            <p class="sas-io mono"><span>I/O</span>LaserScan + Image + AMCL pose → semantic context</p>
+            <ol class="sas-pipeline">
+              <li><b>Detect</b><span>YOLO26n on the robot's Raspberry Pi 5, NCNN backend, 5.5 ± 0.7 FPS (167 ± 21 ms).</span></li>
+              <li><b>Fuse</b><span>Angular Sector Fusion projects each box onto LiDAR rays and takes the 25th-percentile range. No learned parameters.</span></li>
+              <li><b>Remember</b><span>A persistent GeoJSON map classifies objects by mobility and turns them into edge penalties.</span></li>
+            </ol>
+            <div class="sas-demo" data-demo="yolo-detect" data-options='{"compact":true}'></div>
+            <div class="sas-demo" data-demo="asf-fusion" data-options='{"compact":true}'></div>
+            <div class="sas-table-wrap">
+              <table class="sas-table">
+                <caption class="mono">Mobility classes · Sensors 2026, Table 4</caption>
+                <thead><tr><th scope="col">Class</th><th scope="col">Examples</th><th scope="col">Penalty</th><th scope="col">Speed</th><th scope="col">TTL</th></tr></thead>
+                <tbody>
+                  <tr><th scope="row">Dynamic</th><td>person, cat, dog</td><td>50</td><td>30%</td><td>60 s</td></tr>
+                  <tr><th scope="row">Static</th><td>chair, bench, couch</td><td>15</td><td>60%</td><td>permanent</td></tr>
+                  <tr><th scope="row">Minor</th><td>bottle, cup, book</td><td>5</td><td>90%</td><td>120 s</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+
+          <!-- L3 -->
+          <article class="sas-layer sas-col" id="layer-3" data-layer="3" style="--c:#fa520f">
+            <header class="sas-layer__head">
+              <span class="sas-badge">L3</span>
+              <div><p class="mono sas-layer__kicker">Developed in the SAS paper</p><h3 class="h3">Semantic reasoning</h3></div>
+            </header>
+            <p class="sas-layer__text">The bridge from words to a destination. <strong>L3a</strong>, a seven-step deterministic resolver, tries the graph, the semantic objects, the robot's pose and learned associations first. If it abstains, or a safeguard fires, <strong>L3b</strong> asks a pretrained VLM through a fixed prompt and parser, and the answer is validated before anything moves.</p>
+            <p class="sas-io mono"><span>I/O</span>instruction + context + digest → goal / route / action + audit entry</p>
+            <ol class="sas-steps" aria-label="L3a resolver order">
+              <li class="is-guard"><b>Guard</b>Negation or exclusion? Skip to L3b.</li>
+              <li><b>S0</b>Reuse a learned association · J1 ≥ 0.75, margin ≥ 0.10</li>
+              <li><b>S1</b>Explicit node ID</li>
+              <li><b>S2</b>Node name match</li>
+              <li><b>S3</b>Object identifier match</li>
+              <li><b>S4</b>Attribute scoring</li>
+              <li><b>S5</b>Single object class</li>
+              <li><b>S6</b>Class + proximity</li>
+            </ol>
+            <div class="sas-demo" data-demo="resolver-race"></div>
+            <p class="sas-note">Location referents that contradict the instruction escalate instead of executing. VLM replies outside the forbidden set and inside the graph pass the executive contract ⟨A, O, V, L⟩: affordances, observation, validation, logging.</p>
+          </article>
+
+          <!-- L4 -->
+          <article class="sas-layer sas-col" id="layer-4" data-layer="4" style="--c:#ffb547">
+            <header class="sas-layer__head">
+              <span class="sas-badge">L4</span>
+              <div><p class="mono sas-layer__kicker">Developed in the SAS paper</p><h3 class="h3">Mission interface</h3></div>
+            </header>
+            <p class="sas-layer__text">The boundary between people or fleet systems and the reasoning layer. L4 accepts natural-language and structured operator or fleet commands and forwards them through one stable interface, so the same higher-layer logic serves either robot. It is designed to accommodate standard fleet interfaces such as VDA 5050.</p>
+            <p class="sas-io mono"><span>I/O</span>operator NL / fleet cmd → instruction to L3</p>
+            <div class="sas-demo" data-demo="mission-console" data-options='{"compact":true,"map":false}'></div>
+          </article>
+
+          <!-- L5 -->
+          <article class="sas-layer sas-col" id="layer-5" data-layer="5" style="--c:#9b8cff">
+            <header class="sas-layer__head">
+              <span class="sas-badge">L5</span>
+              <div><p class="mono sas-layer__kicker">Developed in the SAS paper</p><h3 class="h3">Operational memory</h3></div>
+            </header>
+            <p class="sas-layer__text">Audit history becomes scoped memory and a compact runtime digest. M1 to M3 are shared across platforms, M4 and M5 stay platform-aware. Only M3 can change the resolution path: a promoted instruction–node association is matched at Step 0 and skips the VLM.</p>
+            <p class="sas-io mono"><span>I/O</span>audit entries (from L3) → compiled digest</p>
+            <div class="sas-gate">
+              <span class="mono">M3 promotion gate</span>
+              <b>f ≥ 3</b><b>c ≥ 0.80</b><b>≥ 1 accepted L3b resolution</b>
+            </div>
+            <div class="sas-demo" data-demo="memory-transfer"></div>
+            <p class="sas-note">The gate measures how stable a sampled answer is, not whether it is right: a stable but wrong association could pass. In a nine-arm model and seed replay, <span class="mono">wet_gloves</span> promoted in 9/9 arms while the archived <span class="mono">quiet_corner</span> rejection flipped in 8/9.</p>
+          </article>
+        </div>
+      </section>
+    </div>
+
+    <!-- One instruction, end to end -->
+    <section class="section sas-journey" id="journey" aria-labelledby="journey-title">
+      <div class="container">
+        <header class="sas-section-head">
+          <p class="eyebrow">End to end</p>
+          <h2 class="h2" id="journey-title" data-split="lines">Watch one instruction <em>travel</em> through the stack.</h2>
+          <p class="lead">Every mission takes the same route through the layers: L4 accepts it, L3 decides, L1 drives, L3 confirms, L5 remembers. The diagram lights up the published v4.8-review reasoning flow as the console runs.</p>
+        </header>
+        <div class="sas-journey__grid">
+          <div class="sas-journey__console" data-demo="mission-console"></div>
+          <figure class="sas-flow" aria-labelledby="flow-cap">
+            <div class="sas-flow__svg" data-flow></div>
+            <figcaption id="flow-cap" class="mono">Frozen v4.8-review reasoning flow · after Fig. 2</figcaption>
+          </figure>
+        </div>
+        <div class="sas-montage">
+          <header class="sas-montage__head">
+            <h3 class="h3">Meanwhile, on the robot: <em>L0 to L2 never stop.</em></h3>
+            <p class="muted">Camera and YOLO, LiDAR fusion and the semantic route map from one synchronised run.</p>
+          </header>
+          <div data-demo="sensor-montage"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Deployment topology -->
+    <section class="section section--ink2 sas-deploy" aria-labelledby="deploy-title">
+      <div class="container">
+        <header class="sas-section-head">
+          <p class="eyebrow">Where each layer runs</p>
+          <h2 class="h2" id="deploy-title" data-split="lines">Robots stay light. <em>Reasoning</em> is shared.</h2>
+          <p class="lead">Locomotion, sensing and metric navigation run on the robot. Deterministic resolution, VLM inference and memory run on one shared workstation. A GPU is needed only for L3b inference; the deterministic path uses none.</p>
+        </header>
+        <div class="sas-topo" data-reveal>
+          <div class="sas-topo__col">
+            <div class="sas-node sas-node--robot"><img src="img/xplorer-b.webp" alt="" width="398" height="458" loading="lazy"><div><b>Xplorer-B</b><span class="mono">single Raspberry Pi 5</span></div><ul><li style="--c:#7ce0c3">L1 Nav2</li><li style="--c:#5bc0eb">L2 YOLO26n + ASF</li><li style="--c:#a49d92">L0 base</li></ul></div>
+            <div class="sas-node sas-node--robot"><img src="img/xplorer-c.webp" alt="" width="284" height="197" loading="lazy"><div><b>Xplorer-C</b><span class="mono">dual Raspberry Pi 5 · detector on the second board</span></div><ul><li style="--c:#7ce0c3">L1 Nav2</li><li style="--c:#5bc0eb">L2 YOLO26n + ASF</li><li style="--c:#a49d92">L0 base</li></ul></div>
+          </div>
+          <div class="sas-topo__links" aria-hidden="true">
+            <div class="sas-link sas-link--up"><span class="mono">HTTP · pose, image, graph, semantic objects</span><i></i></div>
+            <div class="sas-link sas-link--down"><span class="mono">ROS 2 actions · admissible goals</span><i></i></div>
+          </div>
+          <div class="sas-topo__col">
+            <div class="sas-node sas-node--ws"><div><b>Shared workstation</b><span class="mono">RTX 5050 · used only for L3b</span></div><ul><li style="--c:#9b8cff">L5 memory + audit</li><li style="--c:#fa520f">L3b VLM · qwen3.5:4b</li><li style="--c:#fa520f">L3a resolver · CPU</li><li style="--c:#ffb547">L4 mission interface</li></ul></div>
+          </div>
+        </div>
+        <p class="sas-note sas-deploy__note">Session E also ran both robots against the shared VLM service at the same time: in three concurrent pairs all six missions completed and all replies parsed, with slower inference (mean 13.8 s against 9.8 s for non-concurrent calls).</p>
+      </div>
+    </section>
+
+    <!-- Evidence -->
+    <section class="section section--paper sas-evidence" aria-labelledby="evidence-title">
+      <div class="container">
+        <header class="sas-section-head">
+          <p class="eyebrow">What the frozen system showed</p>
+          <h2 class="h2" id="evidence-title" data-split="lines">Evidence, with its <em>limits</em> stated.</h2>
+          <p class="lead">Session E ran one frozen build, v4.8-review, with the commit and a clean working tree recorded at all 214 start-ups, on two robots in one indoor environment. Each block answers its own question, so its totals are not one pooled sample.</p>
+        </header>
+        <div class="sas-evidence__grid" data-stagger>
+          <article class="card"><p class="stat-value"><span data-counter="112">112</span><small>/216</small></p><h3>decision cycles resolved deterministically, with no model call</h3><p class="muted">The share reflects the mix of test blocks, not a resolver-wide rate.</p></article>
+          <article class="card"><p class="stat-value">0.245<small> ms</small></p><h3>median resolver compute · max 0.960 ms</h3><p class="muted">Resolver computation only. The pre-navigation image is fetched before the timer starts.</p></article>
+          <article class="card"><p class="stat-value"><span data-counter="17">17</span><small>/28</small></p><h3>acceptable outcomes on a sealed set of unseen instructions</h3><p class="muted">Five used the fast path and one of those five chose a wrong destination.</p></article>
+          <article class="card"><p class="stat-value"><span data-counter="0">0</span></p><h3>forbidden destinations executed across 39 negation-guard activations</h3><p class="muted">14 intents: 22 clarification requests, 13 non-forbidden resolutions, 4 parse or escalation errors.</p></article>
+          <article class="card"><p class="stat-value"><span data-counter="8">8</span><small>/8</small></p><h3>confirmation outputs agreed with the scene</h3><p class="muted">Four trials with the fire extinguisher present, four with it removed.</p></article>
+          <article class="card"><p class="stat-value">3 × 3</p><h3>VLMs × seed bases replayed through the frozen L3b interface</h3><p class="muted">The interface ported without changes. Semantic behaviour stayed model-dependent.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Principles -->
+    <section class="section sas-principles" aria-labelledby="principles-title">
+      <div class="container">
+        <header class="sas-section-head">
+          <p class="eyebrow">Design principles</p>
+          <h2 class="h2" id="principles-title" data-split="lines">One stack, <em>every body</em>.</h2>
+        </header>
+        <div class="sas-principles__grid" data-stagger>
+          <article class="card sas-principle" data-spotlight>
+            <div class="sas-principle__fx fx-body" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><b></b></div>
+            <h3 class="h3">Body-agnostic</h3>
+            <p class="muted">Layers are defined by responsibilities and interfaces. Change the body at L0 and the layers above keep their contracts; behaviour still has to be validated on each new platform.</p>
+          </article>
+          <article class="card sas-principle" data-spotlight>
+            <div class="sas-principle__fx fx-fast" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            <h3 class="h3">Deterministic first</h3>
+            <p class="muted">Rules over the graph, objects and stored associations run before any model. The VLM is the escalation path, not the default.</p>
+          </article>
+          <article class="card sas-principle" data-spotlight>
+            <div class="sas-principle__fx fx-safe" aria-hidden="true"><i></i><b></b></div>
+            <h3 class="h3">Abstain, don't guess</h3>
+            <p class="muted">Negation outranks every step, location conflicts escalate, near-ties abstain, and an invalid or forbidden VLM answer is blocked and logged without moving the robot.</p>
+          </article>
+          <article class="card sas-principle" data-spotlight>
+            <div class="sas-principle__fx fx-ground" aria-hidden="true"><i></i><i></i><i></i></div>
+            <h3 class="h3">Grounded, not just labelled</h3>
+            <p class="muted">Every target is a node in the route graph tied to surveyed objects. Choosing a destination, arriving and confirming what is there are recorded as three separate events.</p>
+          </article>
+          <article class="card sas-principle" data-spotlight>
+            <div class="sas-principle__fx fx-audit" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+            <h3 class="h3">Auditable by construction</h3>
+            <p class="muted">Each decision leaves an audit record with its resolution path, validation state and outcome. Memory is rebuilt from those records, never from hidden state.</p>
+          </article>
+          <article class="card sas-principle" data-spotlight>
+            <div class="sas-principle__fx fx-edge" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+            <h3 class="h3">Edge hardware</h3>
+            <p class="muted">Robots carry Raspberry Pi 5 boards and no GPU. Only the selective VLM path needs a GPU, on a shared workstation.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Positioning -->
+    <section class="section section--ink2 sas-position" aria-labelledby="position-title">
+      <div class="container">
+        <header class="sas-section-head">
+          <p class="eyebrow">Positioning</p>
+          <h2 class="h2" id="position-title" data-split="lines">The ingredients exist. <em>The integration</em> is the point.</h2>
+          <p class="lead">Selective reasoning, embodied memory and LLM–ROS interfaces each have strong precedents. SAS combines them under one explicit decision boundary. Summarised from Table 1 of the SAS paper: published capabilities, not benchmark results, and the other systems were not rerun.</p>
+        </header>
+        <div class="sas-compare" role="table" aria-label="Architectural positioning of SAS against related systems">
+          <div class="sas-compare__row sas-compare__row--head" role="row">
+            <span role="columnheader">System</span><span role="columnheader">Fast path or selection</span><span role="columnheader">Model role and safeguards</span><span role="columnheader">Memory and reuse</span>
+          </div>
+          <div data-stagger="0.07">
+            <div class="sas-compare__row" role="row"><span role="rowheader">IROS dual-process</span><span role="cell">Key-frame gate; VLM only when a match is ambiguous</span><span role="cell">Safety manoeuvre module; pretrained VLM</span><span role="cell">Per-trip rule table; persistence not documented</span></div>
+            <div class="sas-compare__row" role="row"><span role="rowheader">Hydra-Nav</span><span role="cell">One VLM switches mode on its own token</span><span role="cell">Three-stage fine-tuning of a 7B VLM</span><span role="cell">Landmark graph within an episode</span></div>
+            <div class="sas-compare__row" role="row"><span role="rowheader">CausalNav</span><span role="cell">Hierarchical planner</span><span role="cell">LLM builds the graph; safeguards not documented</span><span role="cell">Multi-level embodied graph; sharing not documented</span></div>
+            <div class="sas-compare__row" role="row"><span role="rowheader">EchoVLA</span><span role="cell">Single diffusion policy, memory-conditioned</span><span role="cell">Policy trained on a purpose-built corpus</span><span role="cell">Scene voxels + episodic buffer, per site</span></div>
+            <div class="sas-compare__row" role="row"><span role="rowheader">ROSClaw</span><span role="cell">No fast path; every command reaches the agent</span><span role="cell">Validator allows or blocks before execution</span><span role="cell">Memory reset each trial</span></div>
+            <div class="sas-compare__row" role="row"><span role="rowheader">Our Sensors 2026 work</span><span role="cell">Route choice by edge penalty</span><span role="cell">No LLM or VLM stage</span><span role="cell">GeoJSON object map; persists, not shared</span></div>
+            <div class="sas-compare__row is-sas" role="row"><span role="rowheader">SAS</span><span role="cell">Seven-step deterministic resolver with M3 Step 0; no trained routing classifier</span><span role="cell">L3b only after abstention; negation precedence, location conflicts, destination validation; pretrained VLM, no fine-tuning</span><span role="cell">Typed M1–M5; M3 promotion gate; shared-memory reuse shown for one induced association</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Research -->
+    <section class="section sas-research" aria-labelledby="research-title">
+      <div class="container">
+        <header class="sas-section-head">
+          <p class="eyebrow">The papers behind the stack</p>
+          <h2 class="h2" id="research-title" data-split="lines">Every layer has a <em>paper</em>.</h2>
+        </header>
+        <div class="sas-research__grid" data-stagger>
+          <a class="card sas-paper" href="research-route-planning.html" data-tilt="5">
+            <img src="img/research-route.webp" alt="" width="600" height="600" loading="lazy">
+            <span class="mono">Sensors 2026 · L1–L2</span>
+            <h3 class="h3">Semantic route planning</h3>
+            <p class="muted">YOLO26n, Angular Sector Fusion and penalty-weighted Nav2 Route Server replanning on Raspberry Pi 5.</p>
+            <span class="link-arrow">Read</span>
+          </a>
+          <a class="card sas-paper" href="research-covariance.html" data-tilt="5">
+            <img src="img/research-ros2.webp" alt="" width="600" height="600" loading="lazy">
+            <span class="mono">Sensors 2025 · L1</span>
+            <h3 class="h3">AI dynamic covariance</h3>
+            <p class="muted">A Random Forest predicts EKF covariance for robot_localization in ROS 2.</p>
+            <span class="link-arrow">Read</span>
+          </a>
+          <a class="card sas-paper" href="research-vlm-autonomy.html" data-tilt="5">
+            <img src="img/research-vlm.webp" alt="" width="600" height="600" loading="lazy">
+            <span class="mono">Robotics and Autonomous Systems 2027 · L3–L5</span>
+            <h3 class="h3">VLM semantic autonomy</h3>
+            <p class="muted">The six-layer framework, the deterministic-first resolver and scoped memory with shared reuse.</p>
+            <span class="link-arrow">Read</span>
+          </a>
+        </div>
+      </div>
+    </section>
   </main>
   <script type="module" src="/src/pages/stack.js"></script>
 </body>

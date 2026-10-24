@@ -4,7 +4,7 @@
 import { createCanvas, readTokens, clamp, clock, noise1 } from './common.js';
 import { renderCamera, detectCandidates } from './camera.js';
 import { SimDetector, VideoTracks, drawDetections } from './detector.js';
-import { CAM, YOLO } from './world.js';
+import { CAM } from './world.js';
 
 const UPTIME = 1742.2; // the HUD clock starts mid-run, like a recording would
 
@@ -36,11 +36,11 @@ function makeScanlines(ctx) {
  * @param {string} [o.video]               mp4 URL for real footage
  * @param {string} [o.detections]          detections JSON URL for real footage
  */
-export function createCameraView(host, { sceneAt, compact = false, video, detections, label }) {
+export function createCameraView(host, { sceneAt, compact = false, video, detections, label, onResize }) {
   const tk = readTokens();
   const grain = makeGrain();
   let mode = 'sim', vid = null, tracks = null, scan = null;
-  const view = createCanvas(host, { label });
+  const view = createCanvas(host, { label, onResize: () => onResize?.() });
   const { ctx, size } = view;
   scan = makeScanlines(ctx);
 
@@ -163,9 +163,9 @@ export function createCameraView(host, { sceneAt, compact = false, video, detect
   return {
     render, ready, detector, canvas: view.canvas,
     get mode() { return mode; },
+    get aspect() { return tracks ? tracks.width / tracks.height : size.w / size.h; },
     play() { if (vid) vid.play().catch(() => {}); },
     pause() { vid?.pause(); },
     destroy() { vid?.pause(); vid?.remove(); view.destroy(); },
-    YOLO,
   };
 }

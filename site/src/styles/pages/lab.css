@@ -51,7 +51,7 @@
 .emblem__halo, .flame-halo {
   position: absolute; left: 50%; top: 6%; width: 140%; aspect-ratio: 1; translate: -50% -50%; border-radius: 50%; pointer-events: none;
   background: radial-gradient(circle, rgba(255, 196, 110, 0.55), rgba(250, 82, 15, 0.16) 38%, transparent 68%);
-  mix-blend-mode: screen; animation: flicker 2.6s infinite steps(1, end);
+  animation: flicker 2.6s infinite steps(1, end);
 }
 @keyframes flicker {
   0% { opacity: 0.9; scale: 1; } 12% { opacity: 0.7; scale: 0.96; } 20% { opacity: 1; scale: 1.04; } 34% { opacity: 0.82; }
@@ -131,7 +131,7 @@
 .person__medal { position: relative; aspect-ratio: 1; flex: none; }
 .person__medal img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; scale: 1.02; transition: scale 0.9s var(--ease-out); box-shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.6); }
 .person__ring { position: absolute; inset: -9px; width: calc(100% + 18px); height: calc(100% + 18px); overflow: visible; transition: rotate 1.6s var(--ease-out); }
-.person__ring circle { fill: none; stroke: currentColor; stroke-width: 0.7; stroke-dasharray: 2 4; opacity: 0.4; transition: stroke-dasharray 1.2s var(--ease-out), opacity 0.8s; vector-effect: non-scaling-stroke; }
+.person__ring circle { fill: none; stroke: currentColor; stroke-width: 0.6; stroke-dasharray: 1.5 3; opacity: 0.45; transition: stroke-dasharray 1.2s var(--ease-out), opacity 0.8s; }
 .person:hover .person__medal img { scale: 1.09; }
 .person:hover .person__ring { rotate: 90deg; }
 .person:hover .person__ring circle { stroke-dasharray: 302 0; opacity: 0.9; }

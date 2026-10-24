@@ -55,7 +55,7 @@ export default function mount(el, { options = {}, reducedMotion }) {
 
   const stage = createStage(viewport, { fov: 28, dpr: 1.5 });
   const { scene, camera } = stage;
-  camera.position.set(0, 3.6, 11.5);
+  camera.position.set(0, 3.1, 11.5);
   camera.lookAt(0, 0, 0);
 
   scene.add(new THREE.AmbientLight(0xffffff, 0.9));
@@ -246,13 +246,17 @@ export default function mount(el, { options = {}, reducedMotion }) {
   }
 
   const corner = new THREE.Vector3();
+  const corner2 = new THREE.Vector3();
   function placeLabels(gap, enter) {
     if (labelsMode === 'none') return;
     const w = stage.size.w, hgt = stage.size.h;
     stack.updateMatrixWorld(true);
     slabs.forEach((s, i) => {
-      // Anchor each label on the slab's right edge, so it follows the slab as the stack rotates.
+      // Anchor each label on whichever right-hand corner of the slab is furthest right on screen,
+      // so labels sit beside the stack (not on it) as it rotates.
       corner.set(SLAB.w / 2, 0, SLAB.d / 2).applyMatrix4(s.group.matrixWorld).project(camera);
+      corner2.set(SLAB.w / 2, 0, -SLAB.d / 2).applyMatrix4(s.group.matrixWorld).project(camera);
+      if (corner2.x > corner.x) corner.copy(corner2);
       const x = Math.min(w - 40, (corner.x * 0.5 + 0.5) * w + 14);
       const y = (-corner.y * 0.5 + 0.5) * hgt;
       const lbl = labels[i];

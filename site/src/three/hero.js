@@ -154,15 +154,17 @@ const POINT_VERT = /* glsl */ `
     col = mix(col, vec3(1.0, 0.71, 0.28), smoothstep(0.45, 1.0, h));
     float det = 0.0;
     if (aObj > -0.5) { det = uDet[oi]; col = mix(col, uCls[oi], det * 0.85); }
-    float base = aKind > 1.5 ? 0.13 + uTop * 0.12 : 0.34 + det * 0.3;
+    float base = aKind > 1.5 ? 0.16 + uTop * 0.14 : 0.5 + det * 0.35;
     vColor = mix(col, vec3(1.0, 0.93, 0.82), flare * 0.55);
     vAlpha = mapped * (base + flare * (aKind > 1.5 ? 0.5 : 0.85));
 
     vec4 mv = modelViewMatrix * vec4(p, 1.0);
     gl_Position = projectionMatrix * mv;
-    float size = (aKind > 1.5 ? 1.3 : 2.0 + det * 0.6) * (1.0 + flare * 0.9);
-    gl_PointSize = clamp(size * uPx * (11.0 / -mv.z), 1.0, 9.0);
-    vAlpha *= smoothstep(48.0, 10.0, -mv.z);
+    float size = (aKind > 1.5 ? 1.4 : 2.4 + det * 0.8) * (1.0 + flare * 0.9);
+    gl_PointSize = clamp(size * uPx * (15.0 / -mv.z), 1.0, 7.0);
+    vAlpha *= smoothstep(52.0, 12.0, -mv.z);
+    // Unmapped points cost fill-rate for nothing: push them outside the clip volume.
+    if (vAlpha < 0.004) gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
   }`;
 const POINT_FRAG = /* glsl */ `
   varying vec3 vColor;
@@ -231,7 +233,7 @@ export function mountHeroScene(container, { labels, reducedMotion = false, onSta
   renderer.setClearColor(0x000000, 0);
 
   // ---------- Point cloud ----------
-  const cloud = buildCloud(small ? 0.55 : 1);
+  const cloud = buildCloud(small ? 0.5 : 0.8);
   const det = new Array(OBJECTS.length).fill(0);
   const pointMat = new THREE.ShaderMaterial({
     vertexShader: POINT_VERT, fragmentShader: POINT_FRAG, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
@@ -272,12 +274,12 @@ export function mountHeroScene(container, { labels, reducedMotion = false, onSta
     vertexShader: ROUTE_VERT, fragmentShader: ROUTE_FRAG, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
     uniforms: { uHead: { value: 0 }, uLen: { value: 0 }, uTime: { value: 0 }, uBase: { value: 0.08 }, uGlow: { value: 1 } },
   });
-  scene.add(new THREE.Mesh(new THREE.TubeGeometry(curve, 700, 0.05, 6, true), routeMat));
+  scene.add(new THREE.Mesh(new THREE.TubeGeometry(curve, 700, 0.035, 6, true), routeMat));
   const glowMat = routeMat.clone();
   glowMat.uniforms = THREE.UniformsUtils.clone(routeMat.uniforms);
   glowMat.uniforms.uBase.value = 0.015;
   glowMat.uniforms.uGlow.value = 0.18;
-  scene.add(new THREE.Mesh(new THREE.TubeGeometry(curve, 700, 0.17, 6, true), glowMat));
+  scene.add(new THREE.Mesh(new THREE.TubeGeometry(curve, 700, 0.12, 6, true), glowMat));
 
   // ---------- Semantic boxes + footprints ----------
   const boxes = OBJECTS.map((o) => {
@@ -315,7 +317,7 @@ export function mountHeroScene(container, { labels, reducedMotion = false, onSta
   const outline = new THREE.LineSegments(new THREE.EdgesGeometry(body.geometry), new THREE.LineBasicMaterial({ color: 0xfa520f, transparent: true, opacity: 0.7 }));
   outline.position.copy(body.position);
   robot.add(body, plate, lidar, outline);
-  robot.scale.setScalar(1.7);
+  robot.scale.setScalar(1.5);
   scene.add(robot);
   scene.add(new THREE.HemisphereLight(0xffe2c4, 0x1a0c08, 1.4));
   const key = new THREE.DirectionalLight(0xffffff, 1.6);
@@ -413,12 +415,12 @@ export function mountHeroScene(container, { labels, reducedMotion = false, onSta
 
     // Camera: slow orbit biased toward the robot, blended into a top-down map with scroll.
     const tanHalf = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
-    const orbitTarget = tmp.set(rU.x * 0.35, 0.4, rU.z * 0.35);
+    const orbitTarget = tmp.set(rU.x * 0.25, 0.3, rU.z * 0.25);
     if (state.first) { state.target.copy(orbitTarget); state.first = false; }
     state.target.lerp(orbitTarget, 0.02);
     const az = 0.55 + (reducedMotion ? 0 : t * 0.02) + state.px * 0.18;
-    const pol = 1.0 + state.py * 0.06;
-    const r = portrait ? 19 : 13.5;
+    const pol = 0.9 + state.py * 0.06;
+    const r = portrait ? 24 : 17;
     const orbit = camPos.set(Math.sin(pol) * Math.sin(az), Math.cos(pol), Math.sin(pol) * Math.cos(az)).multiplyScalar(r).add(state.target);
     const topD = portrait ? Math.max(ROOM.w / (2 * tanHalf), ROOM.d / (2 * tanHalf * camera.aspect)) : Math.max(ROOM.d / (2 * tanHalf), ROOM.w / (2 * tanHalf * camera.aspect));
     const topPos = new THREE.Vector3(state.px * 0.6, topD * 1.04, state.py * 0.4);

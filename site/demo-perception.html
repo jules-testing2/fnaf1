@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Perception demos · test page</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+</head>
+<body data-page="demo-perception">
+  <main id="main">
+    <section class="section section--tight"><div class="container stack">
+      <p class="eyebrow">Test page · perception demos</p>
+      <h2 class="h2">yolo-detect</h2>
+      <div data-demo="yolo-detect"></div>
+      <h3 class="h3">yolo-detect · real footage (test clip)</h3>
+      <div data-demo="yolo-detect" data-options='{"video":"media/test/test.mp4","detections":"media/test/test.json"}'></div>
+    </div></section>
+    <section class="section section--tight"><div class="container stack">
+      <h2 class="h2">asf-fusion</h2>
+      <div data-demo="asf-fusion"></div>
+    </div></section>
+    <section class="section section--tight"><div class="container stack">
+      <h2 class="h2">sensor-montage</h2>
+      <div data-demo="sensor-montage"></div>
+    </div></section>
+    <section class="section section--tight section--paper"><div class="container stack">
+      <h2 class="h2">Paper theme</h2>
+      <div data-demo="asf-fusion" data-options='{"theme":"paper","target":2}'></div>
+      <div class="grid grid-2">
+        <div data-demo="yolo-detect" data-options='{"theme":"paper","compact":true}'></div>
+        <div data-demo="sensor-montage" data-options='{"theme":"paper","compact":true}'></div>
+      </div>
+    </div></section>
+    <section class="section section--tight"><div class="container stack">
+      <h2 class="h2">Compact and bare</h2>
+      <div class="grid grid-3">
+        <div data-demo="yolo-detect" data-options='{"compact":true}'></div>
+        <div data-demo="asf-fusion" data-options='{"compact":true,"target":1}'></div>
+        <div data-demo="yolo-detect" data-options='{"bare":true,"height":240}'></div>
+      </div>
+      <div data-demo="sensor-montage" data-options='{"compact":true}'></div>
+    </div></section>
+  </main>
+  <script type="module" src="/src/pages/demo-perception.js"></script>
+</body>
+</html>

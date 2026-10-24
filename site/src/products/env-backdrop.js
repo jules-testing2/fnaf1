@@ -103,6 +103,7 @@ export function createEnvBackdrop(canvas, { initial = 'indoor' } = {}) {
         ctx.stroke();
       }
       line([0, v.hz], [w, v.hz], FG(0.2 * a));
+      floor(v, a * 0.7, 1.5, 9, travel, acc);
       // Gravel: deterministic dots per ground cell.
       const cell = 0.9, off = travel % cell, base = Math.floor(travel / cell);
       for (let zi = 0; zi < ZMAX / cell; zi++) {
@@ -112,7 +113,7 @@ export function createEnvBackdrop(canvas, { initial = 'indoor' } = {}) {
           const r = hash((zi + base) * 41 + xi * 7);
           if (r < 0.45) continue;
           const [px, py] = P(v, xi * 0.7 + r * 0.5, 0, z);
-          ctx.fillStyle = FG(0.35 * a * fog(z) * r);
+          ctx.fillStyle = FG(0.6 * a * fog(z) * r);
           const s = Math.max(0.6, 2.6 / z);
           ctx.fillRect(px, py, s, s);
         }

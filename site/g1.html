@@ -13,7 +13,149 @@
 </head>
 <body data-page="g1">
   <main id="main">
-    <section class="section"><div class="container"><p class="eyebrow">Coming soon</p><h1 class="h1">SAIM G1</h1></div></section>
+
+    <!-- Hero -->
+    <section class="pp-hero g1-hero" aria-labelledby="g1-title">
+      <div class="pp-hero__grid-bg" aria-hidden="true"></div>
+      <div class="g1-hero__word" aria-hidden="true">FIIRION</div>
+      <div class="container g1-hero__grid">
+        <div class="g1-hero__copy stack" style="--stack-gap:1.6rem">
+          <div class="pp-hero__head">
+            <p class="eyebrow" data-scramble>Humanoid platform</p>
+            <span class="chip chip--live">Bipedal · 43 DOF</span>
+          </div>
+          <h1 class="h1 g1-hero__title" id="g1-title"><span class="g1-hero__line">SAIM G1</span> <span class="g1-hero__line"><em class="fire-text">FIIRION</em></span></h1>
+          <p class="lead" data-reveal>A bipedal humanoid built for tasks that need human-scale reach and dexterity: lab manipulation, guided interaction, and shared workspaces with people.</p>
+          <div class="pp-hero__ctas" data-reveal data-reveal-delay="0.15">
+            <a class="btn btn--fire" href="mailto:contact@saimrobotics.com?subject=SAIM%20G1%20%C2%B7%20demo%20request" data-magnetic>Request a demo <span class="arrow">→</span></a>
+            <a class="btn btn--ghost" href="#anatomy" data-magnetic>Anatomy of a humanoid</a>
+          </div>
+        </div>
+        <div class="g1-hero__figure">
+          <div class="g1-hero__halo" aria-hidden="true"></div>
+          <div class="g1-scan">
+            <img src="img/g1.webp" alt="The SAIM G1 FIIRION humanoid robot standing and waving, with a glowing visor, silver body and black hands" width="526" height="1172" fetchpriority="high">
+            <span class="g1-scan__beam" aria-hidden="true" style="-webkit-mask-image:url(img/g1.webp);mask-image:url(img/g1.webp)"></span>
+          </div>
+          <dl class="g1-hero__tele mono" aria-hidden="true">
+            <div><dt>HGT</dt><dd>1.7 M</dd></div>
+            <div><dt>DOF</dt><dd>43</dd></div>
+            <div><dt>HANDS</dt><dd>2×</dd></div>
+            <div><dt>RUN</dt><dd>2 H</dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- Specs -->
+    <section class="section section--tight pp-stats" aria-label="G1 key specifications">
+      <div class="container grid grid-4" data-stagger>
+        <div><div class="stat-value" data-counter="1.7" data-decimals="1" data-suffix=" m">1.7 m</div><div class="stat-label">Height</div></div>
+        <div><div class="stat-value" data-counter="43">43</div><div class="stat-label">Degrees of freedom</div></div>
+        <div><div class="stat-value" data-counter="2" data-suffix="×">2×</div><div class="stat-label">Dexterous hands</div></div>
+        <div><div class="stat-value" data-counter="2" data-suffix=" h">2 h</div><div class="stat-label">Active runtime</div></div>
+      </div>
+    </section>
+
+    <!-- Anatomy: scroll-driven on desktop, annotated figure + list elsewhere -->
+    <section class="section g1-anat" id="anatomy" aria-labelledby="g1-anat-title">
+      <div class="container">
+        <div class="pp-section-head g1-anat__head">
+          <p class="eyebrow" data-reveal>Anatomy</p>
+          <h2 class="h2" id="g1-anat-title" data-split>Human scale, <em>joint by joint.</em></h2>
+        </div>
+      </div>
+      <div class="g1-anat__pin">
+        <div class="container g1-anat__stage">
+          <ol class="g1-steps">
+            <li class="g1-step" data-step="0"><span class="mono">01 · Height</span><h3 class="h3">1.7 metres tall</h3><p class="muted">Human scale, for human-scale reach in spaces built for people.</p></li>
+            <li class="g1-step" data-step="1"><span class="mono">02 · Head</span><h3 class="h3">Perception and interaction</h3><p class="muted">Understands object identity and affordance, not just geometry, through the Autonomy Stack, and reads voice and gesture cues to work alongside people safely.</p></li>
+            <li class="g1-step" data-step="2"><span class="mono">03 · Hands</span><h3 class="h3">Two dexterous hands</h3><p class="muted">Multi-fingered hands for grasping tools and objects built for people. The <a class="link-arrow" href="arms.html">Arm series</a> runs natively on G1.</p></li>
+            <li class="g1-step" data-step="3"><span class="mono">04 · Joints</span><h3 class="h3">43 degrees of freedom</h3><p class="muted">Articulation through arms, hands, torso and legs: the range of motion behind both manipulation and balance.</p></li>
+            <li class="g1-step" data-step="4"><span class="mono">05 · Legs</span><h3 class="h3">Bipedal locomotion</h3><p class="muted">Dynamic balance control across stairs, ramps and uneven indoor floors.</p></li>
+            <li class="g1-step" data-step="5"><span class="mono">06 · Power</span><h3 class="h3">2 hours active runtime</h3><p class="muted">Two hours of active operation per charge.</p></li>
+          </ol>
+
+          <div class="g1-figure" role="img" aria-label="Annotated G1 humanoid: height dimension, head, both hands, eleven major joints, legs and runtime gauge">
+            <img src="img/g1.webp" alt="" width="526" height="1172" loading="lazy">
+            <span class="g1-figure__scan" aria-hidden="true" style="-webkit-mask-image:url(img/g1.webp);mask-image:url(img/g1.webp)"></span>
+            <svg class="g1-figure__svg" viewBox="0 0 526 1172" aria-hidden="true">
+              <g class="g1-dim">
+                <line x1="-40" y1="18" x2="-40" y2="1160" />
+                <line x1="-58" y1="18" x2="-22" y2="18" />
+                <line x1="-58" y1="1160" x2="-22" y2="1160" />
+              </g>
+              <g class="g1-leads"></g>
+              <g class="g1-dots"></g>
+            </svg>
+            <div class="g1-labels"></div>
+          </div>
+
+          <div class="g1-readout" aria-hidden="true">
+            <div class="g1-readout__row" data-read="0"><span class="mono">Height</span><b data-val="1.7" data-dec="1" data-suf=" m">0.0 m</b></div>
+            <div class="g1-readout__row" data-read="2"><span class="mono">Hands</span><b data-val="2" data-suf="×">0×</b></div>
+            <div class="g1-readout__row" data-read="3"><span class="mono">DOF</span><b data-val="43">0</b></div>
+            <div class="g1-readout__row" data-read="5"><span class="mono">Runtime</span><b data-val="2" data-suf=" h">0 h</b>
+              <svg class="g1-gauge" viewBox="0 0 40 40"><circle cx="20" cy="20" r="16" /><circle class="g1-gauge__fill" cx="20" cy="20" r="16" /></svg>
+            </div>
+            <div class="g1-progress"><i></i></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Capabilities -->
+    <section class="section section--paper g1-caps" aria-labelledby="g1-caps-title">
+      <div class="container">
+        <div class="pp-section-head">
+          <p class="eyebrow" data-reveal>Capabilities</p>
+          <h2 class="h2" id="g1-caps-title" data-split>Built for <em>shared spaces.</em></h2>
+        </div>
+        <div class="grid grid-4" data-stagger>
+          <article class="card pp-cap" data-tilt="4" data-spotlight>
+            <span class="pp-cap__n mono">01</span>
+            <span class="pp-cap__icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="16" cy="5" r="2.5"/><path d="M16 8v9m0 0-5 11m5-11 5 11M9 13h14"/></svg></span>
+            <h3 class="h3">Bipedal locomotion</h3>
+            <p class="muted">Dynamic balance control across stairs, ramps, and uneven indoor floors.</p>
+          </article>
+          <article class="card pp-cap" data-tilt="4" data-spotlight>
+            <span class="pp-cap__n mono">02</span>
+            <span class="pp-cap__icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M10 28V15m0 0V7a2 2 0 0 1 4 0v8m0 0V5a2 2 0 0 1 4 0v10m0 0V7a2 2 0 0 1 4 0v11c0 6-3 10-8 10s-7-3-9-7l-2-4a2 2 0 0 1 3.5-2L10 18"/></svg></span>
+            <h3 class="h3">Dexterous manipulation</h3>
+            <p class="muted">Two multi-fingered hands for grasping tools and objects built for people.</p>
+          </article>
+          <article class="card pp-cap" data-tilt="4" data-spotlight>
+            <span class="pp-cap__n mono">03</span>
+            <span class="pp-cap__icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 16s5-9 13-9 13 9 13 9-5 9-13 9S3 16 3 16Z"/><circle cx="16" cy="16" r="4"/><path d="M4 4h5M4 4v5M28 4h-5M28 4v5M4 28h5M4 28v-5M28 28h-5M28 28v-5"/></svg></span>
+            <h3 class="h3">Semantic perception</h3>
+            <p class="muted">Understands object identity and affordance, not just geometry, via the Autonomy Stack.</p>
+          </article>
+          <article class="card pp-cap" data-tilt="4" data-spotlight>
+            <span class="pp-cap__n mono">04</span>
+            <span class="pp-cap__icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M5 9h13a3 3 0 0 1 3 3v5a3 3 0 0 1-3 3h-6l-5 4v-4H5a3 3 0 0 1-3-3v-5a3 3 0 0 1 3-3Z"/><path d="M24 8c2 1.5 3 3.5 3 6s-1 4.5-3 6M27 5c3 2.5 4 5.5 4 9s-1 6.5-4 9"/></svg></span>
+            <h3 class="h3">Human interaction</h3>
+            <p class="muted">Reads voice and gesture cues to work alongside people safely.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Where it works -->
+    <section class="section g1-uses" aria-labelledby="g1-uses-title">
+      <div class="container">
+        <div class="pp-section-head">
+          <p class="eyebrow" data-reveal>Where it works</p>
+          <h2 class="h2" id="g1-uses-title" data-split>Tasks that need <em>a human-shaped body.</em></h2>
+        </div>
+        <ol class="g1-uses__list">
+          <li data-reveal><span class="mono">01</span><h3 class="h1">Lab manipulation</h3><p class="muted">Human-scale reach and dexterity at the lab bench.</p></li>
+          <li data-reveal><span class="mono">02</span><h3 class="h1">Guided interaction</h3><p class="muted">Reads voice and gesture cues to guide and assist people.</p></li>
+          <li data-reveal><span class="mono">03</span><h3 class="h1">Shared workspaces</h3><p class="muted">Works alongside people safely, in spaces built for them.</p></li>
+        </ol>
+      </div>
+    </section>
+
+    <div data-product-bands></div>
   </main>
   <script type="module" src="/src/pages/g1.js"></script>
 </body>
