@@ -162,8 +162,7 @@ export default function mount(host, { options = {}, reducedMotion = false } = {}
     const start = head; let n = 0;
     while (azAcc >= azStep) {
       azAcc -= azStep; az += azStep;
-      const before = count; column(az, time, azAcc < azStep); n += CHANNELS;
-      void before;
+      column(az, time, azAcc < azStep); n += CHANNELS;
     }
     if (n) markDirty(start, Math.min(n, CAPACITY));
     beamGeo.attributes.position.needsUpdate = true;

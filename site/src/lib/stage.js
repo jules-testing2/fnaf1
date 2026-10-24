@@ -26,7 +26,8 @@ export function createStage(container, opts = {}) {
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(fov, 1, 0.05, 400);
-  const clock = new THREE.Clock();
+  // Minimal clock (THREE.Clock is deprecated in recent three.js releases).
+  const clock = { elapsedTime: 0, last: performance.now(), getDelta() { const now = performance.now(); const d = (now - this.last) / 1000; this.last = now; this.elapsedTime += d; return d; } };
   const size = { w: 1, h: 1 };
   const frames = [];
   let running = false, onScreen = true, raf = 0;
