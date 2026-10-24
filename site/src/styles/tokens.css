@@ -86,20 +86,20 @@
 :root[data-theme='light'] :is(.hero, [data-demo], .demo-frame, .navd, .rz, .mc-term, .rr__box, .reel__item, .reel-box,
   .paper-nav, .ekf__badge, .sas-layers, .xp-twin, .sas-hero, .sas-deploy, .plats, .use, .sas__plate, .hero-tag, .hud,
   .plat__specs, .g1-hero__tele, .g1-label, .go-vision__tag, .pp-layers, .xp-sees, .xp-steps, .xp-arch__sw, .xp-twin__view,
-  .cite, .rc-tip, .pp-stackband, .usecases, section[data-stack], [class*='sas3d-label']),
+  .cite, .rc-tip, .pp-stackband, .usecases, section[data-stack], [class*='sas3d-label'], .sas-scroll),
 :root[data-theme='light'] body[data-page='leadership'] {
   --ink: #0a0a0b; --ink-2: #121214; --ink-3: #1b1b1e; --ink-4: #26262a;
   --fg: #f3eee4; --fg-dim: rgba(243, 238, 228, 0.66); --fg-mute: rgba(243, 238, 228, 0.42);
   --line: rgba(243, 238, 228, 0.12); --line-strong: rgba(243, 238, 228, 0.22);
   color: var(--fg);
 }
-:root[data-theme='light'] :is(.hero, .sas-layers, .xp-twin, .sas-hero, .sas-deploy, .plats, .xp-sees, .pp-stackband, .usecases, section[data-stack]), :root[data-theme='light'] body[data-page='leadership'] { background: var(--ink); }
+:root[data-theme='light'] :is(.hero, .sas-scroll, .xp-twin, .sas-deploy, .plats, .xp-sees, .pp-stackband, .usecases, section[data-stack]), :root[data-theme='light'] body[data-page='leadership'] { background: var(--ink); }
 :root[data-theme='light'] body[data-page='leadership'] .site-nav.is-scrolled { background: rgba(10, 10, 11, 0.62); }
 :root[data-theme='light'] body[data-page='leadership'] img[src$='logo-white.webp'] { filter: none; }
 /* Text set in --ink on bright fills (fire gradient pips, resolver bars) must stay dark in both themes. */
 :root[data-theme='light'] :is(.layer-pip.is-on, .rr-seg, .rr-seg *) { color: #0a0a0b; }
 :root[data-theme='light'] .pp-request { --ink: #0a0a0b; --fg: #f3eee4; }
-:root[data-theme='light'] body[data-page='index'] .site-nav:not(.is-scrolled) {
+:root[data-theme='light'] body:is([data-page='index'], [data-page='stack']) .site-nav:not(.is-scrolled) {
   --fg: #f3eee4; --fg-dim: rgba(243, 238, 228, 0.66); --line-strong: rgba(243, 238, 228, 0.22);
 }
-:root[data-theme='light'] body[data-page='index'] .site-nav:not(.is-scrolled) img[src$='logo-white.webp'] { filter: none; }
+:root[data-theme='light'] body:is([data-page='index'], [data-page='stack']) .site-nav:not(.is-scrolled) img[src$='logo-white.webp'] { filter: none; }

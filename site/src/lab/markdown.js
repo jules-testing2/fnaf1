@@ -34,7 +34,7 @@ export function renderMarkdown(md, { stopAt = [] } = {}) {
       flush();
       const pm = m[1].match(/^Part ([IVX]+)\. (.+)/);
       const id = slug(m[1]);
-      part = { id, num: pm ? pm[1] : '§', title: pm ? pm[2] : m[1], label: m[1], items: [] };
+      part = { id, num: pm ? pm[1] : '', title: pm ? pm[2] : m[1], label: m[1], items: [] };
       article = 0;
       toc.push(part);
       if (out.length) out.push('</section>');
@@ -44,7 +44,7 @@ export function renderMarkdown(md, { stopAt = [] } = {}) {
     if ((m = line.match(/^### (.+)/))) {
       flush();
       article += 1;
-      const num = part && part.num !== '§' ? `${part.num}.${article}` : `${article}`;
+      const num = part && part.num ? `${part.num}.${article}` : `${article}`;
       const id = slug(`${part ? part.id : ''}-${m[1]}`);
       part?.items.push({ id, num, title: m[1] });
       out.push(`<h3 class="article__head" id="${id}"><span class="article__num">${num}</span>${esc(m[1])}<a class="anchor" href="#${id}" aria-label="Link to ${esc(m[1])}">#</a></h3>`);

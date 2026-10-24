@@ -75,3 +75,7 @@ h1, h2, h3, h4, p, figure { margin: 0; }
   .js-motion [data-reveal]:not(.is-in) { opacity: 1; }
   *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
 }
+
+/* SplitText line masks clip to the line box; tight display line-heights would cut ascenders and accents.
+   Extend the clip area vertically without moving the text. */
+.split-line-mask, .hero-split-mask { padding-block: 0.16em; margin-block: -0.16em; }
