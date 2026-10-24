@@ -101,10 +101,11 @@ export function noise1(x, seed = 0) {
 /* ---------- Canvas ---------- */
 
 /**
- * Creates a canvas that fills `host`, keeps its backing store at devicePixelRatio (capped at 2)
+ * Creates a canvas that fills `host`, keeps its backing store at devicePixelRatio (capped at 2, and at
+ * `maxWidth` backing pixels when given)
  * and calls `onResize({ w, h, dpr })` whenever the host changes size after creation.
  */
-export function createCanvas(host, { label, className = '', onResize } = {}) {
+export function createCanvas(host, { label, className = '', onResize, maxWidth = Infinity } = {}) {
   const canvas = document.createElement('canvas');
   canvas.className = `pcp-canvas ${className}`.trim();
   if (label) { canvas.setAttribute('role', 'img'); canvas.setAttribute('aria-label', label); }
@@ -114,8 +115,8 @@ export function createCanvas(host, { label, className = '', onResize } = {}) {
   let initial = true;
   const fit = () => {
     const r = host.getBoundingClientRect();
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const w = Math.max(1, Math.round(r.width)), h = Math.max(1, Math.round(r.height));
+    const dpr = Math.min(window.devicePixelRatio || 1, 2, maxWidth / w);
     if (w === size.w && h === size.h && dpr === size.dpr) return;
     Object.assign(size, { w, h, dpr });
     canvas.width = Math.round(w * dpr);
@@ -184,10 +185,15 @@ export function buildFrame(el, { title, meta = '', options = {}, kind }) {
   return { root, bar, right, body };
 }
 
-/** Applies the demo's height: `options.height` (px) wins, then `options.aspect`, then the default aspect. */
-export function applySize(stage, options, defaultAspect) {
-  if (options.height) stage.style.height = `${options.height}px`;
-  else stage.style.aspectRatio = String(options.aspect || defaultAspect);
+/**
+ * Applies the demo's height: `options.height` (px) wins, then `options.aspect`, then the default aspect,
+ * which may switch to a taller `smallAspect` on phones (see .pcp-sized in perception.css).
+ */
+export function applySize(stage, options, defaultAspect, smallAspect = defaultAspect) {
+  if (options.height) { stage.style.height = `${options.height}px`; return; }
+  stage.classList.add('pcp-sized');
+  stage.style.setProperty('--pcp-aspect', String(options.aspect || defaultAspect));
+  stage.style.setProperty('--pcp-aspect-sm', String(options.aspect || smallAspect));
 }
 
 /** Formats seconds as hh:mm:ss.mmm for HUD clocks. */

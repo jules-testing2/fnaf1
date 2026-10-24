@@ -31,7 +31,7 @@ export const CLASSES = {
   chair: { mobility: 'static', color: 'cyan', conf: 0.84 },
   'potted plant': { mobility: 'static', color: 'mint', conf: 0.78 },
   bench: { mobility: 'static', color: 'violet', conf: 0.7 },
-  'dining table': { mobility: 'static', color: 'gold', conf: 0.63 },
+  'dining table': { mobility: 'static', color: 'gold', conf: 0.68 },
   bottle: { mobility: 'minor', color: 'amber', conf: 0.6 },
 };
 
@@ -63,7 +63,7 @@ export const LAYOUT = [
 /** Person walk in bay-local coordinates: out of the right doorway, down the corridor, into the left doorway. */
 const PERSON_PATH = [[8.02, -2.1], [8.02, -1.3], [7.5, -0.45], [4.25, 0.58], [3.42, 1.2], [3.38, 2.1]];
 const PERSON_SPEED = 0.9;
-const PERSON_START = 4.5; // seconds into the loop
+const PERSON_START = 1.2; // seconds into the loop
 const pathLen = PERSON_PATH.slice(1).reduce((s, p, i) => s + Math.hypot(p[0] - PERSON_PATH[i][0], p[1] - PERSON_PATH[i][1]), 0);
 export const PERSON_WINDOW = [PERSON_START, PERSON_START + pathLen / PERSON_SPEED];
 
@@ -280,7 +280,8 @@ export class SemanticMap {
   constructor() { this.tracks = []; this.objects = []; this.writes = 0; }
 
   observe(t, cls, x, y, conf) {
-    let tr = this.tracks.find((k) => k.cls === cls && Math.hypot(k.x - x, k.y - y) < FUSION.matchDist);
+    // Match on the latest raw point so a walking person stays one track while the median lags behind.
+    let tr = this.tracks.find((k) => { const p = k.buf.at(-1); return k.cls === cls && Math.hypot(p[0] - x, p[1] - y) < FUSION.matchDist; });
     if (!tr) { tr = { cls, buf: [], n: 0, x, y }; this.tracks.push(tr); }
     tr.buf.push([x, y]); if (tr.buf.length > FUSION.window) tr.buf.shift();
     const med = (i) => { const v = tr.buf.map((p) => p[i]).sort((a, b) => a - b); return v[Math.floor(v.length / 2)]; };

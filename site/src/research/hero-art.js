@@ -17,7 +17,8 @@ const el = (tag, attrs, parent) => {
 };
 
 export function heroArt(container, variant) {
-  const svg = el('svg', { class: 'hero-art__svg', viewBox: '0 0 600 600', 'aria-hidden': 'true', preserveAspectRatio: 'xMidYMid meet' });
+  const VIEW = { route: '20 90 560 500', covariance: '40 40 540 540', sas: '40 100 560 500' };
+  const svg = el('svg', { class: 'hero-art__svg', viewBox: VIEW[variant] || '0 0 600 600', 'aria-hidden': 'true', preserveAspectRatio: 'xMidYMid meet' });
   container.appendChild(svg);
   const defs = el('defs', {}, svg);
   const grad = el('linearGradient', { id: `fire-${variant}`, x1: '0', y1: '0', x2: '1', y2: '1' }, defs);
@@ -51,7 +52,7 @@ function route(svg, v) {
   const N = { 0: [1.0, 0], 2: [3.4, 0], 3: [2.4, 1.0], 4: [2.4, -0.5], 5: [4.8, 1.0], 6: [4.8, -0.5], 7: [6.7, 0] };
   const names = { 0: 'start', 2: 'center', 3: 'in_top', 4: 'in_bot', 5: 'out_top', 6: 'out_bot', 7: 'goal' };
   const E = [[0, 2], [0, 3], [0, 4], [2, 3], [2, 4], [2, 5], [2, 6], [2, 7], [5, 7], [6, 7]];
-  const P = (id) => [60 + ((N[id][0] - 1) / 5.7) * 480, 320 - N[id][1] * 150];
+  const P = (id) => [60 + ((N[id][0] - 1) / 5.7) * 480, 330 - N[id][1] * 190];
   const g = el('g', {}, svg);
   // Faint occupancy-grid backdrop.
   for (let i = 0; i <= 12; i += 1) {
@@ -73,20 +74,20 @@ function route(svg, v) {
     tx.textContent = `${names[id]} · ${id}`;
   });
   // Detected person near edge 2→7: bounding box + penalty readout.
-  const [px, py] = [(P(2)[0] + P(7)[0]) / 2 + 10, P(2)[1] + 32];
+  const [px, py] = [(P(2)[0] + P(7)[0]) / 2 + 6, P(2)[1] + 44];
   const person = el('g', { opacity: 0 }, g);
   el('rect', { x: px - 18, y: py - 26, width: 36, height: 52, fill: 'none', stroke: '#ff4d5e', 'stroke-width': 2, rx: 3 }, person);
   el('circle', { cx: px, cy: py - 12, r: 6, fill: '#ff4d5e' }, person);
   el('rect', { x: px - 7, y: py - 4, width: 14, height: 22, rx: 4, fill: '#ff4d5e' }, person);
-  const tag = el('text', { x: px + 24, y: py - 18, fill: '#ff4d5e', 'font-family': 'JetBrains Mono Variable, monospace', 'font-size': 11 }, person);
+  const tag = el('text', { x: px - 26, y: py + 46, fill: '#ff4d5e', 'font-family': 'JetBrains Mono Variable, monospace', 'font-size': 11 }, person);
   tag.textContent = 'person 0.91 · dynamic';
-  const pen = el('text', { x: px + 24, y: py - 2, fill: 'rgba(243,238,228,0.7)', 'font-family': 'JetBrains Mono Variable, monospace', 'font-size': 11 }, person);
+  const pen = el('text', { x: px - 26, y: py + 62, fill: 'rgba(243,238,228,0.7)', 'font-family': 'JetBrains Mono Variable, monospace', 'font-size': 11 }, person);
   pen.textContent = 'penalty +50 · speed 30%';
   const ring = el('circle', { cx: px, cy: py, r: 10, fill: 'none', stroke: '#ff4d5e', 'stroke-width': 2, opacity: 0 }, g);
   const robot = el('g', {}, g);
   el('rect', { x: -12, y: -9, width: 24, height: 18, rx: 4, fill: '#fa520f' }, robot);
   el('path', { d: 'M12,0 L44,-14 A40,40 0 0 1 44,14 Z', fill: 'rgba(250,82,15,0.18)' }, robot);
-  const hud = el('text', { x: 40, y: 560, fill: 'rgba(243,238,228,0.5)', 'font-family': 'JetBrains Mono Variable, monospace', 'font-size': 12, 'letter-spacing': 1 }, svg);
+  const hud = el('text', { x: 40, y: 560, 'data-hud': '', fill: 'rgba(243,238,228,0.5)', 'font-family': 'JetBrains Mono Variable, monospace', 'font-size': 12, 'letter-spacing': 1 }, svg);
   hud.textContent = 'ROUTE 0 → 2 → 7 · COST 5.7';
 
   const [x0, y0] = P(0);

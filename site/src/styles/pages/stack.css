@@ -8,19 +8,19 @@
 }
 .sas-stage::before { /* warm floor glow under the stack */
   content: ''; position: absolute; inset: 0; pointer-events: none;
-  background: radial-gradient(60% 50% at 70% 60%, rgba(250, 82, 15, 0.1), transparent 70%);
+  background: radial-gradient(50% 50% at 74% 58%, rgba(250, 82, 15, 0.1), transparent 70%);
 }
 .sas-stage .sas-stage__canvas { position: absolute; inset: 0; }
 .sas-rail {
-  position: absolute; left: clamp(12px, 1.6vw, 28px); top: 50%; transform: translate(-12px, -50%);
+  position: absolute; right: clamp(10px, 1.4vw, 24px); top: 50%; transform: translate(12px, -50%);
   display: grid; gap: 4px; pointer-events: auto; opacity: 0; visibility: hidden;
   transition: opacity 0.5s, transform 0.6s var(--ease-out), visibility 0.5s;
 }
 .sas-rail.is-visible { opacity: 1; visibility: visible; transform: translate(0, -50%); }
-.sas-rail a { display: flex; align-items: center; gap: 10px; padding: 5px 8px; border-radius: 99px; font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-mute); transition: color 0.3s, background 0.3s; }
+.sas-rail a { display: flex; flex-direction: row-reverse; align-items: center; gap: 10px; padding: 5px 8px; border-radius: 99px; font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-mute); transition: color 0.3s, background 0.3s; }
 .sas-rail a b { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; box-shadow: inset 0 0 0 1px var(--line-strong); font-weight: 600; transition: background 0.3s, color 0.3s, box-shadow 0.3s; }
-.sas-rail a span { opacity: 0; transform: translateX(-4px); transition: opacity 0.3s, transform 0.3s; }
-.sas-rail a:hover span, .sas-rail a.is-active span, .sas-rail a:focus-visible span { opacity: 1; transform: none; }
+.sas-rail a span { opacity: 0; transform: translateX(4px); transition: opacity 0.3s, transform 0.3s; }
+.sas-rail a:hover span, .sas-rail a:focus-visible span { opacity: 1; transform: none; }
 .sas-rail a.is-active { color: var(--fg); }
 .sas-rail a.is-active b { background: var(--orange); color: var(--ink); box-shadow: 0 0 18px rgba(250, 82, 15, 0.6); }
 
@@ -46,7 +46,7 @@
 @keyframes sas-drop { 0% { transform: scaleY(0); transform-origin: top; } 50% { transform: scaleY(1); transform-origin: top; } 51% { transform-origin: bottom; } 100% { transform: scaleY(0); transform-origin: bottom; } }
 
 /* ---------- Layer story ---------- */
-.sas-col { margin-left: 50%; max-width: 660px; }
+.sas-col { width: min(640px, 48%); }
 .sas-layers { padding-bottom: 12vh; }
 .sas-layers__intro { min-height: 70vh; display: flex; flex-direction: column; justify-content: center; gap: 22px; padding-block: 12vh 4vh; }
 .sas-layer { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; gap: 18px; padding-block: 14vh; }
@@ -218,7 +218,7 @@
 
 /* ---------- Responsive ---------- */
 @media (max-width: 1200px) {
-  .sas-col { margin-left: 46%; }
+  .sas-col { width: 50%; }
 }
 @media (max-width: 960px) {
   .sas-stage { position: relative; height: 58vh; height: 58svh; min-height: 360px; margin-bottom: 0; margin-top: var(--nav-h); }
@@ -228,7 +228,7 @@
   .sas-hero__copy { max-width: none; }
   .sas-hero__hint { display: none; }
   .sas-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .sas-col { margin-left: 0; max-width: none; }
+  .sas-col { width: auto; }
   .sas-layers__intro { min-height: 0; padding-block: 80px 24px; }
   .sas-layer { min-height: 0; padding-block: 56px; border-top: 1px solid var(--line); }
   .sas-mini { display: grid; gap: 2px; margin-left: auto; width: 34px; }

@@ -1,8 +1,9 @@
 // sensor-montage: one synchronised run seen through every layer at once, RoM-Nav style.
 //   01 camera + YOLO26n boxes        02 2D LiDAR + Angular Sector Fusion (3 Hz) building the semantic map
-//   03 semantic route (route-replan)  04 telemetry: detector rate, CPU, fusion, map, reroutes, pose
+//   03 semantic route (route-replan)  04 telemetry: detector rate, CPU, fusion, map, speed limit, pose
 // Panels 01, 02 and 04 share one clock and one corridor; 03 mounts the `route-replan` demo (owned by the
-// navigation demos) in bare/compact mode and shows a static Route Server graph until that module exists.
+// navigation demos) in bare/compact mode, playing and pausing with the montage, and shows a static Route
+// Server graph if that module is missing.
 //
 // Options: compact, bare, theme ("dark" | "paper").
 
@@ -10,15 +11,14 @@ import './perception/perception.css';
 import { buildFrame, createCanvas, createLoop, palette, clamp, rgba, rng, noise1, DEG } from './perception/common.js';
 import { createCameraView } from './perception/camera-view.js';
 import { classColor } from './perception/detector.js';
-import { sceneAt, scanAt, asfLocalize, SemanticMap, CAM, LIDAR, FUSION, MOBILITY, LOOP, BAY, ROBOT_Y } from './perception/world.js';
+import { sceneAt, scanAt, asfLocalize, SemanticMap, CAM, LIDAR, FUSION, MOBILITY, LOOP, BAY } from './perception/world.js';
 import { makeView, drawGrid, drawWalls, drawRobot, drawScan, wedge, drawSweep } from './perception/topdown.js';
 
 // Optional sibling demo: resolved at build time, empty if the file does not exist yet.
 const routeModules = import.meta.glob('./route-replan.js');
 
 const START = 3.0;
-const REPLAN_DELTA = 2.0;   // penalty change that cancels FollowPath and recomputes the route (delta)
-const PROXIMITY = 1.5;      // metres within which an object penalises an edge
+const PROXIMITY = 1.5;      // metres within which an object penalises a route-graph edge
 
 /** Static fallback for panel 03: the 7-node FIIR graph (Table 5) with the direct route 0 -> 2 -> 7. */
 function drawGraphPlaceholder(ctx, size, pal) {
@@ -70,7 +70,7 @@ export default function mount(el, { options = {}, reducedMotion = false } = {}) 
           <div class="mtg-tile"><span class="mono">CPU total</span><strong data-k="cpu">85 %</strong><div class="mtg-cpu" aria-hidden="true"><i class="a"></i><i class="b"></i><i class="c"></i></div><small>Nav2 · YOLO · semantic</small></div>
           <div class="mtg-tile"><span class="mono">ASF fusion</span><strong>${FUSION.rate} Hz</strong><small>&lt; 1 ms / detection</small></div>
           <div class="mtg-tile"><span class="mono">Semantic map</span><strong data-k="objs">0</strong><small data-k="objmix">objects · GeoJSON</small></div>
-          <div class="mtg-tile mtg-tile--replan"><span class="mono">Reroutes</span><strong data-k="replans">0</strong><small data-k="delta">penalty Δ &gt; ${REPLAN_DELTA.toFixed(1)}</small></div>
+          <div class="mtg-tile mtg-tile--limit"><span class="mono">Speed limit</span><strong data-k="limit">off</strong><small data-k="limitwhy">AdjustSpeedLimit</small></div>
           <div class="mtg-tile"><span class="mono">Pose · map</span><strong data-k="pose">x 0.00</strong><small data-k="vel">0.00 m/s</small></div>
           <div class="mtg-spark"><div class="mtg-spark__plot" aria-hidden="true"></div><span class="mono"><i class="is-cpu"></i>CPU % <i class="is-fps"></i>YOLO FPS · last 20 s</span></div>
         </div>
@@ -87,7 +87,7 @@ export default function mount(el, { options = {}, reducedMotion = false } = {}) 
 
   /* ---------- Shared simulation ---------- */
   const loop = createLoop((t, dt) => frame(START + t, dt));
-  const sim = { t: START, map: new SemanticMap(), scan: null, scanTick: -1, fusionTick: -1, flashes: [], replans: 0, lastDelta: 0, events: [], loop: -1, cpu: [], fps: [], cleanup: 0, rand: rng(5) };
+  const sim = { t: START, map: new SemanticMap(), scan: null, scanTick: -1, fusionTick: -1, flashes: [], events: [], loop: -1, cpu: [], fps: [], cleanup: 0, limited: false };
 
   const cam = createCameraView(stageCam, {
     sceneAt: (t) => sceneAt(t), compact: true,
@@ -135,7 +135,7 @@ export default function mount(el, { options = {}, reducedMotion = false } = {}) 
         if (!r.ok) continue;
         sim.flashes.push({ t, r, cls: tr.cls });
         const added = sim.map.observe(t, tr.cls, r.mx, r.my, tr.conf);
-        if (added) onNewObject(t, added, scene.robot);
+        if (added) sim.events.push({ u: t - k * LOOP, kind: added.mobility });
       }
       sim.flashes = sim.flashes.filter((f) => t - f.t < 0.6);
     }
@@ -143,21 +143,6 @@ export default function mount(el, { options = {}, reducedMotion = false } = {}) 
     return scene;
   }
 
-  /** A new persistent object near the route raises the edge penalty; above delta it triggers a reroute. */
-  function onNewObject(t, o, robot) {
-    const ahead = o.x > robot.x;
-    const dPath = Math.abs(o.y - ROBOT_Y);
-    const prox = Math.max(0.1, 1 - dPath / PROXIMITY);
-    const delta = MOBILITY[o.mobility].penalty * prox * o.conf;
-    sim.events.push({ u: t - Math.floor(t / LOOP) * LOOP, kind: o.mobility });
-    // Static furniture is already in the map from the prescan; a newly seen person is what reroutes a leg.
-    if (o.mobility === 'dynamic' && ahead && dPath < PROXIMITY && delta > REPLAN_DELTA) {
-      sim.replans++; sim.lastDelta = delta;
-      sim.events.push({ u: t - Math.floor(t / LOOP) * LOOP, kind: 'replan' });
-      const tile = body.querySelector('.mtg-tile--replan');
-      tile.classList.remove('is-flash'); void tile.offsetWidth; tile.classList.add('is-flash');
-    }
-  }
 
   /* ---------- Panel 02 drawing ---------- */
   const ctk = Object.fromEntries(Object.keys(tk).map((k) => [k, pal.hex(k)]));
@@ -177,7 +162,8 @@ export default function mount(el, { options = {}, reducedMotion = false } = {}) 
     ctx.setLineDash([4, 5]); ctx.strokeStyle = pal.lineStrong; ctx.stroke(); ctx.setLineDash([]);
     ctx.restore();
     const sweep = (t * 2.6) % (Math.PI * 2);
-    if (!reducedMotion) drawSweep(ctx, v, pose, sweep + pose.yaw, pal.hex('amber'), 5.5);
+    const ptCol = pal.paper ? pal.hex('orange') : tk.amber;
+    if (!reducedMotion) drawSweep(ctx, v, pose, sweep + pose.yaw, ptCol, 4, pal.paper ? 0.1 : 0.13);
     // ASF sectors flash on every 3 Hz fusion tick.
     for (const f of sim.flashes) {
       const a = clamp(1 - (t - f.t) / 0.6), col = classColor(f.cls, ctk);
@@ -189,23 +175,34 @@ export default function mount(el, { options = {}, reducedMotion = false } = {}) 
       ctx.beginPath(); ctx.arc(v.X(f.r.mx), v.Y(f.r.my), 3, 0, Math.PI * 2); ctx.fill();
       ctx.restore();
     }
-    const ptCol = pal.hex('amber');
     drawScan(ctx, v, sim.scan, (i, r, ang) => {
       const rec = ((((sweep - (ang - pose.yaw)) % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2)) / (Math.PI * 2);
-      return [rgba(ptCol, reducedMotion ? 0.8 : 1 - 0.6 * rec), 1.4];
+      return [rgba(ptCol, reducedMotion ? 0.85 : 1 - 0.55 * rec), 1.8];
     });
     // Semantic map pins (persistent objects), coloured by class, ringed by mobility.
     const f = Math.max(9, Math.min(11, size.w / 52));
     ctx.font = `500 ${f}px "JetBrains Mono Variable", ui-monospace, monospace`; ctx.textBaseline = 'middle';
+    const taken = []; // label boxes already drawn, so neighbouring pins do not print over each other
     for (const o of sim.map.objects) {
       if (o.x < v.x0 - 0.5 || o.x > v.x1 + 0.5) continue;
       const X = v.X(o.x), Y = v.Y(o.y), col = classColor(o.cls, ctk), age = clamp((t - o.born) / 0.5);
       ctx.save();
+      // A person not re-observed lingers until its 60 s TTL: draw it as a fading, stale entry.
+      const stale = o.mobility === 'dynamic' && t - o.last > 1;
+      if (stale) ctx.globalAlpha = 0.35;
       if (o.mobility === 'dynamic') { ctx.setLineDash([2, 4]); ctx.strokeStyle = rgba(col, 0.55); ctx.beginPath(); ctx.arc(X, Y, PROXIMITY * v.s, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]); }
       ctx.strokeStyle = col; ctx.lineWidth = 1.5;
       ctx.beginPath(); ctx.arc(X, Y, 9 + (1 - age) * 14, 0, Math.PI * 2); ctx.stroke();
       ctx.fillStyle = col; ctx.beginPath(); ctx.arc(X, Y, 4, 0, Math.PI * 2); ctx.fill();
-      if (!compact && size.w > 360) { ctx.fillStyle = pal.fg; ctx.globalAlpha = 0.85; ctx.fillText(`${o.cls} · ${o.mobility}`, X + 13, Y - 11); }
+      if (!compact && size.w > 360) {
+        const label = stale ? `${o.cls} · stale (TTL ${MOBILITY.dynamic.ttl} s)` : `${o.cls} · ${o.mobility}`;
+        const w = ctx.measureText(label).width, lx = X + 13 + w > size.w - 6 ? X - 13 - w : X + 13, ly = Y - 11;
+        if (!taken.some((r) => lx < r[0] + r[2] && lx + w > r[0] && Math.abs(ly - r[1]) < f + 2)) {
+          taken.push([lx, ly, w]);
+          ctx.fillStyle = pal.fg; ctx.globalAlpha *= 0.85;
+          ctx.fillText(label, lx, ly);
+        }
+      }
       ctx.restore();
     }
     drawRobot(ctx, v, robot, pal, { accent: pal.hex('orange') });
@@ -250,10 +247,17 @@ export default function mount(el, { options = {}, reducedMotion = false } = {}) 
     const mix = ['static', 'dynamic', 'minor'].map((m) => `${objs.filter((o) => o.mobility === m).length} ${m}`).join(' · ');
     q('objs').textContent = String(objs.length);
     q('objmix').textContent = mix;
-    q('replans').textContent = String(sim.replans);
-    q('delta').textContent = sim.lastDelta ? `last Δ ${sim.lastDelta.toFixed(1)} > δ ${REPLAN_DELTA.toFixed(1)}` : `penalty Δ > δ ${REPLAN_DELTA.toFixed(1)}`;
-    q('pose').textContent = `x ${(robot.x % BAY).toFixed(2)}  y ${robot.y.toFixed(2)}`;
-    q('vel').textContent = `${robot.v.toFixed(2)} m/s · yaw ${(robot.yaw / DEG).toFixed(1)}° · limit ${robot.speedPct < 100 ? `${robot.speedPct} %` : 'none'}`;
+    // AdjustSpeedLimit: edges near a dynamic object cap the robot at 30 % of its maximum velocity.
+    const limited = robot.speedPct < 100;
+    q('limit').textContent = limited ? `${MOBILITY.dynamic.speed} %` : 'off';
+    q('limitwhy').textContent = limited ? 'person near route · dynamic' : 'AdjustSpeedLimit · clear';
+    if (limited && !sim.limited) {
+      const tile = body.querySelector('.mtg-tile--limit');
+      tile.classList.remove('is-flash'); void tile.offsetWidth; tile.classList.add('is-flash');
+    }
+    sim.limited = limited;
+    q('pose').textContent = `${(robot.x % BAY).toFixed(2)}, ${robot.y.toFixed(2)}`;
+    q('vel').textContent = `${robot.v.toFixed(2)} m/s · yaw ${(robot.yaw / DEG).toFixed(1)}°`;
     const u = t - Math.floor(t / LOOP) * LOOP;
     q('clock').textContent = `t ${u.toFixed(1)} s`;
     q('leg').textContent = `leg ${Math.floor(t / LOOP) + 1} · ${u.toFixed(1)} / ${LOOP.toFixed(1)} s`;
@@ -274,7 +278,7 @@ export default function mount(el, { options = {}, reducedMotion = false } = {}) 
   }
   if (reducedMotion) {
     // Static but complete: run the simulation silently to a moment with every layer populated.
-    const T = 13.5;
+    const T = 7.5;
     for (let t = START; t < T; t += 1 / 30) { step(t); cam.detector.update(t, 1 / 30); if (Math.round(t * 30) % 6 === 0) updateTelemetry(t, sceneAt(t).robot); }
     frame(T, 0);
   } else frame(START, 0);

@@ -155,6 +155,7 @@ export default function mount(el, { options = {}, reducedMotion }) {
   const target = { p: options.progress ?? 0.5, layer: options.layer ?? -1, x: 0, y: 0, scale: 1 };
   const cur = { p: reducedMotion ? target.p : 0, x: 0, y: 0, scale: 1 };
   const pointer = { x: 0, y: 0, tx: 0, ty: 0 };
+  let labelSide = 'right';
   let idleRot = 0;
 
   const gapFor = (p) => GAP_ASSEMBLED + (GAP_EXPLODED - GAP_ASSEMBLED) * smooth(clamp01((p - 0.5) / 0.5));
@@ -250,17 +251,21 @@ export default function mount(el, { options = {}, reducedMotion }) {
   function placeLabels(gap, enter) {
     if (labelsMode === 'none') return;
     const w = stage.size.w, hgt = stage.size.h;
+    // Labels go on the open side: right of the stack unless the caller asks for the left.
+    const left = labelSide === 'left';
+    labelLayer.classList.toggle('is-left', left);
+    const sx = left ? -SLAB.w / 2 : SLAB.w / 2;
     stack.updateMatrixWorld(true);
     slabs.forEach((s, i) => {
-      // Anchor each label on whichever right-hand corner of the slab is furthest right on screen,
-      // so labels sit beside the stack (not on it) as it rotates.
-      corner.set(SLAB.w / 2, 0, SLAB.d / 2).applyMatrix4(s.group.matrixWorld).project(camera);
-      corner2.set(SLAB.w / 2, 0, -SLAB.d / 2).applyMatrix4(s.group.matrixWorld).project(camera);
-      if (corner2.x > corner.x) corner.copy(corner2);
-      const x = Math.min(w - 40, (corner.x * 0.5 + 0.5) * w + 14);
+      // Of the two corners on that side, use the one furthest out on screen so labels sit beside the slab.
+      corner.set(sx, 0, SLAB.d / 2).applyMatrix4(s.group.matrixWorld).project(camera);
+      corner2.set(sx, 0, -SLAB.d / 2).applyMatrix4(s.group.matrixWorld).project(camera);
+      if (left ? corner2.x < corner.x : corner2.x > corner.x) corner.copy(corner2);
+      const px = (corner.x * 0.5 + 0.5) * w;
+      const x = left ? Math.max(40, px - 14) : Math.min(w - 40, px + 14);
       const y = (-corner.y * 0.5 + 0.5) * hgt;
       const lbl = labels[i];
-      lbl.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) translateY(-50%)`;
+      lbl.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) translate(${left ? '-100%' : '0'}, -50%)`;
       lbl.style.opacity = String(enter * (target.layer < 0 || target.layer === i ? 1 : 0.5));
       lbl.classList.toggle('is-active', target.layer === i);
     });
@@ -309,8 +314,10 @@ export default function mount(el, { options = {}, reducedMotion }) {
     },
     setProgress(p) { target.p = clamp01(p); if (reducedMotion) cur.p = target.p; redraw(); },
     setLayer(i) { target.layer = i; syncButtons(); redraw(); },
-    setView({ x = target.x, y = target.y, scale = target.scale } = {}) {
+    setView({ x = target.x, y = target.y, scale = target.scale, labels, side } = {}) {
       Object.assign(target, { x, y, scale });
+      if (side) labelSide = side;
+      if (labels && labelsMode !== 'none') labelLayer.className = `sas3d__labels sas3d__labels--${labels}`;
       if (reducedMotion) Object.assign(cur, { x, y, scale });
       redraw();
     },

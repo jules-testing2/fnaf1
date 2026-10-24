@@ -8,9 +8,11 @@ import '../styles/pages/lab.css';
 import { initAtmosphere } from '../lab/atmosphere.js';
 import { initButterflies } from '../lab/butterflies.js';
 
-initSite();
-initAtmosphere();
-initButterflies(document.querySelector('.chapter--novum'));
+const OFF = (new URLSearchParams(location.search).get('off') || '').split(',');
+const on = (k) => !OFF.includes(k);
+if (on('site')) initSite();
+if (on('atmos')) initAtmosphere();
+if (on('bf')) initButterflies(document.querySelector('.chapter--novum'));
 
 // A heavy landing: fast drop, a small overshoot, settle. Used for everything in Magnum.
 CustomEase.create('thud', 'M0,0 C0.42,0 0.58,1.06 0.68,1.02 0.76,0.99 0.86,1 1,1');
@@ -173,12 +175,12 @@ if (reducedMotion) ready();
 else {
   document.fonts.ready.then(() => {
     ready(); // from-tweens below render their start state immediately, so there is no flash
-    hero();
-    strata();
-    magnum();
-    lumen();
-    novum();
-    interludes();
+    if (on('hero')) hero();
+    if (on('strata')) strata();
+    if (on('magnum')) magnum();
+    if (on('lumen')) lumen();
+    if (on('novum')) novum();
+    if (on('interludes')) interludes();
     ScrollTrigger.refresh();
   });
 }

@@ -1,11 +1,11 @@
-// Scroll choreography for the sticky 3D stack: it assembles on arrival, sits to the right of the hero,
-// then slides into the left column and explodes while the layer articles scroll past on the right.
+// Scroll choreography for the sticky 3D stack: it assembles on arrival to the right of the hero copy,
+// then explodes and settles while the layer articles scroll past in the left column.
 // Each article that crosses the middle of the viewport becomes the active layer (3D highlight + rail).
 
 import { gsap, ScrollTrigger, reducedMotion } from '../lib/motion.js';
 
-const HERO_VIEW = { x: 0.5, y: -0.06, scale: 0.78 };
-const STORY_VIEW = { x: -0.56, y: 0, scale: 0.86 };
+const HERO_VIEW = { x: 0.42, y: -0.06, scale: 0.72 };
+const STORY_VIEW = { x: 0.44, y: 0.02, scale: 0.6 };
 const MOBILE_VIEW = { x: 0, y: 0.04, scale: 1.05 };
 
 function whenReady(el) {
@@ -50,6 +50,12 @@ export function initStory() {
     });
   }
 
+  // Demos mount lazily and change article heights; keep trigger positions honest.
+  if (layersSection && 'ResizeObserver' in window) {
+    let raf = 0;
+    new ResizeObserver(() => { cancelAnimationFrame(raf); raf = requestAnimationFrame(() => ScrollTrigger.refresh()); }).observe(layersSection);
+  }
+
   whenReady(host).then((api) => {
     stack = api;
     stack.setLayer(active);
@@ -65,26 +71,29 @@ export function initStory() {
       const entry = { p: 0 };
       const intro = gsap.to(entry, { p: 0.5, duration: 2.2, delay: 0.35, ease: 'power3.out', onUpdate: () => stack.setProgress(entry.p) });
 
-      // Hero → story: explode the stack and move it to the left column (desktop) as the hero scrolls away.
-      const state = { p: 0.5, t: 0 };
-      const st = ScrollTrigger.create({
-        trigger: hero, start: 'top top', end: 'bottom 30%', scrub: true,
+      // Hero → story: the stack explodes while the hero scrolls away, then settles into its story framing.
+      const explode = ScrollTrigger.create({
+        trigger: hero, start: 'top top', end: 'bottom top', scrub: true,
         onUpdate: (self) => {
           if (intro.isActive() && self.progress < 0.02) return;
           intro.progress(1);
-          state.p = 0.5 + 0.5 * self.progress;
-          stack.setProgress(state.p);
-          if (desktop) {
-            const t = gsap.parseEase('power2.inOut')(self.progress);
-            stack.setView({
-              x: start.x + (STORY_VIEW.x - start.x) * t,
-              y: start.y + (STORY_VIEW.y - start.y) * t,
-              scale: start.scale + (STORY_VIEW.scale - start.scale) * t,
-            });
-          }
+          stack.setProgress(0.5 + 0.5 * self.progress);
         },
       });
-      return () => { intro.kill(); st.kill(); };
+      const slide = desktop && ScrollTrigger.create({
+        trigger: hero, start: 'center top', end: 'bottom top', scrub: true,
+        onUpdate: (self) => {
+          const t = gsap.parseEase('power2.inOut')(self.progress);
+          stack.setView({
+            x: start.x + (STORY_VIEW.x - start.x) * t,
+            y: start.y + (STORY_VIEW.y - start.y) * t,
+            scale: start.scale + (STORY_VIEW.scale - start.scale) * t,
+            labels: t > 0.5 ? 'compact' : 'full',
+            side: t > 0.5 ? 'left' : 'right',
+          });
+        },
+      });
+      return () => { intro.kill(); explode.kill(); slide && slide.kill(); };
     });
   });
 }

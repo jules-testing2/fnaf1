@@ -8,24 +8,20 @@ import { CAM } from './world.js';
 
 const UPTIME = 1742.2; // the HUD clock starts mid-run, like a recording would
 
-function makeGrain() {
+/** One small tile with film grain and faint scanlines, so the sensor texture costs a single fill per frame. */
+function makeSensorTile() {
   const c = document.createElement('canvas');
-  c.width = c.height = 160;
-  const g = c.getContext('2d'), img = g.createImageData(160, 160);
-  for (let i = 0; i < img.data.length; i += 4) {
-    const v = Math.random() * 255;
-    img.data[i] = img.data[i + 1] = img.data[i + 2] = v; img.data[i + 3] = 255;
+  c.width = c.height = 192;
+  const g = c.getContext('2d'), img = g.createImageData(192, 192);
+  for (let y = 0; y < 192; y++) {
+    for (let x = 0; x < 192; x++) {
+      const i = (y * 192 + x) * 4, v = Math.random() * 255;
+      img.data[i] = img.data[i + 1] = img.data[i + 2] = v;
+      img.data[i + 3] = y % 3 === 0 ? 34 : 14; // darker every third row = scanline
+    }
   }
   g.putImageData(img, 0, 0);
   return c;
-}
-
-function makeScanlines(ctx) {
-  const c = document.createElement('canvas');
-  c.width = 4; c.height = 3;
-  const g = c.getContext('2d');
-  g.fillStyle = 'rgba(0,0,0,0.22)'; g.fillRect(0, 0, 4, 1);
-  return ctx.createPattern(c, 'repeat');
 }
 
 /**
@@ -38,11 +34,15 @@ function makeScanlines(ctx) {
  */
 export function createCameraView(host, { sceneAt, compact = false, video, detections, label, onResize }) {
   const tk = readTokens();
-  const grain = makeGrain();
-  let mode = 'sim', vid = null, tracks = null, scan = null;
+  const tile = makeSensorTile();
+  let mode = 'sim', vid = null, tracks = null;
+  // Two layers: the camera image at the C920's configured 640 px width (cheap to raster, and as soft as
+  // the real feed), and a full-DPR overlay so boxes, labels and HUD text stay crisp.
+  const image = createCanvas(host, { maxWidth: CAM.width });
+  image.canvas.setAttribute('aria-hidden', 'true');
   const view = createCanvas(host, { label, onResize: () => onResize?.() });
   const { ctx, size } = view;
-  scan = makeScanlines(ctx);
+  const sensor = image.ctx.createPattern(tile, 'repeat');
 
   const detector = new SimDetector((tc) => detectCandidates(sceneAt(tc), size.w / size.h));
 
@@ -59,6 +59,7 @@ export function createCameraView(host, { sceneAt, compact = false, video, detect
       vid.className = 'pcp-video';
       vid.setAttribute('aria-hidden', 'true');
       host.insertBefore(vid, view.canvas);
+      image.canvas.hidden = true;
       await new Promise((ok, fail) => { vid.addEventListener('loadeddata', ok, { once: true }); vid.addEventListener('error', fail, { once: true }); });
       mode = 'video';
       host.classList.add('is-video');
@@ -91,13 +92,14 @@ export function createCameraView(host, { sceneAt, compact = false, video, detect
     ctx.beginPath(); ctx.moveTo(px - 7, py); ctx.lineTo(px + 7, py); ctx.moveTo(px, py - 7); ctx.lineTo(px, py + 7); ctx.stroke();
 
     const top = rect.y + pad + f * 0.4, bottom = rect.y + rect.h - pad - f * 0.4;
+    const narrow = compact || rect.w < 560;
     const blink = Math.floor(t * 1.6) % 2 === 0;
     ctx.fillStyle = blink ? tk.danger : 'rgba(255,77,94,0.35)';
     ctx.beginPath(); ctx.arc(rect.x + pad + 4, top, 3.5, 0, Math.PI * 2); ctx.fill();
-    text(compact ? info.source : `${info.source}  ·  ${info.res}`, rect.x + pad + 13, top);
+    text(narrow ? info.source : `${info.source}  ·  ${info.res}`, rect.x + pad + 13, top);
     text(info.clock, rect.x + rect.w - pad, top, 'right');
     if (!compact) text(`FRM ${String(info.frame).padStart(6, '0')}`, rect.x + rect.w - pad, top + f * 1.5, 'right', 'rgba(255,255,255,0.6)');
-    text(compact ? 'YOLO26n · NCNN' : 'YOLO26n · NCNN · 416×416 · RPi 5 CPU', rect.x + pad, bottom);
+    text(narrow ? 'YOLO26n · NCNN' : 'YOLO26n · NCNN · 416×416 · RPi 5 CPU', rect.x + pad, bottom);
     ctx.fillStyle = tk.amber;
     text(info.rate, rect.x + rect.w - pad, bottom, 'right', tk.amber);
 
@@ -105,38 +107,35 @@ export function createCameraView(host, { sceneAt, compact = false, video, detect
     if (!compact && info.inferences && rect.w > 520) {
       const w = Math.min(220, rect.w * 0.26), x0 = rect.x + rect.w / 2 - w / 2, y0 = bottom - f * 0.2, span = 2;
       ctx.shadowBlur = 0;
-      ctx.fillStyle = 'rgba(0,0,0,0.35)'; ctx.fillRect(x0 - 8, y0 - f * 1.9, w + 16, f * 2.6);
+      ctx.fillStyle = 'rgba(0,0,0,0.35)'; ctx.fillRect(x0 - 8, y0 - f * 2.7, w + 16, f * 3.3);
       ctx.fillStyle = 'rgba(255,255,255,0.32)';
       const fr = Math.floor(info.time * CAM.rate);
       for (let k = 0; k < span * CAM.rate; k++) { const x = x0 + w - ((info.time - (fr - k) / CAM.rate) / span) * w; if (x >= x0) ctx.fillRect(x, y0 - 3, 1, 4); }
       ctx.fillStyle = tk.orange;
-      for (const ti of info.inferences) { const x = x0 + w - ((info.time - ti) / span) * w; if (x >= x0 && x <= x0 + w) ctx.fillRect(x - 1, y0 - f * 1.3, 2, f * 1.3 + 1); }
+      for (const ti of info.inferences) { const x = x0 + w - ((info.time - ti) / span) * w; if (x >= x0 && x <= x0 + w) ctx.fillRect(x - 1, y0 - f * 1.05, 2, f * 1.05 + 1); }
       ctx.font = `500 ${f - 2}px "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, monospace`;
-      text('CAM 30 Hz', x0, y0 - f * 1.45, 'left', 'rgba(255,255,255,0.55)');
-      text('YOLO ~5.5 Hz', x0 + w, y0 - f * 1.45, 'right', tk.orange);
+      text('CAM 30 Hz', x0, y0 - f * 1.95, 'left', 'rgba(255,255,255,0.6)');
+      text('YOLO26n ~5.5 Hz', x0 + w, y0 - f * 1.95, 'right', tk.orange);
     }
     ctx.restore();
   }
 
-  function fx(t, rect) {
+  function fx(ctx, t, rect) {
     ctx.save();
-    // Sensor grain, scanlines, a soft rolling band and vignette: a USB webcam, not a render.
-    ctx.globalAlpha = 0.07;
-    const ox = Math.floor(Math.random() * 160), oy = Math.floor(Math.random() * 160);
-    ctx.fillStyle = ctx.createPattern(grain, 'repeat');
+    // Grain + scanlines (one tiled fill, jittered each frame), a soft rolling band and a vignette:
+    // a USB webcam, not a render.
+    const ox = Math.floor(Math.random() * 64), oy = 3 * Math.floor(Math.random() * 21);
+    ctx.globalAlpha = 0.55;
+    ctx.fillStyle = sensor;
     ctx.translate(-ox, -oy); ctx.fillRect(rect.x + ox, rect.y + oy, rect.w, rect.h); ctx.translate(ox, oy);
     ctx.globalAlpha = 1;
-    ctx.fillStyle = scan; ctx.fillRect(rect.x, rect.y, rect.w, rect.h);
     const by = rect.y + ((t * 0.12) % 1.3 - 0.15) * rect.h;
     const band = ctx.createLinearGradient(0, by - 40, 0, by + 40);
     band.addColorStop(0, 'rgba(255,255,255,0)'); band.addColorStop(0.5, 'rgba(255,255,255,0.035)'); band.addColorStop(1, 'rgba(255,255,255,0)');
     ctx.fillStyle = band; ctx.fillRect(rect.x, by - 40, rect.w, 80);
     const vg = ctx.createRadialGradient(rect.x + rect.w / 2, rect.y + rect.h / 2, rect.h * 0.35, rect.x + rect.w / 2, rect.y + rect.h / 2, Math.hypot(rect.w, rect.h) * 0.62);
-    vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,0.55)');
+    vg.addColorStop(0, 'rgba(8,14,24,0)'); vg.addColorStop(1, 'rgba(8,14,24,0.58)');
     ctx.fillStyle = vg; ctx.fillRect(rect.x, rect.y, rect.w, rect.h);
-    // Slight cool grade in the shadows.
-    ctx.globalCompositeOperation = 'soft-light';
-    ctx.fillStyle = 'rgba(40,70,110,0.25)'; ctx.fillRect(rect.x, rect.y, rect.w, rect.h);
     ctx.restore();
   }
 
@@ -149,10 +148,12 @@ export function createCameraView(host, { sceneAt, compact = false, video, detect
       hud(t, rect, { source: 'REAL FOOTAGE', res: `${tracks.width}×${tracks.height}`, clock: clock(vt), frame: Math.floor(vt * tracks.fps), rate: 'YOLO26n detections' });
       return;
     }
-    const pitch = noise1(t * 9, 3) * 0.0022 + noise1(t * 23, 5) * 0.0009;
-    renderCamera(ctx, rect, sceneAt(t), { pitch });
+    // Wheel vibration on terrazzo: a few hundredths of a degree of pitch shake.
+    const shake = noise1(t * 9, 3) * 0.0022 + noise1(t * 23, 5) * 0.0009;
+    const ic = image.ctx, irect = { x: 0, y: 0, w: image.size.w, h: image.size.h };
+    renderCamera(ic, irect, sceneAt(t), { shake });
+    fx(ic, t, irect);
     detector.update(t, dt);
-    fx(t, rect);
     drawDetections(ctx, rect, detector.list(), t, tk, { font: clamp(Math.round(size.w / 58), 9, 12) });
     hud(t, rect, {
       source: '/camera/image_raw', res: `${CAM.width}×${CAM.height} · 30 Hz`, clock: clock(UPTIME + t), frame: Math.floor((UPTIME + t) * CAM.rate),
@@ -166,6 +167,6 @@ export function createCameraView(host, { sceneAt, compact = false, video, detect
     get aspect() { return tracks ? tracks.width / tracks.height : size.w / size.h; },
     play() { if (vid) vid.play().catch(() => {}); },
     pause() { vid?.pause(); },
-    destroy() { vid?.pause(); vid?.remove(); view.destroy(); },
+    destroy() { vid?.pause(); vid?.remove(); image.destroy(); view.destroy(); },
   };
 }

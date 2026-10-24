@@ -7,11 +7,14 @@ import { clamp, rng } from './common.js';
 
 const NEAR = 0.06;
 const FAR = 24;
+// The camera sits 9.5 cm above the floor; a slight upward tilt (a presentation choice, not a paper value)
+// keeps people's heads in frame. ASF only uses horizontal angles, which the tilt leaves unchanged.
+const TILT = 7 * Math.PI / 180;
 
 /* ---------- Colours of the physical scene (a warm, slightly desaturated university corridor) ---------- */
 const C = {
-  haze: [150, 146, 138], wallHi: [206, 199, 186], wallLo: [150, 152, 147], skirting: [70, 68, 64],
-  floor: [128, 122, 112], ceiling: [196, 192, 184], doorway: [26, 25, 24], frame: [172, 163, 148],
+  haze: [196, 190, 176], wallHi: [226, 216, 196], wallLo: [124, 138, 126], skirting: [62, 58, 54],
+  floor: [126, 118, 106], ceiling: [218, 214, 204], doorway: [30, 28, 26], frame: [178, 166, 146],
   light: [255, 246, 226], cork: [158, 118, 78], paper: [232, 228, 216],
   wood: [146, 108, 72], metal: [52, 54, 58], chair: [58, 76, 98], tableTop: [190, 178, 160], tableLeg: [70, 72, 76],
   pot: [150, 84, 56], leafA: [52, 98, 58], leafB: [76, 128, 70], bottle: [150, 196, 214], cap: [40, 90, 170],
@@ -19,14 +22,15 @@ const C = {
 };
 const rgb = (c, k = 1) => `rgb(${Math.round(clamp(c[0] * k, 0, 255))},${Math.round(clamp(c[1] * k, 0, 255))},${Math.round(clamp(c[2] * k, 0, 255))})`;
 const fogged = (c, depth, k = 1) => {
-  const f = clamp(1 - Math.exp(-depth / 13), 0, 0.9);
+  const f = clamp(1 - Math.exp(-depth / 21), 0, 0.82);
   return [c[0] * k + (C.haze[0] - c[0] * k) * f, c[1] * k + (C.haze[1] - c[1] * k) * f, c[2] * k + (C.haze[2] - c[2] * k) * f];
 };
 
 /* ---------- Camera model ---------- */
 
 /** Camera pose and projection for an image rect; pitch adds wheel-vibration shake. */
-export function makeCamera(robot, rect, pitch = 0) {
+export function makeCamera(robot, rect, shake = 0) {
+  const pitch = TILT + shake;
   const cy0 = Math.cos(robot.yaw), sy0 = Math.sin(robot.yaw);
   const pos = [robot.x + cy0 * CAM.x, robot.y + sy0 * CAM.x, CAM.z];
   const F = CAM.fx * (rect.w / CAM.width), cx = rect.x + CAM.cx * (rect.w / CAM.width), cy = rect.y + rect.h / 2;
@@ -89,8 +93,11 @@ function lightAt(x) {
 
 function drawArchitecture(ctx, cam, robot) {
   const x0 = Math.floor(robot.x - 1), x1 = robot.x + FAR;
-  for (let x = x1; x >= x0; x -= 1) {
-    const a = x, b = x + 1, mid = x + 0.5;
+  // Half-metre strips near the camera (smooth lighting), one-metre strips further away; drawn far to near.
+  const edges = [];
+  for (let x = x0; x < x1; x += x < robot.x + 6 ? 0.5 : 1) edges.push(x);
+  for (let i = edges.length - 1; i >= 0; i--) {
+    const a = edges[i], b = edges[i + 1] ?? a + 1, mid = (a + b) / 2;
     const d = Math.max(0.1, mid - robot.x), k = lightAt(mid);
     // Floor, ceiling and two-tone walls per one-metre strip.
     fillPoly(ctx, cam, [[a, -HALF_W, 0], [b, -HALF_W, 0], [b, HALF_W, 0], [a, HALF_W, 0]], rgb(fogged(C.floor, d, k * 0.95)));
@@ -165,7 +172,7 @@ function drawLight(ctx, cam, x, robot) {
   ctx.globalCompositeOperation = 'lighter';
   const glow = (p, r, a) => {
     const c = cam.toCam(p); if (c[0] < NEAR) return;
-    const [u, v] = cam.proj(c), R = (r * cam.F) / c[0];
+    const [u, v] = cam.proj(c), R = Math.min((r * cam.F) / c[0], cam.rect.w * 0.22); // capped: big gradients are costly
     const g = ctx.createRadialGradient(u, v, 0, u, v, R);
     g.addColorStop(0, `rgba(255,236,200,${a})`); g.addColorStop(1, 'rgba(255,236,200,0)');
     ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(u, v, R, R * 0.55, 0, 0, Math.PI * 2); ctx.fill();
@@ -315,7 +322,6 @@ function drawPerson(ctx, cam, p, t) {
   drawLeg(far[0] === 'L' ? j.L : j.R);
   drawLeg(far[1] === 'L' ? j.L : j.R);
   limb(j.pelvis, j.neck, 0.36, C.jacket);
-  limb([j.pelvis[0], j.pelvis[1], j.pelvis[2] + 0.02], [j.pelvis[0], j.pelvis[1], j.pelvis[2] + 0.06], 0.32, C.trousers);
   drawArm(far[1] === 'L' ? j.aL : j.aR);
   limb(j.neck, [j.neck[0], j.neck[1], j.neck[2] + 0.06], 0.1, C.skin);
   const H = P(j.head);
@@ -333,14 +339,20 @@ function drawPerson(ctx, cam, p, t) {
  * Draws the camera image of `scene` into `rect` of a 2D context.
  * @returns the camera used, so callers can project overlays consistently.
  */
-export function renderCamera(ctx, rect, scene, { pitch = 0 } = {}) {
+export function renderCamera(ctx, rect, scene, { shake = 0 } = {}) {
   const { robot, objects, person, t } = scene;
-  const cam = makeCamera(robot, rect, pitch);
+  const cam = makeCamera(robot, rect, shake);
   ctx.save();
   ctx.beginPath(); ctx.rect(rect.x, rect.y, rect.w, rect.h); ctx.clip();
-  const bg = ctx.createLinearGradient(0, rect.y, 0, rect.y + rect.h);
-  bg.addColorStop(0, rgb(C.haze, 1.05)); bg.addColorStop(0.5, rgb(C.haze, 1.12)); bg.addColorStop(1, rgb(C.haze, 0.9));
-  ctx.fillStyle = bg; ctx.fillRect(rect.x, rect.y, rect.w, rect.h);
+  ctx.fillStyle = rgb(C.haze); ctx.fillRect(rect.x, rect.y, rect.w, rect.h);
+  // Daylight at the far end of the corridor, slightly over-exposed like a webcam would render it.
+  const vp = cam.toCam([robot.x + 200, robot.y, CAM.z]);
+  if (vp[0] > 0) {
+    const [u, v] = cam.proj(vp), R = rect.w * 0.12;
+    const g = ctx.createRadialGradient(u, v, 0, u, v, R);
+    g.addColorStop(0, 'rgb(255,252,244)'); g.addColorStop(1, rgb(C.haze));
+    ctx.fillStyle = g; ctx.fillRect(u - R, v - R, 2 * R, 2 * R);
+  }
   drawArchitecture(ctx, cam, robot);
 
   const drawables = [];

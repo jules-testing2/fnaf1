@@ -35,7 +35,7 @@
           <div class="g1-hero__halo" aria-hidden="true"></div>
           <div class="g1-scan">
             <img src="img/g1.webp" alt="The SAIM G1 FIIRION humanoid robot standing and waving, with a glowing visor, silver body and black hands" width="526" height="1172" fetchpriority="high">
-            <span class="g1-scan__beam" aria-hidden="true" style="-webkit-mask-image:url(img/g1.webp);mask-image:url(img/g1.webp)"></span>
+            <span class="g1-scan__beam" aria-hidden="true" style="-webkit-mask-image:url(img/g1.webp);mask-image:url(img/g1.webp)"><i></i></span>
           </div>
           <dl class="g1-hero__tele mono" aria-hidden="true">
             <div><dt>HGT</dt><dd>1.7 M</dd></div>
@@ -67,14 +67,25 @@
       </div>
       <div class="g1-anat__pin">
         <div class="container g1-anat__stage">
-          <ol class="g1-steps">
-            <li class="g1-step" data-step="0"><span class="mono">01 · Height</span><h3 class="h3">1.7 metres tall</h3><p class="muted">Human scale, for human-scale reach in spaces built for people.</p></li>
-            <li class="g1-step" data-step="1"><span class="mono">02 · Head</span><h3 class="h3">Perception and interaction</h3><p class="muted">Understands object identity and affordance, not just geometry, through the Autonomy Stack, and reads voice and gesture cues to work alongside people safely.</p></li>
-            <li class="g1-step" data-step="2"><span class="mono">03 · Hands</span><h3 class="h3">Two dexterous hands</h3><p class="muted">Multi-fingered hands for grasping tools and objects built for people. The <a class="link-arrow" href="arms.html">Arm series</a> runs natively on G1.</p></li>
-            <li class="g1-step" data-step="3"><span class="mono">04 · Joints</span><h3 class="h3">43 degrees of freedom</h3><p class="muted">Articulation through arms, hands, torso and legs: the range of motion behind both manipulation and balance.</p></li>
-            <li class="g1-step" data-step="4"><span class="mono">05 · Legs</span><h3 class="h3">Bipedal locomotion</h3><p class="muted">Dynamic balance control across stairs, ramps and uneven indoor floors.</p></li>
-            <li class="g1-step" data-step="5"><span class="mono">06 · Power</span><h3 class="h3">2 hours active runtime</h3><p class="muted">Two hours of active operation per charge.</p></li>
-          </ol>
+          <div class="g1-anat__side">
+            <ol class="g1-steps">
+              <li class="g1-step" data-step="0"><span class="mono">01 · Height</span><h3 class="h3">1.7 metres tall</h3><p class="muted">Human scale, for human-scale reach in spaces built for people.</p></li>
+              <li class="g1-step" data-step="1"><span class="mono">02 · Head</span><h3 class="h3">Perception and interaction</h3><p class="muted">Understands object identity and affordance, not just geometry, through the Autonomy Stack, and reads voice and gesture cues to work alongside people safely.</p></li>
+              <li class="g1-step" data-step="2"><span class="mono">03 · Hands</span><h3 class="h3">Two dexterous hands</h3><p class="muted">Multi-fingered hands for grasping tools and objects built for people. The <a class="link-arrow" href="arms.html">Arm series</a> runs natively on G1.</p></li>
+              <li class="g1-step" data-step="3"><span class="mono">04 · Joints</span><h3 class="h3">43 degrees of freedom</h3><p class="muted">Articulation through arms, hands, torso and legs: the range of motion behind both manipulation and balance.</p></li>
+              <li class="g1-step" data-step="4"><span class="mono">05 · Legs</span><h3 class="h3">Bipedal locomotion</h3><p class="muted">Dynamic balance control across stairs, ramps and uneven indoor floors.</p></li>
+              <li class="g1-step" data-step="5"><span class="mono">06 · Power</span><h3 class="h3">2 hours active runtime</h3><p class="muted">Two hours of active operation per charge.</p></li>
+            </ol>
+            <div class="g1-readout" aria-hidden="true">
+              <div class="g1-readout__row" data-read="0"><span class="mono">Height</span><b data-val="1.7" data-dec="1" data-suf=" m">0.0 m</b></div>
+              <div class="g1-readout__row" data-read="2"><span class="mono">Hands</span><b data-val="2" data-suf="×">0×</b></div>
+              <div class="g1-readout__row" data-read="3"><span class="mono">DOF</span><b data-val="43">0</b></div>
+              <div class="g1-readout__row" data-read="5"><span class="mono">Runtime</span><b data-val="2" data-suf=" h">0 h</b>
+                <svg class="g1-gauge" viewBox="0 0 40 40"><circle cx="20" cy="20" r="16" /><circle class="g1-gauge__fill" cx="20" cy="20" r="16" /></svg>
+              </div>
+              <div class="g1-progress"><i></i></div>
+            </div>
+          </div>
 
           <div class="g1-figure" role="img" aria-label="Annotated G1 humanoid: height dimension, head, both hands, eleven major joints, legs and runtime gauge">
             <img src="img/g1.webp" alt="" width="526" height="1172" loading="lazy">
@@ -84,21 +95,12 @@
                 <line x1="-40" y1="18" x2="-40" y2="1160" />
                 <line x1="-58" y1="18" x2="-22" y2="18" />
                 <line x1="-58" y1="1160" x2="-22" y2="1160" />
+                <text x="-62" y="589" transform="rotate(-90 -62 589)">1.7 M</text>
               </g>
               <g class="g1-leads"></g>
               <g class="g1-dots"></g>
             </svg>
             <div class="g1-labels"></div>
-          </div>
-
-          <div class="g1-readout" aria-hidden="true">
-            <div class="g1-readout__row" data-read="0"><span class="mono">Height</span><b data-val="1.7" data-dec="1" data-suf=" m">0.0 m</b></div>
-            <div class="g1-readout__row" data-read="2"><span class="mono">Hands</span><b data-val="2" data-suf="×">0×</b></div>
-            <div class="g1-readout__row" data-read="3"><span class="mono">DOF</span><b data-val="43">0</b></div>
-            <div class="g1-readout__row" data-read="5"><span class="mono">Runtime</span><b data-val="2" data-suf=" h">0 h</b>
-              <svg class="g1-gauge" viewBox="0 0 40 40"><circle cx="20" cy="20" r="16" /><circle class="g1-gauge__fill" cx="20" cy="20" r="16" /></svg>
-            </div>
-            <div class="g1-progress"><i></i></div>
           </div>
         </div>
       </div>

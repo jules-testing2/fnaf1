@@ -70,10 +70,11 @@ export class SimDetector {
       else this.tracks.set(d.id, { id: d.id, cls: d.cls, conf: d.conf, target: d, x: d.x, y: d.y, w: d.w, h: d.h, born: t, alpha: 1, lost: 0 });
     }
     for (const tr of this.tracks.values()) if (!seen.has(tr.id) && !tr.lost) tr.lost = t;
-    const interval = t - (this.inferences.at(-1) ?? t - 1 / YOLO.fps);
+    // Rates come from the scheduled completion times, so a slow display never skews them.
+    const interval = p.done - (this.inferences.at(-1) ?? p.done - 1 / YOLO.fps);
     if (interval > 0.05) this.fps += (1 / interval - this.fps) * 0.3;
     this.ms += (p.lat * 1000 - this.ms) * 0.3;
-    this.inferences.push(t);
+    this.inferences.push(p.done);
     while (this.inferences.length > 40) this.inferences.shift();
     this.count++;
     this.pending = null;
@@ -190,7 +191,7 @@ export function drawDetections(ctx, rect, boxes, now, tk, { font = 11, labels = 
     const txt = full.slice(0, Math.max(1, Math.ceil(full.length * clamp(k * 1.6))));
     const tw = ctx.measureText(full).width + 10, th = font + 7;
     let ly = Y - th;
-    if (ly < rect.y + 2) ly = Y + 2;
+    if (ly < rect.y + 2) ly = Math.max(rect.y + 2, Y + 2); // no room above: tuck the label inside the box
     const lx = clamp(X, rect.x, rect.x + rect.w - tw);
     ctx.fillStyle = col;
     ctx.globalAlpha = a * (0.4 + 0.6 * k);

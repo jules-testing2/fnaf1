@@ -34,7 +34,7 @@ if (!reducedMotion) {
 const JOINTS = [[180, 275], [420, 292], [62, 355], [452, 432], [310, 540], [255, 640], [385, 640], [215, 880], [405, 880], [190, 1062], [420, 1052]];
 const GROUPS = [
   { step: 1, dots: [[300, 140]], label: { x: 600, y: 140, text: 'Head · perception + interaction' } },
-  { step: 2, dots: [[110, 72]], label: { x: -90, y: 72, text: 'Dexterous hand', left: true } },
+  { step: 2, dots: [[110, 72]], label: { x: 600, y: 22, text: 'Dexterous hand', near: true } },
   { step: 2, dots: [[486, 590]], label: { x: 600, y: 590, text: 'Dexterous hand' } },
   { step: 3, dots: JOINTS, label: { x: 600, y: 470, text: '43 degrees of freedom', from: 3 } },
   { step: 4, dots: [[215, 880], [405, 880], [190, 1062], [420, 1052]], label: { x: 600, y: 960, text: 'Dynamic balance', from: 1 } },
@@ -61,8 +61,9 @@ GROUPS.forEach((g) => {
     dotsLayer.appendChild(c);
   });
   const [sx, sy] = g.dots[g.label.from ?? 0];
-  const { x, y, left } = g.label;
-  const elbowX = left ? x + 30 : x - 30;
+  const { x, y, left, near } = g.label;
+  // The bend sits next to the label, or next to the dot when the line must clear the head.
+  const elbowX = near ? sx + 30 : left ? x + 30 : x - 30;
   const p = document.createElementNS(SVGNS, 'path');
   p.setAttribute('d', `M${sx},${sy} L${elbowX},${y} L${x},${y}`);
   p.setAttribute('pathLength', '1');

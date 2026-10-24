@@ -34,6 +34,19 @@
       <p class="mono dn-label">route-replan · paper theme</p>
       <div data-demo="route-replan" data-options='{"theme":"paper"}'></div>
     </div></section>
+    <section class="section section--tight"><div class="container stack">
+      <h2 class="h2">ekf-covariance</h2>
+      <p class="mono dn-label">default (auto-cycles until a control is used)</p>
+      <div data-demo="ekf-covariance"></div>
+      <div class="dn-row">
+        <div><p class="mono dn-label">compact · aggressive + AI</p><div data-demo="ekf-covariance" data-options='{"compact":true,"regime":"aggressive","mode":"ai"}'></div></div>
+        <div><p class="mono dn-label">bare (no chrome, auto-cycles)</p><div data-demo="ekf-covariance" data-options='{"bare":true,"compact":true}'></div></div>
+      </div>
+    </div></section>
+    <section class="section section--paper section--tight"><div class="container stack">
+      <p class="mono dn-label">ekf-covariance · paper theme · static + fixed</p>
+      <div data-demo="ekf-covariance" data-options='{"theme":"paper","regime":"static","mode":"fixed"}'></div>
+    </div></section>
   </main>
   <script type="module" src="/src/pages/demo-navigation.js"></script>
 </body>

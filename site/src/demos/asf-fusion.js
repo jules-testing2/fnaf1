@@ -2,7 +2,8 @@
 // A YOLO box's horizontal extent becomes an angular sector of the 2D LiDAR scan; the 25th percentile of the
 // valid returns inside it is the range; the point is placed in the map frame and tagged with its mobility class.
 //
-// Options: compact, bare, theme ("dark" | "paper"), height, aspect, target (0 person, 1 potted plant, 2 bottle).
+// Options: compact, bare, theme ("dark" | "paper"), height, aspect, target (0 person, 1 potted plant, 2 bottle),
+// step (0-5: open on that step and hold instead of auto-playing).
 // Returned API adds setStep(i) and setProgress(p) so a page can drive it from scroll; it auto-plays otherwise.
 
 import './perception/perception.css';
@@ -70,7 +71,7 @@ export default function mount(el, { options = {}, reducedMotion = false } = {}) 
       <p class="asf-caption" aria-live="polite"></p>
     </div>`;
   const main = body.querySelector('.asf-main');
-  applySize(main, options, compact ? 1.5 : 1.6);
+  applySize(main, options, compact ? 1.5 : 1.35, compact ? 1.3 : 1.05);
   let toggle = null;
   if (right && !reducedMotion) {
     toggle = document.createElement('button');
@@ -101,10 +102,13 @@ export default function mount(el, { options = {}, reducedMotion = false } = {}) 
   /* ---------- Main top-down ---------- */
   function drawMain(T, yaw) {
     const { ctx, size } = mainView;
-    const rect = { x: 0, y: 0, w: size.w, h: size.h };
+    if (size.w < 60 || size.h < 60) return;
     ctx.clearRect(0, 0, size.w, size.h);
     ctx.fillStyle = pal.bg; ctx.fillRect(0, 0, size.w, size.h);
-    const v = makeView({ x: 10, y: 10, w: size.w - 20, h: size.h - 20 }, { x0: 0.05, x1: 5.6, y0: -1.75, y1: 1.85 });
+    // Narrow screens crop the empty corridor behind the robot so the sector stays large.
+    const narrow = size.w < 520;
+    const v = makeView({ x: 10, y: 10, w: size.w - 20, h: size.h - 20 }, narrow ? { x0: 0.5, x1: 5.0, y0: -1.75, y1: 1.85 } : { x0: 0.05, x1: 5.6, y0: -1.75, y1: 1.85 });
+    const labels = !compact && !narrow;
     drawGrid(ctx, v, pal);
     // Map origin axes (ROS colours: x red, y green).
     const O = [v.X(0), v.Y(0)], ax = Math.max(18, 0.4 * v.s);
@@ -131,28 +135,28 @@ export default function mount(el, { options = {}, reducedMotion = false } = {}) 
     ctx.fillStyle = rgba(pal.paper ? '#17161a' : '#f3eee4', 0.045); ctx.fill();
     ctx.setLineDash([4, 5]); ctx.strokeStyle = pal.lineStrong; ctx.lineWidth = 1; ctx.stroke(); ctx.setLineDash([]);
     ctx.restore();
-    if (!compact) {
+    if (labels) {
       const ex = pose.x + Math.cos(yaw + CAM.hfov / 2) * 2.2, ey = pose.y + Math.sin(yaw + CAM.hfov / 2) * 2.2;
       ctx.font = mono(500, f - 1); ctx.fillStyle = pal.mute; ctx.fillText('camera FOV ±24.9°', v.X(ex) + 6, v.Y(ey) - 8);
     }
 
     // Spinning LiDAR sweep (slowed down for the eye; the LD19 turns at 10 Hz).
     const sweep = (st.t * 2.4) % (Math.PI * 2);
-    if (!reducedMotion) drawSweep(ctx, v, pose, sweep + pose.yaw, pal.hex('amber'), 6.5);
+    const ptCol = pal.paper ? pal.hex('orange') : pal.tk.amber;
+    if (!reducedMotion) drawSweep(ctx, v, pose, sweep + pose.yaw, ptCol, 4.5, pal.paper ? 0.1 : 0.13);
 
     const inSector = (i) => settled && s >= 2 && a.idx.includes(i);
     const reveal = s > 2 ? 1 : s === 2 ? easeOut(fr * 1.4) : 0;
-    const ptCol = pal.hex('amber');
     drawScan(ctx, v, scan, (i, r, ang) => {
       const rec = (((sweep - (ang - pose.yaw)) % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2) / (Math.PI * 2);
       const base = reducedMotion ? 0.8 : 1 - 0.6 * rec;
       if (inSector(i)) {
         const k = a.idx.indexOf(i) / Math.max(1, a.idx.length - 1);
-        if (k > reveal) return [rgba(ptCol, base * 0.5), 1.6];
+        if (k > reveal) return [rgba(ptCol, base * 0.6), 2];
         const bgPt = s >= 3 && r > a.d + 0.3;
-        return [bgPt ? rgba(pal.paper ? '#17161a' : '#f3eee4', 0.4) : col, bgPt ? 2 : 3];
+        return [bgPt ? rgba(pal.paper ? '#17161a' : '#f3eee4', 0.45) : col, bgPt ? 2.4 : 3.4];
       }
-      return [rgba(ptCol, base * (s >= 2 && settled ? 0.3 : 0.75)), 1.5];
+      return [rgba(ptCol, base * (s >= 2 && settled ? 0.35 : 0.9)), 2];
     });
 
     if (settled && s >= 1) {
@@ -166,7 +170,8 @@ export default function mount(el, { options = {}, reducedMotion = false } = {}) 
       ctx.fillStyle = g; ctx.fill();
       ctx.strokeStyle = rgba(col, 0.9); ctx.lineWidth = 1.2; ctx.stroke();
       ctx.restore();
-      if (!compact && open > 0.95) {
+      // Each annotation shows while its step is the story, then steps aside for the next one.
+      if (labels && open > 0.95 && s <= 3) {
         ctx.font = mono(600, f - 1); ctx.fillStyle = col;
         for (const [ang, lab] of [[a.lmax, `θ max ${deg(a.lmax)}`], [a.lmin, `θ min ${deg(a.lmin)}`]]) {
           const R = 1.25, x = pose.x + Math.cos(pose.yaw + ang) * R, y = pose.y + Math.sin(pose.yaw + ang) * R;
@@ -193,7 +198,7 @@ export default function mount(el, { options = {}, reducedMotion = false } = {}) 
       ctx.strokeStyle = col; ctx.lineWidth = 2.5;
       const c = pose.yaw + a.center, half = ((a.lmax - a.lmin) / 2 + 2 * DEG) * k;
       ctx.beginPath(); ctx.arc(v.X(pose.x), v.Y(pose.y), R, -(c + half), -(c - half)); ctx.stroke();
-      if (!compact) {
+      if (!compact && s <= 4) {
         ctx.font = mono(600, f); ctx.fillStyle = col;
         const lx = pose.x + Math.cos(c + (a.lmax - a.lmin) / 2 + 5 * DEG) * a.d, ly = pose.y + Math.sin(c + (a.lmax - a.lmin) / 2 + 5 * DEG) * a.d;
         ctx.globalAlpha = k; ctx.fillText(`d = P25 = ${a.d.toFixed(2)} m`, v.X(lx) + 4, v.Y(ly) - 4);
@@ -214,7 +219,7 @@ export default function mount(el, { options = {}, reducedMotion = false } = {}) 
       const label = `(${num(a.mx)}, ${num(a.my)}) m`;
       const tx = Math.min(X + 12, v.rect.x + v.rect.w - ctx.measureText(label).width - 4);
       ctx.fillText(label, tx, Y - 14);
-      if (!compact) { ctx.font = mono(500, f - 1); ctx.fillStyle = pal.dim; ctx.fillText('base_laser → base_link → odom → map', 16, size.h - 16 - f); }
+      if (labels) { ctx.font = mono(500, f - 1); ctx.fillStyle = pal.dim; ctx.fillText('base_laser → base_link → odom → map', 16, size.h - 16 - f); }
       ctx.restore();
     }
     if (settled && s >= 5) {
@@ -225,7 +230,7 @@ export default function mount(el, { options = {}, reducedMotion = false } = {}) 
       ctx.globalAlpha = k;
       ctx.setLineDash([2, 5]); ctx.strokeStyle = rgba(col, 0.7); ctx.lineWidth = 1;
       ctx.beginPath(); ctx.arc(X, Y, 1.5 * v.s * k, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]);
-      ctx.fillStyle = rgba(col, 0.08); ctx.fill();
+      ctx.fillStyle = rgba(col, 0.045); ctx.fill();
       ctx.strokeStyle = col; ctx.lineWidth = 2;
       ctx.beginPath(); ctx.arc(X, Y, 11 + (1 - k) * 10, 0, Math.PI * 2); ctx.stroke();
       const tag = `${T.mobility.toUpperCase()} · +${m.penalty.toFixed(0)} · ${m.speed}%`;
@@ -239,7 +244,7 @@ export default function mount(el, { options = {}, reducedMotion = false } = {}) 
     drawRobot(ctx, v, { ...T.robot, yaw }, pal, { accent: accentHex });
     // Corner labels.
     ctx.font = mono(500, f - 1); ctx.fillStyle = pal.mute; ctx.textAlign = 'right';
-    ctx.fillText(compact ? 'MAP FRAME' : 'MAP FRAME · TOP-DOWN · 0.5 m GRID', size.w - 14, 18);
+    ctx.fillText(labels ? 'MAP FRAME · TOP-DOWN · 0.5 m GRID' : 'MAP FRAME', size.w - 14, 18);
     ctx.textAlign = 'left';
   }
 
@@ -295,7 +300,7 @@ export default function mount(el, { options = {}, reducedMotion = false } = {}) 
     const a = T.asf, s = st.step;
     if (s < 2 || !a.ok) {
       ctx.fillStyle = pal.mute; ctx.font = `500 11px "JetBrains Mono Variable", ui-monospace, monospace`; ctx.textBaseline = 'middle';
-      ctx.fillText('waiting for the sector…', 10, size.h / 2);
+      ctx.fillText('waiting…', 10, size.h / 2);
       return;
     }
     // Ranges in ray order; from step 4 they slide into sorted order and the percentile is marked.
@@ -356,7 +361,15 @@ export default function mount(el, { options = {}, reducedMotion = false } = {}) 
       const geo = s >= 5;
       histTitle.textContent = geo ? 'semantic_objects.geojson' : s >= 3 ? 'Sector ranges · 25th percentile' : 'Sector ranges';
       body.querySelector('.asf-card--hist').classList.toggle('is-geo', geo);
-      geoEl.textContent = geo ? JSON.stringify({ type: 'Feature', geometry: { type: 'Point', coordinates: [+a.mx.toFixed(4), +a.my.toFixed(4)] }, properties: { class_name: T.cls, mobility: T.mobility, confidence: +T.box.conf.toFixed(3), ttl_seconds: Number.isFinite(m.ttl) ? m.ttl : -1.0 } }, null, 1).replace(/\n\s*/g, ' ').replace('"properties"', '\n "properties"').replace('"geometry"', '\n "geometry"') : '';
+      // Same fields as SemanticMapManager writes (static objects store ttl_seconds -1.0 = never expire).
+      geoEl.textContent = geo ? `{ "type": "Feature",
+  "geometry": { "type": "Point",
+    "coordinates": [${a.mx.toFixed(4)}, ${a.my.toFixed(4)}] },
+  "properties": {
+    "class_name": "${T.cls}",
+    "mobility": "${T.mobility}",
+    "confidence": ${T.box.conf.toFixed(3)},
+    "ttl_seconds": ${Number.isFinite(m.ttl) ? m.ttl.toFixed(1) : '-1.0'} } }` : '';
       lastStep = s; lastTarget = st.target;
     }
   }
@@ -431,6 +444,8 @@ export default function mount(el, { options = {}, reducedMotion = false } = {}) 
   }
   stepBtns.forEach((b) => b.addEventListener('click', () => setStep(+b.dataset.i)));
 
+  // options.step: open on a given step and hold it (no auto-play), e.g. for a static figure.
+  if (Number.isFinite(options.step)) { st.auto = false; st.step = clamp(options.step | 0, 0, 5); st.frac = 1; st.lockAt = -10; if (toggle) toggle.textContent = 'Play'; }
   root.classList.add('is-ready');
   draw();
 

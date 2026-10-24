@@ -4,16 +4,411 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>A Semantic Autonomy Framework for VLM-Integrated Robots · SAIM Research</title>
-  <meta name="description" content="Hybrid deterministic reasoning and cross-robot adaptive memory for VLM-integrated indoor mobile robots.">
+  <meta name="description" content="The Semantic Autonomy Stack: deterministic-first semantic reasoning with selective VLM escalation and reusable operational memory. Robotics and Autonomous Systems 207 (2027) 105822.">
   <meta name="theme-color" content="#0a0a0b">
   <meta property="og:title" content="A Semantic Autonomy Framework for VLM-Integrated Robots · SAIM Research">
-  <meta property="og:description" content="Hybrid deterministic reasoning and cross-robot adaptive memory for VLM-integrated indoor mobile robots.">
-  <meta property="og:type" content="website">
+  <meta property="og:description" content="The Semantic Autonomy Stack: deterministic-first semantic reasoning with selective VLM escalation and reusable operational memory. Robotics and Autonomous Systems 207 (2027) 105822.">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="img/research/sas-fig1-stack.webp">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
 </head>
 <body data-page="research-vlm-autonomy">
   <main id="main">
-    <section class="section"><div class="container"><p class="eyebrow">Coming soon</p><h1 class="h1">A Semantic Autonomy Framework for VLM-Integrated Robots</h1></div></section>
+
+    <!-- ============================================================ hero -->
+    <header class="paper-hero">
+      <div class="container paper-hero__grid">
+        <div class="paper-hero__text">
+          <nav class="paper-hero__crumbs" aria-label="Breadcrumb">
+            <a href="research.html">← All research</a>
+            <span class="paper-layers" data-layers aria-label="SAS layers L3 to L5"></span>
+          </nav>
+          <p class="eyebrow paper-hero__eyebrow">Reasoning + memory · Robotics and Autonomous Systems</p>
+          <h1 class="paper-title" data-split="words">A semantic autonomy framework for <em>VLM-integrated</em> indoor mobile robots</h1>
+          <p class="paper-subtitle" data-reveal="blur">Hybrid deterministic reasoning and cross-robot adaptive memory</p>
+          <p class="paper-authors">
+            <span>Bogdan Felician Abaza<sup>*</sup></span>
+            <span>Andrei-Alexandru Staicu</span>
+            <span>Cristian Vasile Doicin</span>
+          </p>
+          <p class="paper-affil">Faculty of Industrial Engineering and Robotics (FIIR), National University of Science and Technology POLITEHNICA Bucharest, Bucharest, Romania · <sup>*</sup>Corresponding author</p>
+          <p class="paper-venue"><strong>Robotics and Autonomous Systems</strong> <span class="mono">207 (2027) 105822 · Available online 17 October 2026</span> <span class="chip">Open access · CC BY 4.0</span></p>
+          <nav class="paper-links" aria-label="Paper links">
+            <a class="btn btn--fire" href="https://doi.org/10.1016/j.robot.2026.105822" target="_blank" rel="noopener" data-magnetic>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h6"/></svg>
+              Paper</a>
+            <a class="btn btn--ghost" href="https://github.com/bogdan-abaza/nav2-sas-vlm-memory" target="_blank" rel="noopener" data-magnetic>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m8 6-6 6 6 6M16 6l6 6-6 6"/></svg>
+              Evidence + code</a>
+            <a class="btn btn--ghost" href="#in-motion" data-magnetic>
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+              Interactive demo</a>
+            <a class="btn btn--ghost" href="stack.html" data-magnetic>The Autonomy Stack</a>
+            <a class="btn btn--ghost" href="#citation" data-magnetic>BibTeX</a>
+          </nav>
+        </div>
+        <div class="hero-art" data-hero-art></div>
+      </div>
+      <div class="container">
+        <div class="paper-stats">
+          <div class="paper-stat"><div class="stat-value" data-counter="112" data-suffix="/216">112/216</div><div class="stat-label">Cycles resolved without a VLM call</div></div>
+          <div class="paper-stat"><div class="stat-value" data-counter="0.245" data-decimals="3" data-suffix=" ms">0.245 ms</div><div class="stat-label">Median resolver compute</div></div>
+          <div class="paper-stat"><div class="stat-value" data-counter="17" data-suffix="/28">17/28</div><div class="stat-label">Sealed challenge, acceptable</div></div>
+          <div class="paper-stat"><div class="stat-value" data-counter="0" data-suffix="/39">0/39</div><div class="stat-label">Forbidden destinations executed</div></div>
+        </div>
+      </div>
+    </header>
+
+    <nav class="paper-nav" aria-label="Sections">
+      <div class="paper-nav__inner">
+        <div class="paper-nav__track">
+          <span class="paper-nav__thumb" aria-hidden="true"></span>
+          <a href="#abstract"><span class="num">I</span>Abstract</a>
+          <a href="#contributions"><span class="num">II</span>Contributions</a>
+          <a href="#in-motion"><span class="num">III</span>In motion</a>
+          <a href="#method"><span class="num">IV</span>Method</a>
+          <a href="#results"><span class="num">V</span>Results</a>
+          <a href="#limitations"><span class="num">VI</span>Limits</a>
+          <a href="#citation"><span class="num">VII</span>Cite</a>
+        </div>
+        <div class="paper-nav__progress" aria-hidden="true"><i></i></div>
+      </div>
+    </nav>
+
+    <!-- ============================================================ I. abstract -->
+    <section class="psec psec--paper" id="abstract">
+      <div class="container">
+        <div class="sec-head"><span class="sec-num" aria-hidden="true">I</span><div><p class="eyebrow">Abstract</p><h2 class="h2" data-split>Not every instruction needs a <em>language model</em>.</h2></div></div>
+        <div class="abstract-grid">
+          <div>
+            <p class="lead-abstract" data-reveal>Robots need to connect what people ask for with places they can drive to. SAS answers <em>what its rules can accept</em>, escalates the rest to a VLM, and turns stable model answers into memory a second robot can reuse.</p>
+            <div class="prose">
+              <p>This paper presents the <strong>Semantic Autonomy Stack (SAS)</strong>, a six-layer integration framework, and develops its semantic-reasoning, mission-interface and operational-memory layers over a previously validated ROS 2/Nav2 foundation. A <strong>deterministic-first cascade</strong> combines the route graph, semantic objects, robot state and stored instruction–destination associations, escalating unresolved or guarded cases to a pretrained Vision-Language Model. SAS keeps destination selection, action validation, navigation execution and post-arrival confirmation separate.</p>
+              <p>Recurrent model-mediated associations can pass a frequency-and-consistency gate and be compiled for deterministic M3 reuse; the paper stresses that this gate measures <strong>sampled-output stability, not semantic truth</strong>. The frozen v4.8-review implementation was evaluated on two physical robot configurations in one indoor environment. Of <strong>216 decision cycles</strong> outside the start gate, <strong>112</strong> resolved deterministically at sub-millisecond resolver-compute latency. A sealed 28-instruction challenge yielded <strong>17 acceptable outcomes</strong>; its five fast-path decisions included one incorrect selection. One promoted association was reused on the second platform through deliberate shared-digest installation, and a controlled <strong>594-observation</strong> offline comparison showed greater agreement with stored associations and lower latency from M3 reuse on five familiar cases. Large latency savings were concentrated in paths that avoid VLM inference.</p>
+            </div>
+            <div class="kw" data-stagger>
+              <span class="chip">Semantic navigation</span><span class="chip">Vision-language model</span><span class="chip">Hybrid reasoning</span><span class="chip">Shared-memory reuse</span><span class="chip">ROS 2</span><span class="chip">Mobile robotics</span>
+            </div>
+          </div>
+          <div class="findings" data-stagger>
+            <p class="mono" style="color:var(--red)">What the frozen evidence establishes (Section 8.1)</p>
+            <div class="finding"><i>01</i><span><b>Deterministic resolution returns targets with sub-millisecond resolver compute</b> when a rule or stored association applies; ambiguous, negated or conflicting instructions are escalated instead of forced.</span></div>
+            <div class="finding"><i>02</i><span><b>Confirmation stays distinct from arrival</b>: controlled present/absent trials matched the scene condition in 8/8.</span></div>
+            <div class="finding"><i>03</i><span><b>One complete association lifecycle</b>, from VLM-mediated induction through promotion, compilation and installation to deterministic reuse on the other robot.</span></div>
+            <div class="finding"><i>04</i><span><b>Two robots can share the inference service</b>, and the frozen L3b interface ran on three different VLMs without prompt or parser changes.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ II. contributions -->
+    <section class="psec" id="contributions">
+      <div class="container">
+        <div class="sec-head"><span class="sec-num" aria-hidden="true">II</span><div><p class="eyebrow">Contributions</p><h2 class="h2" data-split>Six layers. The top three are <em>new</em>.</h2></div></div>
+        <div class="contribs" style="--cols:4" data-stagger>
+          <article class="contrib card" data-tilt="5" data-spotlight><span class="contrib__id">C1</span><h3>A six-layer integration framework</h3><p>L0 platform, L1 navigation, L2 perception and semantic map, L3 reasoning, L4 mission interface, L5 operational memory. This work develops L3–L5 over the L0–L2 foundation validated in the Sensors 2026 paper.</p><span class="mono">L0 → L5</span></article>
+          <article class="contrib card" data-tilt="5" data-spotlight><span class="contrib__id">C2</span><h3>Deterministic-first reasoning</h3><p>A seven-step resolver with a threshold-and-margin memory step, negation and exclusion precedence, location-conflict handling and constrained VLM escalation, all before post-response validation.</p><span class="mono">L3a resolver · L3b VLM</span></article>
+          <article class="contrib card" data-tilt="5" data-spotlight><span class="contrib__id">C3</span><h3>Scoped memory with M3 promotion</h3><p>M1–M5 operational memory and an audit-to-memory lifecycle: recurring model-mediated instruction–node outcomes pass an explicit gate and compile into a digest for deterministic reuse.</p><span class="mono">f ≥ 3 · c ≥ 0.80 · ≥ 1 L3b</span></article>
+          <article class="contrib card" data-tilt="5" data-spotlight><span class="contrib__id">C4</span><h3>Physical integration evidence</h3><p>The frozen v4.8-review system on Xplorer-B and Xplorer-C, a confirmatory Session E campaign, controlled offline comparisons, independent adjudication and matcher and guard diagnostics.</p><span class="mono">2 robots · 1 site · frozen build</span></article>
+        </div>
+        <figure class="fig" style="max-width:860px;margin-inline:auto" data-reveal>
+          <button type="button" class="fig-plate" data-zoom aria-label="Enlarge Figure 1"><img src="img/research/sas-fig1-stack.webp" width="1140" height="1500" alt="Diagram of the Semantic Autonomy Stack: L0 mobile platform, L1 navigation execution, L2 perception and semantic map with hollow badges; L3 semantic reasoning, L4 mission interface and L5 operational memory with filled badges; runtime data flow and the offline memory cycle." loading="lazy"></button>
+          <figcaption><b>Fig. 1.</b> The Semantic Autonomy Stack. Hollow badges mark the inherited L0–L2 foundation; filled badges mark the L3–L5 focus of this work. Solid arrows show runtime data flow; dashed arrows show the offline audit-to-digest cycle behind M3 Step-0 reuse. The executive contract ⟨A, O, V, L⟩ follows ROSClaw.<span class="credit">Figure 1 from Abaza et al., Robotics and Autonomous Systems 2027, CC BY 4.0</span></figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ============================================================ III. in motion -->
+    <section class="psec psec--ink2" id="in-motion">
+      <div class="container">
+        <div class="sec-head"><span class="sec-num" aria-hidden="true">III</span><div><p class="eyebrow">Method in motion</p><h2 class="h2" data-split>From a sentence to a <em>goal node</em>.</h2></div></div>
+        <div class="picker" role="tablist" aria-label="Demo" data-picker data-caption="#motion-caption">
+          <button type="button" role="tab" id="tab-console" aria-controls="panel-console" aria-selected="true" data-text="<b>Mission console.</b> An instruction enters at L4 and is resolved at L3: deterministically when a rule or stored association applies, through the VLM when it does not. Only a validated, graph-valid node is handed to Nav2 at L1; arrival and confirmation are logged as separate events.">Mission console <span class="mono">L4 → L3 → L1</span></button>
+          <button type="button" role="tab" id="tab-race" aria-controls="panel-race" aria-selected="false" tabindex="-1" data-text="<b>Resolver vs VLM.</b> In Session E, 112 of 216 cycles resolved in the deterministic cascade with a median resolver compute of 0.245 ms (all below 1 ms); escalated cycles waited for VLM inference, about 9.8 s on average for non-concurrent calls. That gap is a property of paths that skip inference, not a uniform speedup.">Resolver vs VLM <span class="mono">L3a / L3b</span></button>
+          <button type="button" role="tab" id="tab-memory" aria-controls="panel-memory" aria-selected="false" tabindex="-1" data-text="<b>Shared-memory reuse.</b> Repeated VLM answers on Xplorer-C passed the promotion gate, were compiled into a digest and deliberately installed for Xplorer-B, which then resolved the same instruction at Step 0 with Jaccard 1.00 and no model call. One induced association, four reuse cycles: managed reuse, not robot-to-robot learning.">Memory reuse <span class="mono">M1–M5</span></button>
+          <button type="button" role="tab" id="tab-stack" aria-controls="panel-stack" aria-selected="false" tabindex="-1" data-text="<b>The stack in 3D.</b> Six layers from platform to memory. L0–L2 run onboard each robot on a Raspberry Pi 5; L3a, L3b and L5 run on a shared workstation, where a GPU is needed only for VLM inference.">The stack <span class="mono">L0–L5</span></button>
+        </div>
+        <div class="motion-stage">
+          <div role="tabpanel" id="panel-console" aria-labelledby="tab-console"><div class="demo-slot" data-demo="mission-console"></div></div>
+          <div role="tabpanel" id="panel-race" aria-labelledby="tab-race" hidden><div class="demo-slot" data-demo="resolver-race"></div></div>
+          <div role="tabpanel" id="panel-memory" aria-labelledby="tab-memory" hidden><div class="demo-slot" data-demo="memory-transfer"></div></div>
+          <div role="tabpanel" id="panel-stack" aria-labelledby="tab-stack" hidden><div class="demo-slot" data-demo="sas-stack-3d"></div></div>
+        </div>
+        <p class="motion-caption" id="motion-caption" aria-live="polite"><b>Mission console.</b> An instruction enters at L4 and is resolved at L3: deterministically when a rule or stored association applies, through the VLM when it does not. Only a validated, graph-valid node is handed to Nav2 at L1; arrival and confirmation are logged as separate events.</p>
+      </div>
+    </section>
+
+    <!-- ============================================================ IV. method -->
+    <section class="psec" id="method">
+      <div class="container">
+        <div class="sec-head"><span class="sec-num" aria-hidden="true">IV</span><div><p class="eyebrow">Method</p><h2 class="h2" data-split>Rules first. A model when <em>the rules abstain</em>.</h2></div></div>
+
+        <h3 class="sub-head"><span class="lt">A.</span>Where each layer runs</h3>
+        <div class="tbl" data-reveal>
+          <table>
+            <caption><b>Layer map of the frozen v4.8-review instance.</b> L0–L2 are inherited from the Sensors 2026 work and not re-validated here; L3–L5 are this paper's contribution.</caption>
+            <thead><tr><th scope="col">Layer</th><th scope="col">Responsibility</th><th scope="col">Implementation</th><th scope="col">Runs on</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">L5 Operational memory</th><td class="wrap">Scoped persistent memory, compiled digest, audit</td><td class="wrap">M1–M5, audit-to-M3 extraction and promotion, digest installation</td><td>Workstation</td></tr>
+              <tr><th scope="row">L4 Mission interface</th><td class="wrap">Natural-language and structured mission entry</td><td class="wrap">Stable internal interface to L3; designed to accommodate VDA 5050</td><td>Workstation</td></tr>
+              <tr><th scope="row">L3 Semantic reasoning</th><td class="wrap">Instruction → admissible target or explicit abstention</td><td class="wrap">L3a seven-step resolver; L3b qwen3.5:4b (Q4_K_M) via Ollama 0.30.2; ⟨A, O, V, L⟩ contract</td><td>Workstation (GPU for L3b only)</td></tr>
+              <tr><th scope="row">L2 Perception</th><td class="wrap">Objects in the map frame, semantic map</td><td class="wrap">YOLO26n + ASF, persistent semantic map, graph annotation</td><td>Robot, Raspberry Pi 5</td></tr>
+              <tr><th scope="row">L1 Navigation</th><td class="wrap">Localisation, routing, path following</td><td class="wrap">ROS 2 Jazzy, Nav2, Route Server</td><td>Robot, Raspberry Pi 5</td></tr>
+              <tr><th scope="row">L0 Platform</th><td class="wrap">Locomotion, sensing, compute</td><td class="wrap">Xplorer-B (single RPi 5, IMU) and Xplorer-C (dual RPi 5, detector offloaded)</td><td>Robot</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="callout" data-reveal>The shared workstation used an Intel Core Ultra 7 255H, an NVIDIA RTX 5050 and 32 GB RAM on Ubuntu 24.04. <b>The paper describes the system as a distributed robot–workstation deployment, not fully onboard GPU-free semantic inference.</b> Metric navigation and the localisation loop always stay on the robot.</p>
+
+        <h3 class="sub-head"><span class="lt">B.</span>The seven-step deterministic resolver</h3>
+        <div class="split">
+          <div>
+            <div class="prose" data-reveal>
+              <p>Before any step runs, a <strong>negation and exclusion guard</strong> reads the raw normalised wording; if it fires, the cascade is skipped and the instruction goes to a negation-aware L3b path with a forbidden-node set, so neither memory nor an explicit node reference can override “not there”. Otherwise the first step that produces an admissible candidate wins:</p>
+            </div>
+            <ol class="pipeline" style="--cols:1;gap:8px" data-stagger>
+              <li><b>Step 0 · M3 association</b>Reuse a promoted instruction–node association if Jaccard ≥ 0.75 and it leads the runner-up destination by ≥ 0.10; otherwise fall through, not escalate.</li>
+              <li><b>Step 1 · Explicit node ID</b>A numeric graph-node command, exempt from the location check.</li>
+              <li><b>Step 2 · Node name</b>A unique normalised node-name match.</li>
+              <li><b>Step 3 · Object ID</b>A unique semantic-object identifier.</li>
+              <li><b>Step 4 · Attribute</b>A unique best word-bounded attribute match; no affordance is inferred.</li>
+              <li><b>Step 5 · Single class</b>One mentioned class with one candidate object, surveyed objects first.</li>
+              <li><b>Step 6 · Class + proximity</b>One class, several objects, a proximity cue: nearest to the current pose.</li>
+            </ol>
+            <div class="prose" data-reveal>
+              <p>A candidate that contradicts an explicit room or lab identifier in the instruction is escalated as a <strong>location conflict</strong>. If nothing is admissible, the decision goes to L3b. The resolver is deterministic given the same instruction, graph, objects, pose and installed memory; which step resolves a request depends on the workload.</p>
+            </div>
+          </div>
+          <figure class="fig" style="margin-block:0" data-reveal>
+            <button type="button" class="fig-plate" data-zoom aria-label="Enlarge Figure 2"><img src="img/research/sas-fig2-reasoning-flow.webp" width="1001" height="1400" alt="Flowchart of the frozen v4.8-review reasoning flow: normalisation, negation check, Step 0 and Steps 1 to 6, location consistency, L3b escalation with multimodal prompt and VLM inference, destination validation, executive contract, route execution, confirmation and audit record." loading="lazy"></button>
+            <figcaption><b>Fig. 2.</b> Frozen v4.8-review reasoning flow. Negation precedes all resolver steps; Step-0 abstention continues to Steps 1–6; location conflicts escalate except for explicit node commands; blocked answers are logged without navigation. A frame is acquired before resolution on every cycle: deterministic decisions avoid inference, not frame acquisition.<span class="credit">Figure 2 from Abaza et al., Robotics and Autonomous Systems 2027, CC BY 4.0</span></figcaption>
+          </figure>
+        </div>
+
+        <h3 class="sub-head"><span class="lt">C.</span>A constrained VLM and a contract around it</h3>
+        <div class="split">
+          <div class="prose" data-reveal>
+            <p>L3b does not emit robot commands. It selects a destination through a fixed multimodal interface: the installed memory prefix, robot state, the graph with node identifiers and coordinates, semantic objects grouped by region, designated seating and resting information, and the task with explicit response rules. The model must answer with an integer node identifier and a reason; <code>-1</code> means clarification.</p>
+            <p>The parsed proposal then passes the <strong>executive contract ⟨A, O, V, L⟩</strong> adopted from ROSClaw: <strong>A</strong>ffordances (graph-grounded targets and admissible actions), <strong>O</strong>bservations (normalised state and context), <strong>V</strong>alidation against graph and safety constraints, and <strong>L</strong>ogging of the path, timing and outcome. Invalid nodes, forbidden destinations and <code>-1</code> never produce a navigation command.</p>
+          </div>
+          <div class="prose" data-reveal>
+            <p><strong>Post-arrival confirmation is its own decision.</strong> For landmark and contextual destinations the system checks an arrival image against the expected context; for others it uses a pose-based check, which supports arrival at a location, not visual detection of an object. A completed navigation followed by a negative confirmation is not rewritten as a navigation failure.</p>
+            <p>Only pretrained models are used: no task-specific fine-tuning and no separately trained routing classifier.</p>
+          </div>
+        </div>
+
+        <h3 class="sub-head"><span class="lt">D.</span>Scoped memory and the promotion gate</h3>
+        <div class="split">
+          <div class="tbl" data-reveal style="margin-block:0">
+            <table>
+              <caption><b>M1–M5.</b> Validation coverage is asymmetric: M3 is directly evaluated; M1/M2 are only removed jointly with M3; M4/M5 are not independently evaluated.</caption>
+              <thead><tr><th scope="col">Memory</th><th scope="col">Holds</th><th scope="col">Scope</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">M1 Environment</th><td class="wrap">Visit statistics and arrival information per entity</td><td>Shared</td></tr>
+                <tr><th scope="row">M2 Temporal</th><td class="wrap">Recurring scene-level descriptions with confidence</td><td>Shared</td></tr>
+                <tr><th scope="row">M3 Associations</th><td class="wrap">Instruction key → destination node, matched at Step 0</td><td>Shared</td></tr>
+                <tr><th scope="row">M4 Platform</th><td class="wrap">Hardware, sensing and configuration state</td><td>Per platform</td></tr>
+                <tr><th scope="row">M5 Task history</th><td class="wrap">Decision-level history with platform attribution</td><td>Aggregated, attributed</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="prose" data-reveal>
+            <p>Memory extraction is offline over a selected audit subset. Instructions are grouped by a canonical key built with the same text processing as the resolver. A candidate is promoted only when <strong>frequency ≥ 3</strong>, rounded <strong>consistency ≥ 0.80</strong>, and at least <strong>one accepted L3b resolution</strong> exist, so instructions the cascade already handles do not become rules.</p>
+            <p>Compilation and installation are separate, deliberate steps: a new association does not become active just because extraction ran. Cross-platform use is <strong>shared-memory reuse through a managed digest</strong>, not autonomous peer-to-peer learning, and a promoted M3 item is a learned association, not a validated operator preference.</p>
+          </div>
+        </div>
+        <figure class="fig" data-reveal>
+          <button type="button" class="fig-plate" data-zoom aria-label="Enlarge Figure 3"><img src="img/research/sas-fig3-memory.webp" width="1600" height="1314" alt="Two-panel diagram: memory layers and scope (M1 to M3 shared, M4 per platform, M5 aggregated), and the promotion and shared-memory reuse workflow from induction platform to recipient platform." loading="lazy"></button>
+          <figcaption><b>Fig. 3.</b> Scoped memory and shared-memory reuse. (a) M1–M3 shared across platforms, M4 platform-specific, M5 aggregated with attribution; only M3 is matched at Step 0. (b) Audit-derived associations are grouped and promoted at frequency ≥ 3, consistency ≥ 0.80 and ≥ 1 accepted L3b resolution; deliberate installation changes recipient resolution from L3b to Step 0.<span class="credit">Figure 3 from Abaza et al., Robotics and Autonomous Systems 2027, CC BY 4.0</span></figcaption>
+        </figure>
+
+        <h3 class="sub-head"><span class="lt">E.</span>A frozen build and a confirmatory campaign</h3>
+        <div class="prose" data-reveal>
+          <p>All confirmatory evidence comes from <strong>Session E</strong>, run against one frozen build (v4.8-review, commit <code>f973aa0c</code>, clean working tree at every one of 214 startups) with fixed model, graph, ontology and parameters. Its blocks test different capabilities with different experimental units, so the paper reports no pooled N. Earlier development Sessions A–C are kept as history, not as estimates of final-system performance.</p>
+        </div>
+        <details class="acc" data-reveal>
+          <summary>Session E blocks, units and counts (Table 4, Part B)</summary>
+          <div class="tbl">
+            <table>
+              <thead><tr><th scope="col">Block</th><th scope="col">Tests</th><th scope="col">Unit</th><th scope="col">Primary grouping</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">E0</th><td class="wrap">Start gate: digest, graph and ontology checks</td><td>Configuration session</td><td class="wrap">Excluded from performance rates</td></tr>
+                <tr><th scope="row">E1 / E1b</th><td class="wrap">Post-arrival confirmation, present vs absent</td><td>Scene-condition trial</td><td>8 trials, 4 + 4</td></tr>
+                <tr><th scope="row">E2</th><td class="wrap">Negation, exclusion, location conflict</td><td>Semantic-intent cluster</td><td class="wrap">19 clusters, 39 guard activations</td></tr>
+                <tr><th scope="row">E3</th><td class="wrap">Resolver repeatability</td><td>Semantic intent</td><td>11 clusters, 56 cycles</td></tr>
+                <tr><th scope="row">E4 / E4b</th><td class="wrap">Promotion gate; induction → install → reuse</td><td>Candidate association</td><td class="wrap">3 candidates; 1 induced, 4 reuse cycles</td></tr>
+                <tr><th scope="row">E5</th><td class="wrap">Two robots on the shared L3b server</td><td>Concurrent pair</td><td>3 pairs, 6 missions</td></tr>
+                <tr><th scope="row">E6</th><td class="wrap">Compiled-memory removal (M3 + M1/M2)</td><td>Instruction × platform</td><td>4 paired units</td></tr>
+                <tr><th scope="row">E7</th><td class="wrap">Sealed unseen instructions, Xplorer-B only</td><td>Sealed cell</td><td>28 cells</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+        <figure class="fig" data-reveal>
+          <button type="button" class="fig-plate" data-zoom aria-label="Enlarge Figure 4"><img src="img/research/sas-fig4-platforms.webp" width="1600" height="1228" alt="Four panels: Xplorer-B and Xplorer-C in the corridor, a mission view with occupancy map, graph and camera feed, and the frozen route graph with 24 nodes and 18 annotated objects." loading="lazy"></button>
+          <figcaption><b>Fig. 4.</b> (a) Xplorer-B and (b) Xplorer-C in the test corridor. (c) Mission view with occupancy map, graph, pose, camera feed and two detections. (d) Frozen route graph: 24 nodes, 30 bidirectional edges and 18 annotated objects; nine nodes are topological only.<span class="credit">Figure 4 from Abaza et al., Robotics and Autonomous Systems 2027, CC BY 4.0</span></figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ============================================================ V. results -->
+    <section class="psec psec--paper" id="results">
+      <div class="container">
+        <div class="sec-head"><span class="sec-num" aria-hidden="true">V</span><div><p class="eyebrow">Results</p><h2 class="h2" data-split>What worked, where it failed, <em>and why</em>.</h2></div></div>
+
+        <h3 class="sub-head" style="margin-top:0"><span class="lt">A.</span>Deterministic reasoning</h3>
+        <div class="result-grid">
+          <div class="chart-slot" data-demo="chart-resolution-steps" data-options='{"theme":"paper"}'></div>
+          <div class="prose" data-reveal>
+            <p>Outside the start gate, <strong>112 of 216</strong> decision cycles were resolved by the cascade without a model call and <strong>104</strong> entered the L3b path. The learned-association step resolved 39 of the 112. The paper is explicit that this proportion describes the instruction mix the campaign was built to probe, from every cycle in the repeatability block to none in the promotion and concurrency blocks, not a resolver-wide rate.</p>
+            <p>Between naturally selected paths, the ratio of median decision latency (accepted L3b vs deterministic) was <strong>45,443×</strong>, 95% cluster-bootstrap interval 30,428–70,512×. These arms contain different instructions, so this is not a causal VLM-only baseline. In the repeatability block all <strong>11 intents</strong> (56 cycles) resolved deterministically with an invariant method, step and destination: repeatability, not correctness.</p>
+          </div>
+        </div>
+
+        <h3 class="sub-head"><span class="lt">B.</span>Hard cases: unseen wording and negation</h3>
+        <div class="result-grid">
+          <div class="chart-slot" data-demo="chart-sealed-challenge" data-options='{"theme":"paper"}'></div>
+          <div class="prose" data-reveal>
+            <p>The sealed challenge had 28 instructions with acceptable-destination sets fixed before execution. <strong>17/28</strong> were acceptable: 6/6, 2/6, 4/6 and 2/6 across difficulty levels P1–P4 and 3/4 in the extra cells. Six went to a wrong destination, two executed where the key required clarification, three ended in parsing failures, and <strong>no clarification request was ever issued</strong>.</p>
+            <p>Five cells took the fast path; one of them, G-3 “Where is the H sign?”, resolved at Step 5 to a node carrying a YOLO stop-sign object through a partial class match on “sign”. An independent evaluator who had not built or run the test agreed with the sealed verdict in 26/28 cells; rescoring under his judgments gives <strong>16/28</strong>.</p>
+            <p>In a deployed-navigator branch test, all 27 forbidden integer proposals were rejected without dispatch. The same test exposed a parser weakness: a boolean <code>true</code> as node_id reached dispatch as node 1 in 14/14 synthetic cases. None of the 91 recorded Session E proposals was non-integer.</p>
+          </div>
+        </div>
+
+        <h3 class="sub-head"><span class="lt">C.</span>Memory: promotion, reuse and removal</h3>
+        <div class="result-grid">
+          <div class="chart-slot" data-demo="chart-promotion-gate" data-options='{"theme":"paper"}'></div>
+          <div class="prose" data-reveal>
+            <p>Three controlled candidates were each observed four times with an accepted L3b answer, so consistency decided: <strong>wet_gloves</strong> (1.00) promoted, quiet_corner (0.75) and deliveries (0.50) were rejected. A post-hoc sweep showed every threshold from 0.76 to 1.00 gives the same outcome.</p>
+            <p><strong>E4b</strong> ran the whole chain: a baseline cycle on Xplorer-B needed L3b; four induction cycles on Xplorer-C chose the same node; the association was promoted, compiled and deliberately installed; four cycles on Xplorer-B then resolved at Step 0 with Jaccard 1.00 and no model call. Those are four verifications of <strong>one</strong> association.</p>
+            <p><strong>E6</strong> removed the compiled memory layer for four instruction-by-platform pairs: every unit escalated to L3b and every one chose a different destination; the paired latency ratio had a median of 75,500× (72,039–88,269×). M3 and the M1/M2 prompt prefix were removed together, so the change cannot be pinned on M3 alone.</p>
+          </div>
+        </div>
+        <figure class="fig" data-reveal>
+          <button type="button" class="fig-plate" data-zoom aria-label="Enlarge Figure 6"><img src="img/research/sas-fig6-memory-results.webp" width="1800" height="1165" alt="Three panels: promotion gate replay for wet_gloves, quiet_corner and deliveries; ten E4b cycles across Xplorer-B and Xplorer-C; and E6 memory-loaded versus memory-off decisions." loading="lazy"></button>
+          <figcaption><b>Fig. 6.</b> M3 promotion, managed cross-platform reuse and compiled-memory ablation. (a) Gate replay: wet_gloves promotes, quiet_corner and deliveries do not; model/seed replay promotes quiet_corner in 8/9 arms, exposing an unstable rejection. (b) Ten E4b cycles; all reached the radiator node. (c) E6: memory-loaded units resolved at Step 0, ablated units invoked L3b (10.1–11.6 s) and changed destination.<span class="credit">Figure 6 from Abaza et al., Robotics and Autonomous Systems 2027, CC BY 4.0</span></figcaption>
+        </figure>
+
+        <h3 class="sub-head"><span class="lt">D.</span>A controlled comparison: complete, M3-off, VLM-only</h3>
+        <div class="result-grid" style="--cols:1">
+          <div class="chart-slot" data-demo="chart-latency-log" data-options='{"theme":"paper"}'></div>
+        </div>
+        <div class="split">
+          <div class="prose" data-reveal>
+            <p>Three arms resolved the same 38 standardized instruction-context items, three seeds each: <strong>A</strong> the complete system, <strong>B</strong> the cascade with M3 disabled, and <strong>C</strong> direct VLM resolution, all with the same context, safeguards and validation. Across both conditions, 594 observations.</p>
+            <p>On the five familiar items, A agreed with the stored associations on <strong>5/5</strong> items (15/15 observations) versus 4/5 for B and C, and made no VLM calls. On unseen formulations M3 added nothing. B and C made identical decisions in all 114 paired observations while B used 99 instead of 114 VLM calls: the cascade reduced invocation without observed quality superiority.</p>
+          </div>
+          <div class="tbl" data-reveal style="margin-block:0">
+            <table>
+              <caption><b>Table 6, standardized context.</b> Item correct when ≥ 2 of 3 seeds are correct. VLM calls count item-seed observations.</caption>
+              <thead><tr><th scope="col">Stratum</th><th scope="col">Arm</th><th scope="col">Correct</th><th scope="col">VLM calls</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">Familiar (5)</th><td>A</td><td class="best">5/5</td><td class="best">0/15</td></tr>
+                <tr><th scope="row"></th><td>B · C</td><td>4/5 · 4/5</td><td>12/15 · 15/15</td></tr>
+                <tr><th scope="row">Unseen (27)</th><td>A · B · C</td><td>17/27 each</td><td>69 · 69 · 81 of 81</td></tr>
+                <tr><th scope="row">Clarification (6)</th><td>A · B · C</td><td>3/6 each</td><td>18/18 each</td></tr>
+                <tr class="total"><th scope="row">All (38)</th><td>A · B · C</td><td>25 · 24 · 24</td><td>87 · 99 · 114</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <h3 class="sub-head"><span class="lt">E.</span>Swapping the VLM</h3>
+        <div class="result-grid">
+          <div class="chart-slot" data-demo="chart-model-replay" data-options='{"theme":"paper"}'></div>
+          <div class="prose" data-reveal>
+            <p>68 archived, image-complete Session E records were replayed through the unchanged prompt and parser with the control model and two substitutes, at three seed bases: 612 outputs in the primary analysis. All three models could drive the interface, but they behaved differently: parser compliance 88.7%, 100% and 97.5%; same-node seed unanimity 40/68, 66/68 and 50/68; median latency 7.20 s, 6.77 s and 14.63 s.</p>
+            <p>Agreement with the archived node is reference agreement against one recorded stochastic outcome, not accuracy, and the cohort only includes cases the original system resolved. The paper's conclusion is narrow on purpose: <strong>interface portability, not semantic model invariance</strong>. On the 13 negation records, none of 117 outputs proposed a forbidden node.</p>
+          </div>
+        </div>
+
+        <h3 class="sub-head"><span class="lt">F.</span>On the robots</h3>
+        <div class="kpis" data-stagger>
+          <div class="kpi"><div class="stat-value" data-counter="162" data-suffix="/199">162/199</div><p>protocol-valid runs ended mission_complete; 22 clarification requests, 14 model or parser failures, 1 terminal miss</p></div>
+          <div class="kpi"><div class="stat-value" data-counter="1" data-suffix="/164">1/164</div><p>terminal misses among runs that dispatched a navigation goal (0.61%)</p></div>
+          <div class="kpi"><div class="stat-value" data-counter="8" data-suffix="/8">8/8</div><p>confirmation outputs matched the scene: extinguisher present 4 × confirmed, removed 4 × not confirmed</p></div>
+          <div class="kpi"><div class="stat-value" data-counter="6" data-suffix="/6">6/6</div><p>concurrent missions completed on the shared VLM server (13.8 s vs 9.8 s mean inference)</p></div>
+        </div>
+        <div class="split">
+          <div class="tbl" data-reveal style="margin-block:0">
+            <table>
+              <caption><b>Section 7.5.</b> Terminal outcomes of protocol-valid runs, start gate excluded. Physical arrival can follow an incorrect semantic selection, so none of these is end-to-end task success.</caption>
+              <thead><tr><th scope="col">Platform</th><th scope="col">Runs</th><th scope="col">Complete</th><th scope="col">Miss</th><th scope="col">Clarify</th><th scope="col">VLM fail</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">Xplorer-B</th><td>106</td><td>87</td><td>0</td><td>9</td><td>10</td></tr>
+                <tr><th scope="row">Xplorer-C</th><td>93</td><td>75</td><td>1</td><td>13</td><td>4</td></tr>
+                <tr class="total"><th scope="row">Both</th><td>199</td><td>162</td><td>1</td><td>22</td><td>14</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="prose" data-reveal>
+            <p>Mean endpoint error among completed runs was 0.225 m on Xplorer-B and 0.170 m on Xplorer-C. With so few events, the paper treats platform comparisons as descriptive: hardware differences were not isolated.</p>
+            <p>An opportunistic external check against surveyed AprilTags (11 detections, 10 from one marker) found map-frame discrepancies of dx +0.208 m, dy +0.030 m and yaw −2.30° on average. It is a contemporaneous check, not map-wide ground truth, and it does not explain any navigation miss.</p>
+          </div>
+        </div>
+        <figure class="fig" data-reveal>
+          <button type="button" class="fig-plate" data-zoom aria-label="Enlarge Figure 5"><img src="img/research/sas-fig5-results.webp" width="1800" height="1008" alt="Three panels: first-resolving cascade step bars, negation and exclusion outcomes, and sealed-instruction outcomes by difficulty level." loading="lazy"></button>
+          <figcaption><b>Fig. 5.</b> Deterministic reasoning, guard behaviour and sealed-instruction outcomes in Session E. (a) First-resolving step over 216 cycles. (b) 39 repeated negation/exclusion activations: 22 clarifications, 13 actionable non-forbidden resolutions, 4 errors; no forbidden destination executed. (c) E7 on Xplorer-B: 17/28 acceptable.<span class="credit">Figure 5 from Abaza et al., Robotics and Autonomous Systems 2027, CC BY 4.0</span></figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ============================================================ VI. limitations -->
+    <section class="psec" id="limitations">
+      <div class="container">
+        <div class="sec-head"><span class="sec-num" aria-hidden="true">VI</span><div><p class="eyebrow">Limitations and next steps</p><h2 class="h2" data-split>The paper draws its own <em>claim ceiling</em>.</h2></div></div>
+        <div class="limits">
+          <div>
+            <h3>Limitations, as the paper states them</h3>
+            <ul data-stagger>
+              <li><b>Narrow external validity.</b> Two robot configurations, one indoor environment, one route graph; no second building, no varied POI density, no symmetric layouts or systematic occlusion.</li>
+              <li><b>Stable is not correct.</b> The M3 gate measures recurrence of model outputs; there is no operator-confirmation field, so a stable but wrong association can still be promoted and then bypass the VLM.</li>
+              <li><b>Memory layers not isolated.</b> E6 removes M3 with M1/M2; M4 and M5 are not independently evaluated.</li>
+              <li><b>Imperfect routing boundary.</b> E7 includes wrong executable decisions, three parsing failures and zero clarification requests; partial class matching caused the G-3 error.</li>
+              <li><b>Lexical matching.</b> At the operational threshold the matcher accepted 10/16 valid paraphrases but also 9/15 high-overlap items with a different meaning.</li>
+              <li><b>Parser typing.</b> The deployed parser does not type-check node_id; the frozen code was left unchanged and the weakness reported.</li>
+              <li><b>Reproducibility differs by evidence.</b> Session E is frozen and public; the navigator, executive contract and memory extractor are protected modules, available to reviewers on request.</li>
+            </ul>
+          </div>
+          <div class="future">
+            <h3>Development routes named in the paper</h3>
+            <ul data-stagger>
+              <li><b>Typed response validation</b> in the L3b parser.</li>
+              <li><b>Stronger deterministic discrimination</b>, to reduce partial-match and lexical-overlap errors.</li>
+              <li><b>Independent confirmation before promotion</b>: explicit user feedback or another semantic-validity signal for stronger preference claims.</li>
+              <li><b>Broader environments and instruction sets</b>, and separate evaluation of M1, M2, M4 and M5.</li>
+              <li><b>Fleet-scale exchange</b> beyond two robots, studied explicitly rather than assumed.</li>
+              <li><b>Localisation checks</b>: frame alignment and camera-robot extrinsics, with broader independent reference coverage.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ VII. citation -->
+    <section class="psec psec--ink2" id="citation">
+      <div class="container">
+        <div class="sec-head"><span class="sec-num" aria-hidden="true">VII</span><div><p class="eyebrow">Citation</p><h2 class="h2" data-split>Cite this <em>work</em>.</h2></div></div>
+        <div class="cite" data-reveal>
+          <div class="cite__bar"><span class="mono">BibTeX · Elsevier</span><button type="button" class="copy-btn" data-copy="#bibtex"><span>Copy</span></button></div>
+          <pre id="bibtex" data-bibtex></pre>
+        </div>
+        <p class="cite-plain" data-reveal>B.F. Abaza, A.-A. Staicu, C.V. Doicin, A semantic autonomy framework for VLM-integrated indoor mobile robots: Hybrid deterministic reasoning and cross-robot adaptive memory, <i>Robotics and Autonomous Systems</i> 207 (2027) 105822. https://doi.org/10.1016/j.robot.2026.105822</p>
+        <div class="cite-links" data-reveal>
+          <a class="btn btn--fire btn--sm" href="https://doi.org/10.1016/j.robot.2026.105822" target="_blank" rel="noopener">Read the paper <span class="arrow">↗</span></a>
+          <a class="btn btn--ghost btn--sm" href="https://github.com/bogdan-abaza/nav2-sas-vlm-memory" target="_blank" rel="noopener">Evidence package, tag ras-revision-rc1.2 <span class="arrow">↗</span></a>
+          <a class="btn btn--ghost btn--sm" href="stack.html">Explore the Semantic Autonomy Stack</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="psec" aria-labelledby="more-research">
+      <div class="container">
+        <p class="eyebrow">More research</p>
+        <h2 class="h2" id="more-research" style="margin:18px 0 clamp(28px,4vw,48px)" data-split>The layers <em>underneath</em>.</h2>
+        <div class="related" data-related></div>
+      </div>
+    </section>
   </main>
   <script type="module" src="/src/pages/research-vlm-autonomy.js"></script>
 </body>

@@ -272,11 +272,11 @@
 }
 .stack__list button .mono { color: var(--fg-mute); padding-top: 4px; transition: color 0.3s; }
 .stack__list button b { font-family: var(--font-serif); font-size: clamp(1.2rem, 1.7vw, 1.55rem); font-weight: 420; letter-spacing: -0.015em; color: var(--fg-dim); transition: color 0.3s; }
-.stack__list button small { grid-column: 2; display: grid; grid-template-rows: 0fr; color: var(--fg-dim); font-size: 0.9rem; line-height: 1.5; transition: grid-template-rows 0.5s var(--ease-out), opacity 0.4s; opacity: 0; overflow: hidden; }
+.stack__list button small { grid-column: 2; display: block; max-height: 0; overflow: hidden; opacity: 0; color: var(--fg-dim); font-size: 0.9rem; line-height: 1.5; transition: max-height 0.6s var(--ease-out), opacity 0.4s, padding 0.6s var(--ease-out); }
 .stack__list button:hover b, .stack__list button.is-active b { color: var(--fg); }
 .stack__list button.is-active { padding-left: 14px; background: linear-gradient(90deg, rgba(250, 82, 15, 0.1), transparent 70%); }
 .stack__list button.is-active .mono { color: var(--orange); }
-.stack__list button.is-active small { grid-template-rows: 1fr; opacity: 1; padding-top: 6px; }
+.stack__list button.is-active small { max-height: 7em; opacity: 1; padding-top: 6px; }
 
 .sas { position: relative; height: clamp(440px, 52vw, 640px); display: grid; place-items: center; perspective: 1800px; }
 .sas::before { content: ''; position: absolute; inset: 10% 5%; background: radial-gradient(closest-side, rgba(250, 82, 15, 0.16), transparent); }
@@ -427,3 +427,16 @@
 .hero-pending .hero__content > *, .hero-pending .hero__hud { opacity: 0; animation: hero-failsafe 0s linear 4s forwards; }
 @keyframes hero-failsafe { to { opacity: 1; } }
 .hero__title .hero-split-mask { padding-bottom: 0.1em; margin-bottom: -0.1em; }
+.plat__stage::before {
+  content: attr(data-mark); position: absolute; left: 50%; top: 46%; translate: -50% -50%; z-index: -1;
+  font-family: var(--font-serif); font-style: italic; font-size: clamp(9rem, 19vw, 18rem); line-height: 1; letter-spacing: -0.05em; white-space: nowrap;
+  color: transparent; -webkit-text-stroke: 1px color-mix(in srgb, var(--accent) 30%, transparent); pointer-events: none;
+}
+@media (max-width: 760px) { .plat__stage::before { font-size: 9rem; } }
+/* Base texture for the use-case section; the LiDAR demo layers on top when it mounts. */
+.usecases { background: radial-gradient(70% 60% at 80% 30%, rgba(250, 82, 15, 0.1), transparent 70%), var(--ink); }
+.usecases::before {
+  content: ''; position: absolute; inset: 0; z-index: -2; pointer-events: none;
+  background-image: radial-gradient(rgba(243, 238, 228, 0.1) 1px, transparent 1.4px); background-size: 22px 22px;
+  mask-image: radial-gradient(80% 70% at 60% 40%, #000, transparent);
+}

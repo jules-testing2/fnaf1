@@ -26,7 +26,7 @@ export default function mount(el, { options = {}, reducedMotion = false } = {}) 
 
   const stage = document.createElement('div');
   stage.className = 'pcp-stage pcp-stage--cam';
-  applySize(stage, options, compact ? 16 / 10 : 16 / 9);
+  applySize(stage, options, compact ? 16 / 10 : 16 / 9, 4 / 3);
   body.appendChild(stage);
 
   // A resize clears the canvas; repaint the last frame so a paused or static view never goes blank.
@@ -45,8 +45,8 @@ export default function mount(el, { options = {}, reducedMotion = false } = {}) 
     body.appendChild(legend);
   }
 
-  // Start a few seconds in, just before the person steps out of the doorway.
-  const start = options.start ?? 3.2;
+  // Start just before the person steps out of the doorway.
+  const start = options.start ?? 1.6;
   const loop = createLoop((t, dt) => { last = start + t; view.render(last, dt); });
 
   view.ready.then((mode) => {
@@ -60,7 +60,7 @@ export default function mount(el, { options = {}, reducedMotion = false } = {}) 
 
   // Reduced motion: one meaningful frame, with the detector warmed up so every box is settled.
   function still() {
-    const t = 9.4;
+    const t = 3.9;
     for (let s = t - 2.5; s < t; s += 1 / 30) view.detector.update(s, 1 / 30);
     last = t;
     view.render(t, 0);

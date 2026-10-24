@@ -88,7 +88,12 @@ export default function mount(host, { options = {}, reducedMotion = false } = {}
   const CLASSES_MOB = { person: 'dynamic', chair: 'static', bottle: 'minor' };
 
   // ---------- Canvas + cached floor plan ----------
+  // Two layers: a static floor plan (repainted only on resize or when the semantic map changes)
+  // under a transparent canvas that animates. Keeps per-frame fill work small.
   const bg = document.createElement('canvas');
+  bg.className = 'navd__canvas';
+  bg.setAttribute('aria-hidden', 'true');
+  let fieldKey = '';
   let view = { k: 1, cx: 0, cy: 0, rot: false };
   const cv = createCanvas(stage, (w, h) => {
     if (!ready) return;
@@ -96,6 +101,7 @@ export default function mount(host, { options = {}, reducedMotion = false } = {}
     shell.root.classList.toggle('rr--narrow', narrow);
     shell.root.classList.toggle('rr--tiny', w < 380);
     layout(w, h);
+    floorSnapshot = null;
     paintFloor();
     render();
   });
@@ -127,6 +133,7 @@ export default function mount(host, { options = {}, reducedMotion = false } = {}
   function paintFloor() {
     const { w, h } = cv, dpr = cv.dpr;
     bg.width = cv.canvas.width; bg.height = cv.canvas.height;
+    fieldKey = '';
     const c = bg.getContext('2d');
     c.setTransform(dpr, 0, 0, dpr, 0, 0);
     c.fillStyle = P.bg; c.fillRect(0, 0, w, h);
@@ -357,7 +364,7 @@ export default function mount(host, { options = {}, reducedMotion = false } = {}
 
   function drawObjects() {
     const s = sim.state, R = s.robot;
-    const sc = Math.max(view.k, 40);
+    const sc = clamp(view.k * 0.7, 36, 80);
     for (const o of s.objects) {
       const gone = o.gone != null ? clamp((s.t - o.gone) / 0.6) : 0;
       if (gone >= 1) continue;
@@ -386,11 +393,6 @@ export default function mount(host, { options = {}, reducedMotion = false } = {}
           ctx.beginPath(); ctx.arc(x, y, ring * easeOut(age), 0, Math.PI * 2); ctx.stroke();
           ctx.globalAlpha = 1 - gone;
         }
-        const g = ctx.createRadialGradient(x, y, 0, x, y, ring);
-        g.addColorStop(0, withAlpha(col, 0.16)); g.addColorStop(1, withAlpha(col, 0));
-        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, ring, 0, Math.PI * 2); ctx.fill();
-        ctx.strokeStyle = withAlpha(col, 0.32); ctx.lineWidth = 1; ctx.setLineDash([2, 5]);
-        ctx.beginPath(); ctx.arc(x, y, ring, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]);
       }
       // Walking ghost trail (dynamic objects get their position overwritten)
       if (o.walk) {
@@ -487,14 +489,45 @@ export default function mount(host, { options = {}, reducedMotion = false } = {}
     ctx.globalAlpha = 0.55;
     ctx.strokeStyle = col; ctx.setLineDash([3, 4]); ctx.lineWidth = 1;
     ctx.beginPath(); ctx.arc(x, y, px(PROXIMITY), 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]);
-    ICON[cls](x, y, Math.max(view.k, 40), col);
+    ICON[cls](x, y, clamp(view.k * 0.7, 36, 80), col);
     ctx.restore();
+  }
+
+  /** Influence fields of persisted objects live on the floor layer; repainted when the semantic map changes. */
+  let floorSnapshot = null;
+  function paintFields() {
+    const s = sim.state;
+    const live = s.objects.filter((o) => o.tStable >= 0 && o.gone == null);
+    const key = live.map((o) => `${o.id}:${o.mapX.toFixed(2)},${o.mapY.toFixed(2)}`).join('|');
+    if (key === fieldKey) return;
+    fieldKey = key;
+    const c = bg.getContext('2d');
+    c.setTransform(1, 0, 0, 1, 0, 0);
+    if (!floorSnapshot || floorSnapshot.width !== bg.width || floorSnapshot.height !== bg.height) {
+      floorSnapshot = document.createElement('canvas');
+      floorSnapshot.width = bg.width; floorSnapshot.height = bg.height;
+      floorSnapshot.getContext('2d').drawImage(bg, 0, 0);
+    }
+    c.clearRect(0, 0, bg.width, bg.height);
+    c.drawImage(floorSnapshot, 0, 0);
+    c.setTransform(cv.dpr, 0, 0, cv.dpr, 0, 0);
+    const ring = px(PROXIMITY);
+    for (const o of live) {
+      const col = P[o.mobility];
+      const [x, y] = S(o.mapX, o.mapY);
+      const g = c.createRadialGradient(x, y, 0, x, y, ring);
+      g.addColorStop(0, withAlpha(col, 0.16)); g.addColorStop(1, withAlpha(col, 0));
+      c.fillStyle = g; c.beginPath(); c.arc(x, y, ring, 0, Math.PI * 2); c.fill();
+      c.strokeStyle = withAlpha(col, 0.32); c.lineWidth = 1; c.setLineDash([2, 5]);
+      c.beginPath(); c.arc(x, y, ring, 0, Math.PI * 2); c.stroke(); c.setLineDash([]);
+    }
   }
 
   function render() {
     if (!cv.w) return;
+    paintFields();
     const c = cv.begin();
-    c.save(); c.setTransform(1, 0, 0, 1, 0, 0); c.drawImage(bg, 0, 0); c.restore();
+    c.clearRect(0, 0, cv.w, cv.h);
     drawEdges();
     drawRoutes();
     drawObjects();
@@ -606,6 +639,7 @@ export default function mount(host, { options = {}, reducedMotion = false } = {}
 
   ready = true;
   stage.insertBefore(cv.canvas, hud);
+  stage.insertBefore(bg, cv.canvas);
   shell.root.classList.toggle('rr--narrow', cv.w < 640);
   shell.root.classList.toggle('rr--tiny', cv.w < 380);
   layout(cv.w, cv.h);

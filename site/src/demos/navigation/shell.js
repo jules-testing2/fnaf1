@@ -78,7 +78,7 @@ export function createShell(host, cfg) {
     if (fill) return; // CSS flex fills the host
     const w = stage.clientWidth || host.clientWidth || 600;
     const a = options.aspect || cfg.aspect(w);
-    stage.style.height = `${Math.round(w / a)}px`;
+    stage.style.height = a ? `${Math.round(w / a)}px` : ''; // aspect 0: content decides (stacked layouts)
   };
   const ro = new ResizeObserver(size);
   ro.observe(root);
@@ -127,7 +127,7 @@ export function createCanvas(parent, onResize) {
   const canvas = document.createElement('canvas');
   canvas.className = 'navd__canvas';
   parent.append(canvas);
-  const ctx = canvas.getContext('2d', { willReadFrequently: true });
+  const ctx = canvas.getContext('2d');
   const s = { canvas, ctx, w: 1, h: 1, dpr: 1 };
   const resize = () => {
     const w = Math.max(1, parent.clientWidth), h = Math.max(1, parent.clientHeight);
@@ -184,8 +184,3 @@ export function hex(h) {
 }
 export function withAlpha(h, a) { const [r, g, b] = hex(h); return `rgba(${r},${g},${b},${a})`; }
 
-/** Deterministic PRNG so scripted demos replay identically (needed for setProgress scrubbing). */
-export function rng(seed = 1) {
-  let s = seed >>> 0;
-  return () => { s = (s + 0x6d2b79f5) >>> 0; let t = s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
-}

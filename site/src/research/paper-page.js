@@ -18,6 +18,22 @@ export function initPaperPage(slug, artVariant) {
   initLightbox();
   initCopy();
   initLayerBadges(paper);
+  refreshOnLayoutChange();
+}
+
+/** Lazy demos and charts change the page height after load; keep scroll-trigger positions honest. */
+export function refreshOnLayoutChange() {
+  const main = document.querySelector('main');
+  if (!main) return;
+  let timer = 0;
+  let lastH = main.offsetHeight;
+  new ResizeObserver(() => {
+    const h = main.offsetHeight;
+    if (Math.abs(h - lastH) < 2) return;
+    lastH = h;
+    clearTimeout(timer);
+    timer = setTimeout(() => ScrollTrigger.refresh(), 200);
+  }).observe(main);
 }
 
 /* ---------- Hero ---------- */

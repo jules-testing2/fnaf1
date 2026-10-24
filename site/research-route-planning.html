@@ -144,9 +144,9 @@
           <button type="button" role="tab" id="tab-replan" aria-controls="panel-replan" aria-selected="false" tabindex="-1" data-text="<b>Penalty-weighted replanning.</b> Objects near an edge add mobility-weighted penalties (person 50, chair 15, bottle 5). Every 2 s the executor compares penalties on the active route; a change above δ = 2.0 cancels FollowPath and asks the Route Server for a new route from the robot's current AMCL pose.">Replan <span class="mono">Route Server</span></button>
         </div>
         <div class="motion-stage">
-          <div role="tabpanel" id="panel-detect" aria-labelledby="tab-detect"><div class="demo-slot" data-demo="yolo-detect" data-options='{"aspect":1.7}'></div></div>
-          <div role="tabpanel" id="panel-fuse" aria-labelledby="tab-fuse" hidden><div class="demo-slot" data-demo="asf-fusion" data-options='{"aspect":1.7}'></div></div>
-          <div role="tabpanel" id="panel-replan" aria-labelledby="tab-replan" hidden><div class="demo-slot" data-demo="route-replan" data-options='{"interactive":true,"aspect":1.7}'></div></div>
+          <div role="tabpanel" id="panel-detect" aria-labelledby="tab-detect"><div class="demo-slot" data-demo="yolo-detect"></div></div>
+          <div role="tabpanel" id="panel-fuse" aria-labelledby="tab-fuse" hidden><div class="demo-slot" data-demo="asf-fusion"></div></div>
+          <div role="tabpanel" id="panel-replan" aria-labelledby="tab-replan" hidden><div class="demo-slot" data-demo="route-replan" data-options='{"interactive":true}'></div></div>
         </div>
         <p class="motion-caption" id="motion-caption" aria-live="polite"><b>YOLO26n on the robot.</b> A C++ lifecycle node runs YOLO26n through NCNN on the Raspberry Pi 5's four Cortex-A76 cores at 416 × 416, rate-limited to 15 Hz; the measured throughput was 5.5 ± 0.7 FPS (167 ± 21 ms per inference). Boxes are published on /yolo26/detections.</p>
       </div>

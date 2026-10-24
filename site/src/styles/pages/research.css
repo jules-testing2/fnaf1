@@ -326,3 +326,17 @@
 .rx-repo strong { font-family: var(--font-mono); font-size: 0.95rem; font-weight: 500; word-break: break-all; }
 .rx-repo p { color: var(--fg-dim); font-size: 0.92rem; line-height: 1.55; }
 @media (max-width: 900px) { .rx-open { grid-template-columns: 1fr; } }
+
+/* ---------- ROS 2 dataflow (covariance page) ---------- */
+.dataflow__scroll { overflow-x: auto; padding: 18px 16px 10px; }
+.dataflow svg { display: block; width: 100%; min-width: 760px; height: auto; overflow: visible; font-family: var(--font-sans); }
+.df-node rect { fill: rgba(255, 255, 255, 0.035); stroke: var(--line-strong); stroke-width: 1.2; }
+.df-node--hot rect { fill: rgba(250, 82, 15, 0.08); stroke: var(--orange); stroke-opacity: 0.35; stroke-width: 1.6; }
+.df-node text { fill: var(--fg); font-family: var(--font-mono); font-size: 14px; }
+.df-node .df-sub { fill: var(--fg-mute); font-size: 12px; }
+.df-edge { fill: none; stroke: var(--orange); stroke-width: 1.6; stroke-opacity: 0.55; }
+.df-edge--dim, .df-edge[data-tone='b'] { stroke: var(--cyan); stroke-dasharray: 4 5; stroke-opacity: 0.5; }
+.df-topic { fill: var(--amber); font-family: var(--font-mono); font-size: 11.5px; }
+.df-readout { fill: var(--mint); font-family: var(--font-mono); font-size: 13px; }
+.df-packet { fill: var(--amber); }
+.df-packet--b { fill: var(--cyan); }

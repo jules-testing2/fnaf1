@@ -7,7 +7,7 @@ import { rgba } from './common.js';
 /** Maps a world box onto a screen rect (uniform scale, centred). y is up in the world, down on screen. */
 export function makeView(rect, box) {
   const sx = rect.w / (box.x1 - box.x0), sy = rect.h / (box.y1 - box.y0);
-  const s = Math.min(sx, sy);
+  const s = Math.max(1, Math.min(sx, sy)); // never degenerate, even before the first layout
   const cxw = (box.x0 + box.x1) / 2, cyw = (box.y0 + box.y1) / 2;
   const ox = rect.x + rect.w / 2, oy = rect.y + rect.h / 2;
   return {
@@ -40,7 +40,7 @@ export function drawWalls(ctx, v, pal) {
       const y = side * HALF_W;
       const doors = DOORS.filter((d) => d.side === side);
       let x = ox;
-      ctx.strokeStyle = pal.lineStrong; ctx.lineWidth = Math.max(2, v.s * 0.05);
+      ctx.strokeStyle = pal.lineStrong; ctx.lineWidth = 2.5;
       ctx.beginPath();
       for (const d of doors) { ctx.moveTo(v.X(x), v.Y(y)); ctx.lineTo(v.X(ox + d.x0), v.Y(y)); x = ox + d.x1; }
       ctx.moveTo(v.X(x), v.Y(y)); ctx.lineTo(v.X(ox + BAY), v.Y(y));
@@ -123,12 +123,12 @@ export function wedge(ctx, v, pose, a0, a1, range) {
 }
 
 /** Rotating sweep glow for the spinning LiDAR head. */
-export function drawSweep(ctx, v, pose, angle, color, range = 7) {
+export function drawSweep(ctx, v, pose, angle, color, range = 7, strength = 0.22) {
   const X = v.X(pose.x), Y = v.Y(pose.y), R = range * v.s;
   ctx.save();
   if (ctx.createConicGradient) {
     const g = ctx.createConicGradient(-angle, X, Y);
-    g.addColorStop(0, rgba(color, 0.22)); g.addColorStop(0.12, rgba(color, 0)); g.addColorStop(1, rgba(color, 0));
+    g.addColorStop(0, rgba(color, strength)); g.addColorStop(0.12, rgba(color, 0)); g.addColorStop(1, rgba(color, 0));
     ctx.fillStyle = g;
     ctx.beginPath(); ctx.arc(X, Y, R, 0, Math.PI * 2); ctx.fill();
   }

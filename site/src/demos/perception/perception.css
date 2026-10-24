@@ -23,6 +23,8 @@
 
 /* Canvases fill their stage */
 .pcp-stage, .asf-main, .asf-cam, .asf-hist, .mtg-stage, .mtg-spark__plot { position: relative; overflow: hidden; }
+.pcp-sized { aspect-ratio: var(--pcp-aspect); }
+@media (max-width: 720px) { .pcp-sized { aspect-ratio: var(--pcp-aspect-sm); } }
 .pcp-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .pcp-stage--cam { background: #1d1c1a; }
 .pcp-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: fill; background: #000; }
@@ -37,6 +39,11 @@
 
 /* ---------- ASF ---------- */
 .asf-grid { display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr); border-bottom: 1px solid var(--pcp-line); }
+.asf-main { align-self: stretch; }
+/* The map keeps at least its aspect ratio but may grow to match a taller side column. */
+.asf-main.pcp-sized { aspect-ratio: auto; }
+.asf-main.pcp-sized::before { content: ''; display: block; padding-top: calc(100% / var(--pcp-aspect)); }
+@media (max-width: 720px) { .asf-main.pcp-sized::before { padding-top: calc(100% / var(--pcp-aspect-sm)); } }
 .asf-side { display: flex; flex-direction: column; border-left: 1px solid var(--pcp-line); min-width: 0; }
 .asf-card { display: flex; flex-direction: column; min-height: 0; }
 .asf-card figcaption { padding: 10px 14px; color: var(--pcp-mute); font-size: 0.64rem; border-bottom: 1px solid var(--pcp-line); }
@@ -89,6 +96,7 @@
   .asf-card { flex: 1 1 50%; min-width: 0; }
   .asf-card--hist { border-top: 0; border-left: 1px solid var(--pcp-line); }
   .pcp--compact .asf-card--cam { flex-basis: 100%; }
+  .pcp--compact .asf-cam { aspect-ratio: 16 / 9; } /* vertical crop only: pixel columns stay true */
   .asf-steps__list { grid-template-columns: repeat(6, auto); justify-content: start; }
   .asf-step { padding: 4px; border-radius: 50%; box-shadow: none; }
   .asf-step__t { display: none; }
@@ -113,7 +121,7 @@
 .mtg-tile > span { font-size: 0.58rem; color: var(--pcp-mute); }
 .mtg-tile strong { font-family: var(--font-serif); font-weight: 420; font-size: clamp(1.25rem, 2.1vw, 2rem); line-height: 1.05; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .mtg-tile small { font-family: var(--font-mono); font-size: 0.62rem; color: var(--pcp-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.mtg-tile--replan.is-flash { animation: mtg-flash 1.6s var(--ease-out); }
+.mtg-tile--limit.is-flash { animation: mtg-flash 1.6s var(--ease-out); }
 @keyframes mtg-flash { 0% { box-shadow: inset 0 0 0 999px rgba(250, 82, 15, 0.42); } 100% { box-shadow: inset 0 0 0 999px rgba(250, 82, 15, 0); } }
 .mtg-cpu { display: flex; height: 5px; border-radius: 3px; overflow: hidden; background: var(--pcp-line); }
 .mtg-cpu i { display: block; height: 100%; transition: width 0.4s; }
@@ -131,7 +139,6 @@
 .mtg-timeline__bar > b.is-dynamic { background: var(--orange); }
 .mtg-timeline__bar > b.is-static { background: var(--cyan); }
 .mtg-timeline__bar > b.is-minor { background: var(--amber); }
-.mtg-timeline__bar > b.is-replan { top: -7px; height: 18px; width: 4px; background: var(--danger); }
 .mtg-timeline .mono { color: var(--pcp-mute); font-size: 0.62rem; white-space: nowrap; font-variant-numeric: tabular-nums; }
 
 .pcp--compact .mtg-tile small, .pcp--compact .mtg-spark { display: none; }
