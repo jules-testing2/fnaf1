@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; } body { margin: 0; }
+  a { color: #A14D66; text-decoration: none; } a:hover { color: #7E3A50; }
+  .saim-reveal { opacity: 0; transform: translateY(28px); transition: opacity .8s ease, transform .8s ease; }
+  .saim-reveal.saim-in { opacity: 1; transform: translateY(0); }
+  .saim-nav-links::-webkit-scrollbar { display: none; }
+  .saim-nav-links a { flex: none; }
+  @media (max-width: 760px) { .saim-nav-links a:nth-child(n+4) { display: none; } }
+</style>
+</helmet>
+
+<div style="font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; background: linear-gradient(180deg, #F8EAEE 0%, #FFFAEB 420px); color: #1F1F1F; overflow-x: hidden; min-height: 100vh;">
+
+  <div style="position: sticky; top: 0; z-index: 100; display: flex; justify-content: center; padding: 16px 24px; background: rgba(248,234,238,0.85); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(31,31,31,0.06);">
+    <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 1240px; gap: 20px;">
+      <a href="SAIM Robotics.dc.html"><img src="assets/saim-logo-black.png" alt="SAIM Robotics" style="height: 28px; width: auto; display: block;"></a>
+      <div class="saim-nav-links" style="display: flex; align-items: center; gap: 20px; flex: 1; min-width: 0; overflow-x: auto; scrollbar-width: none; white-space: nowrap;">
+        <a href="Xplorer.dc.html" style="color: #1F1F1F; font-size: 14px; font-weight: 500;">Xplorer</a>
+        <a href="G1 Robot.dc.html" style="color: #1F1F1F; font-size: 14px; font-weight: 500;">G1 &amp; Go2</a>
+        <a href="Arm Series.dc.html" style="color: #1F1F1F; font-size: 14px; font-weight: 500;">Arms</a>
+        <a href="Semantic Autonomy Stack.dc.html" style="color: #1F1F1F; font-size: 14px; font-weight: 500;">Autonomy Stack</a>
+        <a href="Research.dc.html" style="color: #A14D66; font-size: 14px; font-weight: 600;">Research</a>
+        <a href="Leadership.dc.html" style="color: #1F1F1F; font-size: 14px; font-weight: 500;">Leadership</a>
+        <a href="Constitution.dc.html" style="color: #1F1F1F; font-size: 14px; font-weight: 500;">Constitution</a>
+      </div>
+      <a href="SAIM Robotics.dc.html#contact" style="background: #1F1F1F; color: #FFFAEB; padding: 10px 20px; border-radius: 999px; font-size: 13.5px; font-weight: 600; white-space: nowrap;" style-hover="background:#A14D66">Request a demo</a>
+    </div>
+  </div>
+
+  <div style="padding: 64px 24px 50px; display: flex; justify-content: center;">
+    <div style="max-width: 760px; width: 100%; display: flex; flex-direction: column; align-items: flex-start; gap: 26px;">
+      <a href="Research.dc.html" style="font-size: 13.5px; font-weight: 600; color: #A14D66;">← All research</a>
+      <div style="width: 88px; height: 88px; border-radius: 20px; overflow: hidden; background: #D98CA0; flex: none;">
+        <img src="assets/research-vlm-icon.png" alt="" style="width: 100%; height: 100%; object-fit: cover;">
+      </div>
+      <div style="font-size: 13.5px; font-weight: 600; color: #A14D66; letter-spacing: 0.05em; text-transform: uppercase;">Semantic autonomy · Research paper</div>
+      <h1 style="font-family: 'Newsreader', Georgia, serif; font-size: 36px; line-height: 1.25; margin: 0; font-weight: 500;">A Semantic Autonomy Framework for VLM-Integrated Indoor Mobile Robots: Hybrid Deterministic Reasoning and Cross-Robot Adaptive Memory</h1>
+      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <span style="display: inline-flex; align-items: center; gap: 8px; background: rgba(31,31,31,0.06); color: rgba(31,31,31,0.4); padding: 11px 22px; border-radius: 999px; font-size: 14px; font-weight: 600;">Read the paper — submission pending</span>
+        <a href="https://github.com/bogdan-abaza/nav2-sas-vlm-memory" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 8px; background: #D98CA0; color: #1F1F1F; padding: 11px 22px; border-radius: 999px; font-size: 14px; font-weight: 600;">GitHub ↗</a>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 0 24px 40px; display: flex; justify-content: center;">
+    <div style="max-width: 760px; width: 100%; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px;">
+      <sc-for list="{{ stats }}" as="stat" hint-placeholder-count="4">
+        <div style="padding: 20px; border-radius: 16px; background: rgba(217,140,160,0.14); border: 1px solid rgba(217,140,160,0.32);">
+          <div style="font-family: 'Newsreader', Georgia, serif; font-size: 27px; font-weight: 500; color: #A14D66;">{{ stat.value }}</div>
+          <div style="font-size: 12.5px; color: rgba(31,31,31,0.6); margin-top: 4px;">{{ stat.label }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="padding: 0 24px 40px; display: flex; justify-content: center;">
+    <div style="max-width: 760px; width: 100%; display: flex; flex-direction: column; gap: 10px;">
+      <sc-for list="{{ highlights }}" as="h" hint-placeholder-count="2">
+        <div style="display: flex; gap: 12px; align-items: flex-start; font-size: 15px; line-height: 1.55; color: rgba(31,31,31,0.75);">
+          <span style="color: #A14D66; font-weight: 700; flex: none;">→</span><span>{{ h }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="padding: 0 24px 40px; display: flex; justify-content: center;">
+    <div style="max-width: 760px; width: 100%; display: flex; flex-direction: column; gap: 14px;">
+      <div style="font-size: 13px; font-weight: 600; color: rgba(31,31,31,0.45); letter-spacing: 0.05em; text-transform: uppercase;">Authors</div>
+      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <sc-for list="{{ authors }}" as="author" hint-placeholder-count="3">
+          <span style="padding: 9px 18px; border-radius: 999px; background: rgba(217,140,160,0.16); border: 1px solid rgba(217,140,160,0.35); font-size: 14px; font-weight: 500; color: #1F1F1F;">{{ author }}</span>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 30px 24px 130px; display: flex; justify-content: center;">
+    <div style="max-width: 760px; width: 100%; display: flex; flex-direction: column; gap: 3px;">
+      <sc-for list="{{ sections }}" as="sec" hint-placeholder-count="5">
+        <div ref="{{ sec.setRef }}" class="saim-reveal" style="padding: 26px 0; border-bottom: 1px solid rgba(31,31,31,0.08);">
+          <div style="font-family: 'Newsreader', Georgia, serif; font-size: 19px; font-weight: 500; margin-bottom: 8px;">{{ sec.name }}</div>
+          <p style="font-size: 15px; line-height: 1.65; color: rgba(31,31,31,0.68); margin: 0;">{{ sec.body }}</p>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="padding: 0 24px 90px; display: flex; justify-content: center;">
+    <div style="max-width: 1240px; width: 100%; border-top: 1px solid rgba(31,31,31,0.08); padding-top: 40px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+      <div style="font-size: 13.5px; color: rgba(31,31,31,0.5);">© 2026 SAIM Robotics. All rights reserved.</div>
+      <div style="display: flex; gap: 22px;">
+        <a href="Research.dc.html" style="color: rgba(31,31,31,0.5); font-size: 13.5px;">All research</a>
+        <a href="SAIM Robotics.dc.html" style="color: rgba(31,31,31,0.5); font-size: 13.5px;">Home</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  observer = null;
+  revealEls = new Set();
+  componentDidMount() {
+    this.observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('saim-in'); this.observer.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    this.revealEls.forEach(el => el && this.observer.observe(el));
+  }
+  componentWillUnmount() { if (this.observer) this.observer.disconnect(); }
+  makeRef = () => (el) => { if (el && !this.revealEls.has(el)) { this.revealEls.add(el); if (this.observer) this.observer.observe(el); } };
+
+  renderVals() {
+    const withRef = (list) => list.map(item => ({ ...item, setRef: this.makeRef() }));
+    return {
+      authors: ['Bogdan Felician Abaza', 'Andrei-Alexandru Staicu', 'Cristian Vasile Doicin'],
+      highlights: [
+        'Hybrid resolver bypasses the VLM in 88% of navigation decisions.',
+        'Cross-robot memory transfer succeeds in 33/33 tested missions.',
+        'Learned preferences reduce repeated decisions to sub-millisecond latency.',
+        'Validated on physical ROS 2 robots using off-the-shelf edge hardware — no GPU.',
+      ],
+      stats: [
+        { value: '88%', label: 'Instructions resolved without a VLM' },
+        { value: '33/33', label: 'Cross-robot transfer accuracy' },
+        { value: '103,000×', label: 'Latency reduction after learning' },
+        { value: '82', label: 'Scenario decisions, 3 sessions' },
+      ],
+      sections: withRef([
+        { name: 'Abstract', body: 'Autonomous indoor mobile robots can navigate reliably to metric coordinates using frameworks such as ROS 2 Navigation 2, yet they lack the ability to interpret natural language instructions that express intent rather than positions. Vision-Language Models offer the semantic reasoning to bridge this gap, but their inference latency (2\u20139 seconds per decision) and session-by-session amnesia limit practical deployment. This paper presents the Semantic Autonomy Stack, a six-layer reference framework for semantically autonomous indoor navigation, validated through hybrid deterministic-VLM reasoning and cross-robot adaptive memory on physical robots with off-the-shelf edge hardware. A seven-step parametric resolver handles 88% of instructions in under 0.1 milliseconds without invoking a language model, camera, or GPU; a five-category semantic memory framework enables cross-session learning and cross-robot knowledge transfer, achieving a measured latency reduction of 103,000-fold. Validation across 82 scenario-level decisions and three sessions demonstrated 100% semantic transfer accuracy (33/33) on Raspberry Pi 5 platforms with no onboard GPU and zero training data.' },
+        { name: 'Introduction', body: 'Contemporary ROS 2/Nav2 platforms navigate reliably to metric coordinates but have no understanding of why they are going there — a limitation that becomes critical once operators issue intent-based instructions like "take me somewhere I can sit and relax." Vision-Language Models can bridge that semantic gap, but three practical challenges limit their use on physical robots: 2\u20139 second inference latency per decision, session amnesia that discards everything learned once the robot restarts, and a lack of physical multi-robot validation for cross-robot knowledge transfer. This paper\u2019s Semantic Autonomy Stack addresses all three directly.' },
+        { name: 'Method', body: 'The Semantic Autonomy Stack defines six layers (L0\u2013L5) from platform hardware through navigation execution, perception, semantic reasoning, mission interface, and memory-driven operational intelligence. A seven-step deterministic parametric resolver (L3a) attempts to resolve each instruction first; only genuinely ambiguous cases escalate to VLM reasoning (L3b, Qwen 3.5:4b) with on-demand camera capture and post-arrival visual confirmation. A five-category semantic memory framework (M1\u2013M5) — environment knowledge, temporal patterns, operator preferences, platform capabilities, task history — lets preferences learned through VLM interaction on one robot be promoted to deterministic rules and shared to a second robot via a compiled memory digest.' },
+        { name: 'Results', body: 'The deterministic resolver handled 72 of 82 scenario-level decisions (88%) without invoking the VLM. A new instruction resolved seven times by the VLM (mean 6,733 ms) was promoted to memory and thereafter resolved deterministically in 0.060 ms — a 103,000-fold latency reduction. All 33 tested cross-robot preference resolutions on a second robot produced the correct target node (100%, 95% CI [0.894, 1.000]), requiring no retraining and no per-robot rule engineering — only a shared graph, POI identifiers, and memory digest.' },
+        { name: 'Conclusion', body: 'Semantically autonomous indoor navigation does not require invoking a VLM for every instruction. By combining deterministic graph- and memory-based resolution with selective VLM reasoning and scoped, transferable semantic memory, the Semantic Autonomy Stack offers a practical, auditable path to adaptive navigation on physical ROS 2 robots — validated with zero training data and no onboard GPU. Planned next steps include benchmarking across VLM families, embedding-based preference matching, validation on the Unitree Go2 quadruped, and a shared memory server for fleets beyond two robots.' },
+      ]),
+    };
+  }
+}
+</script>
+</body>
+</html>

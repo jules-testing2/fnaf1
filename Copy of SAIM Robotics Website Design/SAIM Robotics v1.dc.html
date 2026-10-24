@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics="">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<script src="./image-slot.js"></script>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  @keyframes saimSunset { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+  a { color: #C1121F; text-decoration: none; }
+  a:hover { color: #FA520F; }
+  .saim-reveal { opacity: 0; transform: translateY(28px); transition: opacity .8s ease, transform .8s ease; }
+  .saim-reveal.saim-in { opacity: 1; transform: translateY(0); }
+  .saim-card { transition: transform .35s ease, box-shadow .35s ease; }
+  .saim-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(31,31,31,0.12); }
+  .saim-card-dark:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,0.35); }
+  .saim-blob { transition: transform .6s cubic-bezier(.16,1,.3,1); }
+  .saim-nav-links::-webkit-scrollbar { display: none; }
+  .saim-nav-links a { flex: none; }
+  @media (max-width: 760px) {
+    .saim-nav-links a:nth-child(n+4) { display: none; }
+  }
+</style>
+</helmet>
+
+<div style="font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; background: #FFFAEB; color: #1F1F1F; overflow-x: hidden;">
+
+  <div style="position: sticky; top: 0; z-index: 100; display: flex; justify-content: center; padding: 16px 24px; background: rgba(255,250,235,0.85); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(31,31,31,0.06);">
+    <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 1240px; gap: 20px;">
+      <img src="assets/saim-logo-black.png" alt="SAIM Robotics" style="height: 28px; width: auto; display: block;">
+      <div class="saim-nav-links" style="display: flex; align-items: center; gap: 20px; flex: 1; min-width: 0; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; white-space: nowrap;">
+        <a href="Xplorer.dc.html" style="color: #1F1F1F; font-size: 14px; font-weight: 500;">Xplorer</a>
+        <a href="G1 Robot.dc.html" style="color: #1F1F1F; font-size: 14px; font-weight: 500;">G1 &amp; Go2</a>
+        <a href="Arm Series.dc.html" style="color: #1F1F1F; font-size: 14px; font-weight: 500;">Arms</a>
+        <a href="Semantic Autonomy Stack.dc.html" style="color: #1F1F1F; font-size: 14px; font-weight: 500;">Autonomy Stack</a>
+        <a href="#about" style="color: #1F1F1F; font-size: 14px; font-weight: 500;">About</a>
+        <a href="Research.dc.html" style="color: #1F1F1F; font-size: 14px; font-weight: 500;">Research</a>
+        <a href="Leadership.dc.html" style="color: #1F1F1F; font-size: 14px; font-weight: 500;">Leadership</a>
+        <a href="Constitution.dc.html" style="color: #1F1F1F; font-size: 14px; font-weight: 500;">Constitution</a>
+      </div>
+      <a href="#contact" style="background: #1F1F1F; color: #FFFAEB; padding: 10px 20px; border-radius: 999px; font-size: 13.5px; font-weight: 600; white-space: nowrap;" style-hover="background:#FA520F;color:#1F1F1F">Request a demo</a>
+    </div>
+  </div>
+
+  <div style="position: relative; padding: 110px 24px 90px; display: flex; justify-content: center; overflow: hidden;">
+    <div ref="{{ setBlobRef }}" class="saim-blob" style="position: absolute; top: -240px; left: 50%; transform: translateX(-50%); width: 1200px; height: 760px; border-radius: 50%; background: linear-gradient(120deg, #FA520F, #E8A33D, #C1121F, #FA520F); background-size: 300% 300%; animation: saimSunset 14s ease infinite; filter: blur(100px); opacity: 0.42;"></div>
+    <div style="position: relative; max-width: 900px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 26px;">
+      <div style="display: inline-flex; align-items: center; gap: 8px; padding: 7px 16px; border-radius: 999px; background: rgba(31,31,31,0.06); font-size: 13px; font-weight: 600;">SAIM — Systems for Autonomous Intelligent Mobility</div>
+      <h1 style="font-family: 'Newsreader', Georgia, serif; font-size: 68px; line-height: 1.05; margin: 0; font-weight: 500; letter-spacing: -0.01em;">Physical autonomy.<br>In the real world.</h1>
+      <p style="font-size: 19px; line-height: 1.6; color: rgba(31,31,31,0.7); max-width: 640px; margin: 0;">SAIM Robotics builds mobile robots, humanoid and quadruped platforms, and manipulation arms — all driven by one Semantic Autonomy Stack, from warehouse floor to open terrain.</p>
+      <div style="display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;">
+        <a href="Xplorer.dc.html" style="background: #FA520F; color: #FFFAEB; padding: 14px 28px; border-radius: 999px; font-size: 15px; font-weight: 600;" style-hover="background:#C1121F">Explore Xplorer
+        </a><a href="#stack" style="background: transparent; color: #1F1F1F; padding: 14px 28px; border-radius: 999px; font-size: 15px; font-weight: 600; border: 1.5px solid rgba(31,31,31,0.2);" style-hover="border-color:#1F1F1F">The Autonomy Stack</a>
+      </div>
+    </div>
+  </div>
+
+  <div style="background: #1F1F1F; color: #FFFAEB; padding: 56px 24px; display: flex; justify-content: center;">
+    <div ref="{{ setStripRef }}" class="saim-reveal" style="display: flex; gap: 64px; flex-wrap: wrap; justify-content: center; max-width: 1100px; text-align: center;">
+      <div><div style="font-family: 'Newsreader', Georgia, serif; font-size: 40px; font-weight: 500;">4</div><div style="font-size: 13.5px; color: rgba(255,250,235,0.55); margin-top: 6px;">Xplorer generations</div></div>
+      <div><div style="font-family: 'Newsreader', Georgia, serif; font-size: 40px; font-weight: 500;">2</div><div style="font-size: 13.5px; color: rgba(255,250,235,0.55); margin-top: 6px;">robot platforms — G1 &amp; Go2</div></div>
+      <div><div style="font-family: 'Newsreader', Georgia, serif; font-size: 40px; font-weight: 500;">6 DOF</div><div style="font-size: 13.5px; color: rgba(255,250,235,0.55); margin-top: 6px;">manipulation arms</div></div>
+      <div><div style="font-family: 'Newsreader', Georgia, serif; font-size: 40px; font-weight: 500;">1</div><div style="font-size: 13.5px; color: rgba(255,250,235,0.55); margin-top: 6px;">unified Semantic Autonomy Stack</div></div>
+    </div>
+  </div>
+
+  <div id="xplorer" style="padding: 120px 24px 60px; display: flex; justify-content: center;">
+    <div style="max-width: 1240px; width: 100%;">
+      <div ref="{{ setXplorerHeadRef }}" class="saim-reveal" style="max-width: 640px; margin-bottom: 56px;">
+        <div style="font-size: 13.5px; font-weight: 600; color: #C1121F; letter-spacing: 0.04em; text-transform: uppercase;">Product line</div>
+        <h2 style="font-family: 'Newsreader', Georgia, serif; font-size: 42px; font-weight: 500; margin: 14px 0 16px; line-height: 1.15;">SAIM Xplorer</h2>
+        <p style="font-size: 17px; line-height: 1.6; color: rgba(31,31,31,0.68); margin: 0;">Four generations of the same autonomous mobile robot (AMR) platform — from lightweight indoor mapping to full off-road autonomy.</p>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px;">
+        <sc-for list="{{ xplorerModels }}" as="model" hint-placeholder-count="4">
+          <div ref="{{ model.setRef }}" class="saim-reveal saim-card" style="background: #fff; border-radius: 20px; border: 1px solid rgba(31,31,31,0.08); overflow: hidden; display: flex; flex-direction: column;">
+            <image-slot id="{{ model.slotId }}" shape="rect" fit="contain" placeholder="{{ model.placeholder }}" style="width: 100%; height: 200px;"></image-slot>
+            <div style="padding: 24px; display: flex; flex-direction: column; gap: 10px; flex: 1;">
+              <div style="display: flex; align-items: baseline; justify-content: space-between;">
+                <h3 style="font-family: 'Newsreader', Georgia, serif; font-size: 22px; font-weight: 500; margin: 0;">{{ model.name }}</h3>
+                <span style="font-size: 12px; font-weight: 600; color: rgba(31,31,31,0.4);">{{ model.tag }}</span>
+              </div>
+              <p style="font-size: 14.5px; line-height: 1.55; color: rgba(31,31,31,0.65); margin: 0; flex: 1;">{{ model.desc }}</p>
+              <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px;">
+                <sc-for list="{{ model.specs }}" as="spec" hint-placeholder-count="3">
+                  <span style="font-size: 12px; padding: 4px 10px; border-radius: 999px; background: rgba(31,31,31,0.05); color: rgba(31,31,31,0.7);">{{ spec }}</span>
+                </sc-for>
+              </div>
+              <a href="Xplorer.dc.html#{{ model.slotId }}-detail" style="font-size: 13.5px; font-weight: 600; color: #C1121F; margin-top: 6px;" style-hover="color:#FA520F">Learn more →</a>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+
+  <div id="roboti" style="padding: 100px 24px; display: flex; justify-content: center; background: linear-gradient(180deg, #FFFAEB 0%, #FBF0DC 100%);">
+    <div style="max-width: 1240px; width: 100%;">
+      <div ref="{{ setRobotHeadRef }}" class="saim-reveal" style="max-width: 640px; margin-bottom: 56px;">
+        <div style="font-size: 13.5px; font-weight: 600; color: #C1121F; letter-spacing: 0.04em; text-transform: uppercase;">Robot platforms</div>
+        <h2 style="font-family: 'Newsreader', Georgia, serif; font-size: 42px; font-weight: 500; margin: 14px 0 16px; line-height: 1.15;">G1 and Go2</h2>
+        <p style="font-size: 17px; line-height: 1.6; color: rgba(31,31,31,0.68); margin: 0;">A humanoid body and a quadruped platform, both driven by the same semantic stack — from human interaction to rough terrain.</p>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 28px;">
+        <sc-for list="{{ robots }}" as="robot" hint-placeholder-count="2">
+          <div ref="{{ robot.setRef }}" class="saim-reveal saim-card-dark" style="background: #1F1F1F; color: #FFFAEB; border-radius: 24px; overflow: hidden; display: flex; flex-direction: column;">
+            <div style="width: 100%; height: 280px; background: #fff;">
+              <image-slot id="{{ robot.slotId }}" shape="rect" fit="contain" placeholder="{{ robot.placeholder }}" style="width: 100%; height: 280px;"></image-slot>
+            </div>
+            <div style="padding: 30px; display: flex; flex-direction: column; gap: 14px;">
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <h3 style="font-family: 'Newsreader', Georgia, serif; font-size: 26px; font-weight: 500; margin: 0;">{{ robot.name }}</h3>
+                <span style="font-size: 12px; font-weight: 600; padding: 5px 12px; border-radius: 999px; background: rgba(250,82,15,0.18); color: #FA520F;">{{ robot.tag }}</span>
+              </div>
+              <p style="font-size: 15px; line-height: 1.6; color: rgba(255,250,235,0.65); margin: 0;">{{ robot.desc }}</p>
+              <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 6px;">
+                <sc-for list="{{ robot.specs }}" as="spec" hint-placeholder-count="3">
+                  <div style="font-size: 13.5px; color: rgba(255,250,235,0.55); display: flex; gap: 8px;"><span style="color: #FA520F;">—</span>{{ spec }}</div>
+                </sc-for>
+              </div>
+              <a href="{{ robot.href }}" style="font-size: 13.5px; font-weight: 600; color: #FA520F; margin-top: 4px;" style-hover="color:#ffb37a">Learn more →</a>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+
+  <div id="brate" style="padding: 100px 24px; display: flex; justify-content: center;">
+    <div style="max-width: 1240px; width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center;">
+      <div ref="{{ setArmsRef }}" class="saim-reveal" style="display: flex; flex-direction: column; gap: 18px;">
+        <div style="font-size: 13.5px; font-weight: 600; color: #C1121F; letter-spacing: 0.04em; text-transform: uppercase;">Manipulation</div>
+        <h2 style="font-family: 'Newsreader', Georgia, serif; font-size: 42px; font-weight: 500; margin: 0; line-height: 1.15;">SAIM Arm series</h2>
+        <p style="font-size: 17px; line-height: 1.6; color: rgba(31,31,31,0.68); margin: 0;">6-DOF robotic arms that mount on Xplorer, G1, or a fixed base — sharing the same perception and grasp-planning modules from the Autonomy Stack.</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 10px;">
+          <sc-for list="{{ armSpecs }}" as="spec" hint-placeholder-count="4">
+            <div style="padding: 16px; border-radius: 14px; background: rgba(31,31,31,0.04);">
+              <div style="font-family: 'Newsreader', Georgia, serif; font-size: 22px; font-weight: 500;">{{ spec.value }}</div>
+              <div style="font-size: 13px; color: rgba(31,31,31,0.55); margin-top: 4px;">{{ spec.label }}</div>
+            </div>
+          </sc-for>
+        </div>
+        <a href="Arm Series.dc.html" style="font-size: 14px; font-weight: 600; color: #C1121F; margin-top: 8px;" style-hover="color:#FA520F">See the full Arm series →</a>
+      </div>
+      <div style="width: 100%; height: 420px; background: #fff; border-radius: 24px; overflow: hidden; padding: 40px; box-sizing: border-box;">
+        <image-slot id="arm-hero" shape="rounded" radius="24" fit="contain" placeholder="Drop a SAIM Arm product photo" style="width: 100%; height: 100%;"></image-slot>
+      </div>
+    </div>
+  </div>
+
+  <div id="stack" style="padding: 110px 24px; display: flex; justify-content: center; background: #1F1F1F; color: #FFFAEB; position: relative; overflow: hidden;">
+    <div style="position: absolute; bottom: -200px; left: 50%; transform: translateX(-50%); width: 1000px; height: 500px; border-radius: 50%; background: linear-gradient(120deg, #FA520F, #E8A33D, #C1121F); background-size: 300% 300%; animation: saimSunset 16s ease infinite; filter: blur(120px); opacity: 0.25;"></div>
+    <div style="position: relative; max-width: 1100px; width: 100%;">
+      <div ref="{{ setStackHeadRef }}" class="saim-reveal" style="max-width: 640px; margin-bottom: 56px;">
+        <div style="font-size: 13.5px; font-weight: 600; color: #FA520F; letter-spacing: 0.04em; text-transform: uppercase;">The intelligence layer</div>
+        <h2 style="font-family: 'Newsreader', Georgia, serif; font-size: 42px; font-weight: 500; margin: 14px 0 16px; line-height: 1.15;">Semantic Autonomy Stack</h2>
+        <p style="font-size: 17px; line-height: 1.6; color: rgba(255,250,235,0.65); margin: 0;">One software stack runs across every SAIM platform — turning raw sensor streams into grounded understanding, then into safe action.</p>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 2px;">
+        <sc-for list="{{ stackLayers }}" as="layer" hint-placeholder-count="4">
+          <div ref="{{ layer.setRef }}" class="saim-reveal" style="display: grid; grid-template-columns: 200px 1fr; gap: 24px; align-items: center; padding: 26px 28px; background: rgba(255,250,235,0.04); border-radius: 16px; border: 1px solid rgba(255,250,235,0.08);">
+            <div style="font-family: 'Newsreader', Georgia, serif; font-size: 22px; font-weight: 500; color: #FA520F;">{{ layer.name }}</div>
+            <p style="font-size: 14.5px; line-height: 1.55; color: rgba(255,250,235,0.6); margin: 0;">{{ layer.desc }}</p>
+          </div>
+        </sc-for>
+      </div>
+      <a href="Semantic Autonomy Stack.dc.html" style="display: inline-block; margin-top: 32px; font-size: 14px; font-weight: 600; color: #FA520F;" style-hover="color:#ffb37a">Read the full Stack architecture →</a>
+    </div>
+  </div>
+
+  <div id="about" style="padding: 110px 24px; display: flex; justify-content: center;">
+    <div style="max-width: 1240px; width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center;">
+      <div ref="{{ setAboutRef }}" class="saim-reveal" style="display: flex; flex-direction: column; gap: 18px;">
+        <div style="font-size: 13.5px; font-weight: 600; color: #C1121F; letter-spacing: 0.04em; text-transform: uppercase;">About</div>
+        <h2 style="font-family: 'Newsreader', Georgia, serif; font-size: 42px; font-weight: 500; margin: 0; line-height: 1.15;">Systems for Autonomous Intelligent Mobility</h2>
+        <p style="font-size: 17px; line-height: 1.6; color: rgba(31,31,31,0.68); margin: 0;">SAIM Robotics is a Romanian robotics lab building physically autonomous systems — mobile robots, humanoid and quadruped platforms, and manipulation arms — unified by one perception-to-action software stack. Our mission is to make autonomy portable across bodies, not locked to one machine.</p>
+        <p style="font-size: 17px; line-height: 1.6; color: rgba(31,31,31,0.68); margin: 0;">We work with industrial, defense, and field-research partners who need robots that understand what they see well enough to act on it without a human in the loop.</p>
+      </div>
+      <image-slot id="about-photo" shape="rounded" radius="24" fit="contain" placeholder="Drop a team / lab photo" style="width: 100%; height: 420px;"></image-slot>
+    </div>
+  </div>
+
+  <div id="cases" style="padding: 0 24px 110px; display: flex; justify-content: center;">
+    <div style="max-width: 1240px; width: 100%;">
+      <div ref="{{ setCasesRef }}" class="saim-reveal" style="max-width: 640px; margin-bottom: 44px;">
+        <div style="font-size: 13.5px; font-weight: 600; color: #C1121F; letter-spacing: 0.04em; text-transform: uppercase;">Use cases</div>
+        <h2 style="font-family: 'Newsreader', Georgia, serif; font-size: 36px; font-weight: 500; margin: 14px 0 0; line-height: 1.15;">Where SAIM operates</h2>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px;">
+        <sc-for list="{{ useCases }}" as="uc" hint-placeholder-count="4">
+          <div style="padding: 26px; border-radius: 18px; background: rgba(31,31,31,0.04); display: flex; flex-direction: column; gap: 10px;">
+            <div style="font-family: 'Newsreader', Georgia, serif; font-size: 20px; font-weight: 500;">{{ uc.name }}</div>
+            <p style="font-size: 14px; line-height: 1.55; color: rgba(31,31,31,0.6); margin: 0;">{{ uc.desc }}</p>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+
+  <div id="research" style="padding: 0 24px 110px; display: flex; justify-content: center; background: linear-gradient(180deg, #FFFAEB 0%, #FBF0DC 100%);">
+    <div style="max-width: 1240px; width: 100%; padding-top: 110px;">
+      <div ref="{{ setResearchRef }}" class="saim-reveal" style="max-width: 640px; margin-bottom: 44px;">
+        <div style="font-size: 13.5px; font-weight: 600; color: #C1121F; letter-spacing: 0.04em; text-transform: uppercase;">Research &amp; news</div>
+        <h2 style="font-family: 'Newsreader', Georgia, serif; font-size: 36px; font-weight: 500; margin: 14px 0 0; line-height: 1.15;">Latest from the lab</h2>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;">
+        <sc-for list="{{ posts }}" as="post" hint-placeholder-count="3">
+          <div style="background: #fff; border-radius: 18px; border: 1px solid rgba(31,31,31,0.08); overflow: hidden; display: flex; flex-direction: column;">
+            <image-slot id="{{ post.slotId }}" shape="rect" placeholder="{{ post.placeholder }}" style="width: 100%; height: 160px;"></image-slot>
+            <div style="padding: 22px; display: flex; flex-direction: column; gap: 8px;">
+              <span style="font-size: 12px; font-weight: 600; color: #C1121F; text-transform: uppercase; letter-spacing: 0.03em;">{{ post.tag }}</span>
+              <h3 style="font-family: 'Newsreader', Georgia, serif; font-size: 18px; font-weight: 500; margin: 0;">{{ post.title }}</h3>
+              <p style="font-size: 13.5px; line-height: 1.5; color: rgba(31,31,31,0.6); margin: 0;">{{ post.excerpt }}</p>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+
+  <div id="contact" style="padding: 100px 24px; display: flex; justify-content: center; position: relative; overflow: hidden;">
+    <div style="position: absolute; inset: 0; background: linear-gradient(120deg, #FA520F, #E8A33D, #C1121F, #FA520F); background-size: 300% 300%; animation: saimSunset 12s ease infinite;"></div>
+    <div ref="{{ setCtaRef }}" class="saim-reveal" style="position: relative; max-width: 720px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 22px;">
+      <img src="assets/saim-logo-white.png" alt="SAIM Robotics" style="height: 120px; width: 199px">
+      <h2 style="font-family: 'Newsreader', Georgia, serif; font-size: 40px; font-weight: 500; color: #FFFAEB; margin: 0; line-height: 1.2;">Bring physical autonomy into your operation.</h2>
+      <a href="mailto:contact@saimrobotics.com" style="background: #1F1F1F; color: #FFFAEB; padding: 15px 32px; border-radius: 999px; font-size: 15px; font-weight: 600;" style-hover="background:#000">Request a demo</a>
+    </div>
+  </div>
+
+  <div style="background: #1F1F1F; color: rgba(255,250,235,0.5); padding: 60px 24px 34px; display: flex; justify-content: center;">
+    <div style="max-width: 1240px; width: 100%; display: flex; flex-direction: column; gap: 36px;">
+      <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 32px;">
+        <div style="display: flex; flex-direction: column; gap: 10px; max-width: 280px;">
+          <img src="assets/saim-logo-white.png" alt="SAIM Robotics" style="height: 105px; width: 174px">
+          <p style="font-size: 13px; line-height: 1.5; margin: 0;">Systems for Autonomous Intelligent Mobility.</p>
+        </div>
+        <div style="display: flex; gap: 56px; flex-wrap: wrap;">
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div style="font-size: 12.5px; font-weight: 600; color: #FFFAEB; text-transform: uppercase; letter-spacing: 0.03em;">Products</div>
+            <a href="Xplorer.dc.html" style="color: rgba(255,250,235,0.5); font-size: 13.5px;">SAIM Xplorer</a>
+            <a href="G1 Robot.dc.html" style="color: rgba(255,250,235,0.5); font-size: 13.5px;">G1 &amp; Go2</a>
+            <a href="Arm Series.dc.html" style="color: rgba(255,250,235,0.5); font-size: 13.5px;">Arm series</a>
+            <a href="Semantic Autonomy Stack.dc.html" style="color: rgba(255,250,235,0.5); font-size: 13.5px;">Autonomy Stack</a>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div style="font-size: 12.5px; font-weight: 600; color: #FFFAEB; text-transform: uppercase; letter-spacing: 0.03em;">Company</div>
+            <a href="#about" style="color: rgba(255,250,235,0.5); font-size: 13.5px;">About</a>
+            <a href="Research.dc.html" style="color: rgba(255,250,235,0.5); font-size: 13.5px;">Research</a>
+            <a href="#cases" style="color: rgba(255,250,235,0.5); font-size: 13.5px;">Use cases</a>
+            <a href="#contact" style="color: rgba(255,250,235,0.5); font-size: 13.5px;">Contact</a>
+          </div>
+        </div>
+      </div>
+      <div style="border-top: 1px solid rgba(255,250,235,0.1); padding-top: 22px; font-size: 12.5px;">© 2026 SAIM Robotics. All rights reserved.</div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  observer = null;
+  revealEls = new Set();
+
+  blobEl = null;
+  onMouseMove = (e) => {
+    if (!this.blobEl) return;
+    const x = (e.clientX / window.innerWidth - 0.5) * 40;
+    const y = (e.clientY / window.innerHeight - 0.5) * 40;
+    this.blobEl.style.transform = `translate(calc(-50% + ${x}px), ${y}px)`;
+  };
+
+  componentDidMount() {
+    this.observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('saim-in'); this.observer.unobserve(e.target); } });
+    }, { threshold: 0.15 });
+    this.revealEls.forEach(el => el && this.observer.observe(el));
+    window.addEventListener('mousemove', this.onMouseMove);
+  }
+
+  componentWillUnmount() { if (this.observer) this.observer.disconnect(); window.removeEventListener('mousemove', this.onMouseMove); }
+
+  makeRef = () => (el) => { if (el && !this.revealEls.has(el)) { this.revealEls.add(el); if (this.observer) this.observer.observe(el); } };
+
+  setBlobRef = (el) => { this.blobEl = el; };
+
+  renderVals() {
+    const withRef = (list) => list.map(item => ({ ...item, setRef: this.makeRef() }));
+
+    return {
+      setBlobRef: this.setBlobRef,
+      setStripRef: this.makeRef(),
+      setXplorerHeadRef: this.makeRef(),
+      setRobotHeadRef: this.makeRef(),
+      setArmsRef: this.makeRef(),
+      setStackHeadRef: this.makeRef(),
+      setAboutRef: this.makeRef(),
+      setCasesRef: this.makeRef(),
+      setResearchRef: this.makeRef(),
+      setCtaRef: this.makeRef(),
+
+      xplorerModels: withRef([
+        { name: 'Xplorer A', tag: 'INDOOR', slotId: 'xa', placeholder: 'Xplorer A photo', desc: 'Lightweight AMR for indoor mapping and inspection — the entry platform for facilities getting started with autonomy.', specs: ['12h runtime', 'LiDAR + stereo', '25 kg payload'] },
+        { name: 'Xplorer B', tag: 'WAREHOUSE', slotId: 'xb', placeholder: 'Xplorer B photo', desc: 'Warehouse-grade mobile robot built for repeat logistics routes, fleet coordination, and dock-to-shelf transport.', specs: ['150 kg payload', 'Fleet-ready', 'Auto-charging'] },
+        { name: 'Xplorer C', tag: 'OUTDOOR', slotId: 'xc', placeholder: 'Xplorer C photo', desc: 'Ruggedized platform rated for uneven ground and outdoor weather — perimeter patrol and site inspection.', specs: ['IP65', 'All-terrain', '8h runtime'] },
+        { name: 'Xplorer D', tag: 'FIELD', slotId: 'xd', placeholder: 'Xplorer D photo', desc: 'Full off-road autonomy for unstructured terrain — the flagship Xplorer for defense and field-research deployments.', specs: ['4x4 drive', 'Long-range comms', '48h endurance'] },
+      ]),
+
+      robots: withRef([
+        { name: 'SAIM G1 — FIIRION', tag: 'HUMANOID', slotId: 'g1', placeholder: 'G1 robot photo', desc: 'A humanoid platform for tasks that need human-scale reach and dexterity — from lab manipulation to guided interaction.', specs: ['Bipedal locomotion', '2x dexterous hands', 'On-board Autonomy Stack'], href: 'G1 Robot.dc.html' },
+        { name: 'SAIM Go2 — FIIRIDOG', tag: 'QUADRUPED', slotId: 'go2', placeholder: 'Go2 robot photo', desc: 'A quadruped built for rough terrain and confined spaces where wheeled robots can’t go — inspection and reconnaissance.', specs: ['Stair & rubble capable', 'Thermal + RGB sensing', '3h continuous patrol'], href: 'Go2 Robot.dc.html' },
+      ]),
+
+      armSpecs: [
+        { value: '6', label: 'Degrees of freedom' },
+        { value: '5 kg', label: 'Payload capacity' },
+        { value: '±0.1mm', label: 'Repeatability' },
+        { value: '3', label: 'Mount configurations' },
+      ],
+
+      stackLayers: withRef([
+        { name: 'Perception', desc: 'Fuses LiDAR, stereo, and thermal input into a live 3D map of the environment.' },
+        { name: 'Semantic reasoning', desc: 'Grounds raw geometry into meaning — what an object is, and what can be done with it.' },
+        { name: 'Planning', desc: 'Turns intent into a safe, feasible sequence of motion and manipulation actions.' },
+        { name: 'Control', desc: 'Executes plans on the specific body — wheels, legs, or arm — with real-time feedback.' },
+      ]),
+
+      useCases: [
+        { name: 'Warehousing', desc: 'Autonomous transport and inventory checks across dynamic floor layouts.' },
+        { name: 'Defense & field ops', desc: 'Reconnaissance and payload delivery across unstructured, contested terrain.' },
+        { name: 'Industrial inspection', desc: 'Recurring facility and perimeter inspection without fixed infrastructure.' },
+        { name: 'Research', desc: 'A shared autonomy stack for labs prototyping new bodies and behaviors.' },
+      ],
+
+      posts: [
+        { slotId: 'post1', placeholder: 'Post image', tag: 'Research', title: 'Grounding language in 3D scene graphs', excerpt: 'How the Semantic Autonomy Stack turns a point cloud into something a robot can reason about.' },
+        { slotId: 'post2', placeholder: 'Post image', tag: 'Product', title: 'Xplorer D field trial results', excerpt: 'Forty-eight hours of unattended operation across mixed terrain.' },
+        { slotId: 'post3', placeholder: 'Post image', tag: 'Company', title: 'SAIM G1 enters lab pilot phase', excerpt: 'Early partners begin testing humanoid manipulation on real tasks.' },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

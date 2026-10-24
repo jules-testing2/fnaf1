@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; } body { margin: 0; }
+  a { color: #5B7052; text-decoration: none; } a:hover { color: #46592E; }
+  .saim-reveal { opacity: 0; transform: translateY(28px); transition: opacity .8s ease, transform .8s ease; }
+  .saim-reveal.saim-in { opacity: 1; transform: translateY(0); }
+  .saim-nav-links::-webkit-scrollbar { display: none; }
+  .saim-nav-links a { flex: none; }
+  @media (max-width: 760px) { .saim-nav-links a:nth-child(n+4) { display: none; } }
+</style>
+</helmet>
+
+<div style="font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; background: linear-gradient(180deg, #EEF3EA 0%, #FFFAEB 420px); color: #1F1F1F; overflow-x: hidden; min-height: 100vh;">
+
+  <div style="position: sticky; top: 0; z-index: 100; display: flex; justify-content: center; padding: 16px 24px; background: rgba(238,243,234,0.85); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(31,31,31,0.06);">
+    <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 1240px; gap: 20px;">
+      <a href="SAIM Robotics.dc.html"><img src="assets/saim-logo-black.png" alt="SAIM Robotics" style="height: 28px; width: auto; display: block;"></a>
+      <div class="saim-nav-links" style="display: flex; align-items: center; gap: 20px; flex: 1; min-width: 0; overflow-x: auto; scrollbar-width: none; white-space: nowrap;">
+        <a href="Xplorer.dc.html" style="color: #1F1F1F; font-size: 14px; font-weight: 500;">Xplorer</a>
+        <a href="G1 Robot.dc.html" style="color: #1F1F1F; font-size: 14px; font-weight: 500;">G1 &amp; Go2</a>
+        <a href="Arm Series.dc.html" style="color: #1F1F1F; font-size: 14px; font-weight: 500;">Arms</a>
+        <a href="Semantic Autonomy Stack.dc.html" style="color: #1F1F1F; font-size: 14px; font-weight: 500;">Autonomy Stack</a>
+        <a href="Research.dc.html" style="color: #5B7052; font-size: 14px; font-weight: 600;">Research</a>
+        <a href="Leadership.dc.html" style="color: #1F1F1F; font-size: 14px; font-weight: 500;">Leadership</a>
+        <a href="Constitution.dc.html" style="color: #1F1F1F; font-size: 14px; font-weight: 500;">Constitution</a>
+      </div>
+      <a href="SAIM Robotics.dc.html#contact" style="background: #1F1F1F; color: #FFFAEB; padding: 10px 20px; border-radius: 999px; font-size: 13.5px; font-weight: 600; white-space: nowrap;" style-hover="background:#5B7052">Request a demo</a>
+    </div>
+  </div>
+
+  <div style="padding: 64px 24px 50px; display: flex; justify-content: center;">
+    <div style="max-width: 760px; width: 100%; display: flex; flex-direction: column; align-items: flex-start; gap: 26px;">
+      <a href="Research.dc.html" style="font-size: 13.5px; font-weight: 600; color: #5B7052;">← All research</a>
+      <div style="width: 88px; height: 88px; border-radius: 20px; overflow: hidden; background: #8AA482; flex: none;">
+        <img src="assets/research-ros2-icon.png" alt="" style="width: 100%; height: 100%; object-fit: cover;">
+      </div>
+      <div style="font-size: 13.5px; font-weight: 600; color: #5B7052; letter-spacing: 0.05em; text-transform: uppercase;">Localization · Research paper</div>
+      <h1 style="font-family: 'Newsreader', Georgia, serif; font-size: 40px; line-height: 1.2; margin: 0; font-weight: 500;">AI-Driven Dynamic Covariance for ROS 2 Mobile Robot Localization</h1>
+      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <a href="https://doi.org/10.3390/s25103026" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 8px; background: #8AA482; color: #FFFAEB; padding: 11px 22px; border-radius: 999px; font-size: 14px; font-weight: 600;">Read the paper ↗</a>
+        <a href="https://github.com/bogdan-abaza/ai_tools" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(31,31,31,0.06); color: #1F1F1F; padding: 11px 22px; border-radius: 999px; font-size: 14px; font-weight: 600;">GitHub ↗</a>
+      </div>
+      <div style="font-size: 13px; color: rgba(31,31,31,0.45);">Published in Sensors 2025, 25, 3026 · doi.org/10.3390/s25103026</div>
+    </div>
+  </div>
+
+  <div style="padding: 0 24px 40px; display: flex; justify-content: center;">
+    <div style="max-width: 760px; width: 100%; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px;">
+      <sc-for list="{{ stats }}" as="stat" hint-placeholder-count="4">
+        <div style="padding: 20px; border-radius: 16px; background: rgba(138,164,130,0.12); border: 1px solid rgba(138,164,130,0.28);">
+          <div style="font-family: 'Newsreader', Georgia, serif; font-size: 27px; font-weight: 500; color: #5B7052;">{{ stat.value }}</div>
+          <div style="font-size: 12.5px; color: rgba(31,31,31,0.6); margin-top: 4px;">{{ stat.label }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="padding: 0 24px 40px; display: flex; justify-content: center;">
+    <div style="max-width: 760px; width: 100%; display: flex; flex-direction: column; gap: 10px;">
+      <sc-for list="{{ highlights }}" as="h" hint-placeholder-count="2">
+        <div style="display: flex; gap: 12px; align-items: flex-start; font-size: 15px; line-height: 1.55; color: rgba(31,31,31,0.75);">
+          <span style="color: #5B7052; font-weight: 700; flex: none;">→</span><span>{{ h }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="padding: 0 24px 40px; display: flex; justify-content: center;">
+    <div style="max-width: 760px; width: 100%; display: flex; flex-direction: column; gap: 14px;">
+      <div style="font-size: 13px; font-weight: 600; color: rgba(31,31,31,0.45); letter-spacing: 0.05em; text-transform: uppercase;">Authors</div>
+      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <sc-for list="{{ authors }}" as="author" hint-placeholder-count="3">
+          <span style="padding: 9px 18px; border-radius: 999px; background: rgba(138,164,130,0.14); border: 1px solid rgba(138,164,130,0.3); font-size: 14px; font-weight: 500; color: #1F1F1F;">{{ author }}</span>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 30px 24px 130px; display: flex; justify-content: center;">
+    <div style="max-width: 760px; width: 100%; display: flex; flex-direction: column; gap: 3px;">
+      <sc-for list="{{ sections }}" as="sec" hint-placeholder-count="5">
+        <div ref="{{ sec.setRef }}" class="saim-reveal" style="padding: 26px 0; border-bottom: 1px solid rgba(31,31,31,0.08);">
+          <div style="font-family: 'Newsreader', Georgia, serif; font-size: 19px; font-weight: 500; margin-bottom: 8px;">{{ sec.name }}</div>
+          <p style="font-size: 15px; line-height: 1.65; color: rgba(31,31,31,0.68); margin: 0;">{{ sec.body }}</p>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="padding: 0 24px 90px; display: flex; justify-content: center;">
+    <div style="max-width: 1240px; width: 100%; border-top: 1px solid rgba(31,31,31,0.08); padding-top: 40px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+      <div style="font-size: 13.5px; color: rgba(31,31,31,0.5);">© 2026 SAIM Robotics. All rights reserved.</div>
+      <div style="display: flex; gap: 22px;">
+        <a href="Research.dc.html" style="color: rgba(31,31,31,0.5); font-size: 13.5px;">All research</a>
+        <a href="SAIM Robotics.dc.html" style="color: rgba(31,31,31,0.5); font-size: 13.5px;">Home</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  observer = null;
+  revealEls = new Set();
+  componentDidMount() {
+    this.observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('saim-in'); this.observer.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    this.revealEls.forEach(el => el && this.observer.observe(el));
+  }
+  componentWillUnmount() { if (this.observer) this.observer.disconnect(); }
+  makeRef = () => (el) => { if (el && !this.revealEls.has(el)) { this.revealEls.add(el); if (this.observer) this.observer.observe(el); } };
+
+  renderVals() {
+    const withRef = (list) => list.map(item => ({ ...item, setRef: this.makeRef() }));
+    return {
+      authors: ['Bogdan Felician Abaza'],
+      highlights: [
+        'AI-driven dynamic covariance adjustment reduced yaw prediction errors in static and moderate motion dynamics for ROS 2 mobile robot localization.',
+        'Aggressive dynamics increased errors, revealing limitations in the training dataset for rapid rotational motion.',
+      ],
+      stats: [
+        { value: '0.0061', label: 'Pose estimation MAE' },
+        { value: '0.0362 rad', label: 'Median yaw error, static' },
+        { value: '0.9491 rad', label: 'Max yaw error, aggressive' },
+        { value: '21,000+', label: 'Logged training samples (v7)' },
+      ],
+      sections: withRef([
+        { name: 'Abstract', body: 'In the evolving field of mobile robotics, enhancing localization robustness in dynamic environments remains a critical challenge, particularly for ROS 2-based systems where sensor fusion plays a pivotal role. This study evaluates an AI-driven approach to dynamically adjust covariance parameters for improved pose estimation in a differential-drive mobile robot. A regression model was integrated into the robot_localization package to adapt the Extended Kalman Filter (EKF) covariance in real time, with experiments comparing AI-enabled dynamic covariance prediction against a static covariance baseline across Static, Moderate, and Aggressive motion dynamics. The AI-enabled system achieved a Mean Absolute Error (MAE) of 0.0061 for pose estimation, with tighter yaw-error distributions than the static baseline in stable conditions; aggressive dynamics exposed limits of the training data, with errors up to 0.9491 rad. Enhanced dataset augmentation, LSTM modeling, and online learning are proposed to close this gap.' },
+        { name: 'Introduction', body: 'Autonomous mobile robots increasingly rely on ROS 2 and the robot_localization package to fuse wheel odometry, IMU, and other sensors through an Extended Kalman Filter. EKF performance depends heavily on the covariance matrices assigned to each sensor — values that most ROS users still set manually, by intuition or trial and error, with no way to adapt them as motion dynamics change. This gap motivates a learned, dynamic alternative to static covariance tuning, evaluated on low-cost, student-built mobile robots used for robotics research and education at FIIR.' },
+        { name: 'Method', body: 'A Random Forest regression model, trained on logged localization error against motion state, was deployed as an ai_covariance_node that adjusts the EKF\u2019s covariance matrix in real time. Iterative datalogging let the training set grow from 16,000 to over 21,000 samples across model versions, drawing on operational logs rather than a single fixed dataset. Performance was evaluated across three motion regimes — Static, Moderate, and Aggressive — against a static-covariance baseline.' },
+        { name: 'Results', body: 'The AI-enabled system reduced median yaw prediction error to 0.0362 rad (static) and 0.0381 rad (moderate), with tighter interquartile ranges than the static baseline (0.0222\u20130.1399 rad), and an overall pose-estimation MAE of 0.0061. Aggressive rotational motion remained the hard case, with errors reaching 0.9491 rad — traced to underrepresented high-dynamic transitions in the training data and the limited extrapolation capacity of the Random Forest model.' },
+        { name: 'Conclusion', body: 'Dynamic, learned covariance adjustment measurably improves EKF localization robustness in static and moderate motion, at negligible computational cost, while aggressive rotational maneuvers remain an open problem. The datalogging pipeline behind ai_covariance_node supports iterative re-training today and is built to support online, continual learning next — proposed alongside LSTM-based temporal modeling and camera-augmented input as the paths to closing the aggressive-motion gap.' },
+      ]),
+    };
+  }
+}
+</script>
+</body>
+</html>

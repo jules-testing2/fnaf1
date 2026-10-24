@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; } body { margin: 0; }
+  a { color: #C1121F; text-decoration: none; } a:hover { color: #FA520F; }
+  .saim-reveal { opacity: 0; transform: translateY(28px); transition: opacity .8s ease, transform .8s ease; }
+  .saim-reveal.saim-in { opacity: 1; transform: translateY(0); }
+  .saim-nav-links::-webkit-scrollbar { display: none; }
+  .saim-nav-links a { flex: none; }
+  @media (max-width: 760px) { .saim-nav-links a:nth-child(n+4) { display: none; } }
+  .saim-paper-card { transition: transform .35s ease, box-shadow .35s ease; }
+  .saim-paper-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(31,31,31,0.12); }
+</style>
+</helmet>
+
+<div style="font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; background: #FFFAEB; color: #1F1F1F; overflow-x: hidden; min-height: 100vh;">
+
+  <div style="position: sticky; top: 0; z-index: 100; display: flex; justify-content: center; padding: 16px 24px; background: rgba(255,250,235,0.85); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(31,31,31,0.06);">
+    <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 1240px; gap: 20px;">
+      <a href="SAIM Robotics.dc.html"><img src="assets/saim-logo-black.png" alt="SAIM Robotics" style="height: 28px; width: auto; display: block;"></a>
+      <div class="saim-nav-links" style="display: flex; align-items: center; gap: 20px; flex: 1; min-width: 0; overflow-x: auto; scrollbar-width: none; white-space: nowrap;">
+        <a href="Xplorer.dc.html" style="color: #1F1F1F; font-size: 14px; font-weight: 500;">Xplorer</a>
+        <a href="G1 Robot.dc.html" style="color: #1F1F1F; font-size: 14px; font-weight: 500;">G1 &amp; Go2</a>
+        <a href="Arm Series.dc.html" style="color: #1F1F1F; font-size: 14px; font-weight: 500;">Arms</a>
+        <a href="Semantic Autonomy Stack.dc.html" style="color: #1F1F1F; font-size: 14px; font-weight: 500;">Autonomy Stack</a>
+        <a href="Research.dc.html" style="color: #C1121F; font-size: 14px; font-weight: 600;">Research</a>
+        <a href="Leadership.dc.html" style="color: #1F1F1F; font-size: 14px; font-weight: 500;">Leadership</a>
+        <a href="Constitution.dc.html" style="color: #1F1F1F; font-size: 14px; font-weight: 500;">Constitution</a>
+      </div>
+      <a href="SAIM Robotics.dc.html#contact" style="background: #1F1F1F; color: #FFFAEB; padding: 10px 20px; border-radius: 999px; font-size: 13.5px; font-weight: 600; white-space: nowrap;" style-hover="background:#FA520F;color:#1F1F1F">Request a demo</a>
+    </div>
+  </div>
+
+  <div style="padding: 100px 24px 60px; display: flex; justify-content: center;">
+    <div style="max-width: 780px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 22px;">
+      <div style="font-size: 13.5px; font-weight: 600; color: #C1121F; letter-spacing: 0.04em; text-transform: uppercase;">Publications</div>
+      <h1 style="font-family: 'Newsreader', Georgia, serif; font-size: 52px; line-height: 1.1; margin: 0; font-weight: 500;">Research</h1>
+      <p style="font-size: 18px; line-height: 1.6; color: rgba(31,31,31,0.68); margin: 0; max-width: 620px;">Papers behind the Semantic Autonomy Stack — localization, planning, and reasoning, developed alongside the SAIM robot platforms.</p>
+    </div>
+  </div>
+
+  <div style="padding: 0 24px 130px; display: flex; justify-content: center;">
+    <div style="max-width: 1180px; width: 100%; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 28px;">
+      <sc-for list="{{ papers }}" as="paper" hint-placeholder-count="3">
+        <a ref="{{ paper.setRef }}" href="{{ paper.href }}" class="saim-reveal saim-paper-card" style="display: flex; flex-direction: column; gap: 22px; padding: 32px; border-radius: 22px; background: {{ paper.tint }}; border: 1px solid {{ paper.border }}; color: #1F1F1F;">
+          <div style="width: 64px; height: 64px; border-radius: 16px; overflow: hidden; background: {{ paper.iconBg }}; flex: none; display: flex; align-items: center; justify-content: center;">
+            <img src="{{ paper.icon }}" alt="" style="width: 100%; height: 100%; object-fit: cover;">
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div style="font-size: 12px; font-weight: 600; color: {{ paper.accent }}; letter-spacing: 0.05em; text-transform: uppercase;">{{ paper.tag }}</div>
+            <div style="font-family: 'Newsreader', Georgia, serif; font-size: 21px; font-weight: 500; line-height: 1.3;">{{ paper.title }}</div>
+            <p style="font-size: 14.5px; line-height: 1.55; color: rgba(31,31,31,0.65); margin: 0;">{{ paper.desc }}</p>
+          </div>
+          <div style="font-size: 13.5px; font-weight: 600; color: {{ paper.accent }}; margin-top: auto;">Read more →</div>
+        </a>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="padding: 0 24px 90px; display: flex; justify-content: center;">
+    <div style="max-width: 1240px; width: 100%; border-top: 1px solid rgba(31,31,31,0.08); padding-top: 40px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+      <div style="font-size: 13.5px; color: rgba(31,31,31,0.5);">© 2026 SAIM Robotics. All rights reserved.</div>
+      <div style="display: flex; gap: 22px;">
+        <a href="SAIM Robotics.dc.html" style="color: rgba(31,31,31,0.5); font-size: 13.5px;">Home</a>
+        <a href="Leadership.dc.html" style="color: rgba(31,31,31,0.5); font-size: 13.5px;">Leadership</a>
+        <a href="SAIM Robotics.dc.html#contact" style="color: rgba(31,31,31,0.5); font-size: 13.5px;">Contact</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  observer = null;
+  revealEls = new Set();
+
+  componentDidMount() {
+    this.observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('saim-in'); this.observer.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    this.revealEls.forEach(el => el && this.observer.observe(el));
+  }
+  componentWillUnmount() { if (this.observer) this.observer.disconnect(); }
+  makeRef = () => (el) => { if (el && !this.revealEls.has(el)) { this.revealEls.add(el); if (this.observer) this.observer.observe(el); } };
+
+  renderVals() {
+    const withRef = (list) => list.map(item => ({ ...item, setRef: this.makeRef() }));
+    return {
+      papers: withRef([
+        {
+          tag: 'Localization',
+          title: 'AI-Driven Dynamic Covariance for ROS 2 Mobile Robot Localization',
+          desc: 'Learned, context-aware covariance estimation that lets a ROS 2 localization filter trust the right sensor at the right moment.',
+          icon: 'assets/research-ros2-icon.png',
+          href: 'Research AI Covariance.dc.html',
+          tint: '#EEF3EA', border: 'rgba(122,148,110,0.35)', iconBg: '#8AA482', accent: '#5B7052',
+        },
+        {
+          tag: 'Route planning',
+          title: 'Lightweight Semantic-Aware Route Planning on Edge Hardware for Indoor Mobile Robots',
+          desc: 'Monocular camera–2D LiDAR fusion with penalty-weighted Nav2 route server replanning, running entirely on-device.',
+          icon: 'assets/research-route-icon.png',
+          href: 'Research Route Planning.dc.html',
+          tint: '#EAF0F8', border: 'rgba(79,110,156,0.3)', iconBg: '#8FA9CE', accent: '#4E6E9C',
+        },
+        {
+          tag: 'Semantic autonomy',
+          title: 'A Semantic Autonomy Framework for VLM-Integrated Indoor Mobile Robots',
+          desc: 'Hybrid deterministic reasoning and cross-robot adaptive memory for VLM-integrated indoor mobile robots.',
+          icon: 'assets/research-vlm-icon.png',
+          href: 'Research VLM Autonomy.dc.html',
+          tint: '#F8EAEE', border: 'rgba(161,77,102,0.3)', iconBg: '#D98CA0', accent: '#A14D66',
+        },
+      ]),
+    };
+  }
+}
+</script>
+</body>
+</html>

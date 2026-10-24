@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; } body { margin: 0; }
+  a { color: #4E6E9C; text-decoration: none; } a:hover { color: #3B577E; }
+  .saim-reveal { opacity: 0; transform: translateY(28px); transition: opacity .8s ease, transform .8s ease; }
+  .saim-reveal.saim-in { opacity: 1; transform: translateY(0); }
+  .saim-nav-links::-webkit-scrollbar { display: none; }
+  .saim-nav-links a { flex: none; }
+  @media (max-width: 760px) { .saim-nav-links a:nth-child(n+4) { display: none; } }
+</style>
+</helmet>
+
+<div style="font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; background: linear-gradient(180deg, #EAF0F8 0%, #FFFAEB 420px); color: #1F1F1F; overflow-x: hidden; min-height: 100vh;">
+
+  <div style="position: sticky; top: 0; z-index: 100; display: flex; justify-content: center; padding: 16px 24px; background: rgba(234,240,248,0.85); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(31,31,31,0.06);">
+    <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 1240px; gap: 20px;">
+      <a href="SAIM Robotics.dc.html"><img src="assets/saim-logo-black.png" alt="SAIM Robotics" style="height: 28px; width: auto; display: block;"></a>
+      <div class="saim-nav-links" style="display: flex; align-items: center; gap: 20px; flex: 1; min-width: 0; overflow-x: auto; scrollbar-width: none; white-space: nowrap;">
+        <a href="Xplorer.dc.html" style="color: #1F1F1F; font-size: 14px; font-weight: 500;">Xplorer</a>
+        <a href="G1 Robot.dc.html" style="color: #1F1F1F; font-size: 14px; font-weight: 500;">G1 &amp; Go2</a>
+        <a href="Arm Series.dc.html" style="color: #1F1F1F; font-size: 14px; font-weight: 500;">Arms</a>
+        <a href="Semantic Autonomy Stack.dc.html" style="color: #1F1F1F; font-size: 14px; font-weight: 500;">Autonomy Stack</a>
+        <a href="Research.dc.html" style="color: #4E6E9C; font-size: 14px; font-weight: 600;">Research</a>
+        <a href="Leadership.dc.html" style="color: #1F1F1F; font-size: 14px; font-weight: 500;">Leadership</a>
+        <a href="Constitution.dc.html" style="color: #1F1F1F; font-size: 14px; font-weight: 500;">Constitution</a>
+      </div>
+      <a href="SAIM Robotics.dc.html#contact" style="background: #1F1F1F; color: #FFFAEB; padding: 10px 20px; border-radius: 999px; font-size: 13.5px; font-weight: 600; white-space: nowrap;" style-hover="background:#4E6E9C">Request a demo</a>
+    </div>
+  </div>
+
+  <div style="padding: 64px 24px 50px; display: flex; justify-content: center;">
+    <div style="max-width: 760px; width: 100%; display: flex; flex-direction: column; align-items: flex-start; gap: 26px;">
+      <a href="Research.dc.html" style="font-size: 13.5px; font-weight: 600; color: #4E6E9C;">← All research</a>
+      <div style="width: 88px; height: 88px; border-radius: 20px; overflow: hidden; background: #8FA9CE; flex: none;">
+        <img src="assets/research-route-icon.png" alt="" style="width: 100%; height: 100%; object-fit: cover;">
+      </div>
+      <div style="font-size: 13.5px; font-weight: 600; color: #4E6E9C; letter-spacing: 0.05em; text-transform: uppercase;">Route planning · Research paper</div>
+      <h1 style="font-family: 'Newsreader', Georgia, serif; font-size: 36px; line-height: 1.25; margin: 0; font-weight: 500;">Lightweight Semantic-Aware Route Planning on Edge Hardware for Indoor Mobile Robots: Monocular Camera–2D LiDAR Fusion with Penalty-Weighted Nav2 Route Server Replanning</h1>
+      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <a href="https://doi.org/10.3390/s26072232" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 8px; background: #8FA9CE; color: #1F1F1F; padding: 11px 22px; border-radius: 999px; font-size: 14px; font-weight: 600;">Read the paper ↗</a>
+        <a href="https://github.com/bogdan-abaza/nav2-semantic-route-server" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(31,31,31,0.06); color: #1F1F1F; padding: 11px 22px; border-radius: 999px; font-size: 14px; font-weight: 600;">GitHub ↗</a>
+      </div>
+      <div style="font-size: 13px; color: rgba(31,31,31,0.45);">Published in Sensors 2026, 26, 2232 · doi.org/10.3390/s26072232</div>
+    </div>
+  </div>
+
+  <div style="padding: 0 24px 40px; display: flex; justify-content: center;">
+    <div style="max-width: 760px; width: 100%; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px;">
+      <sc-for list="{{ stats }}" as="stat" hint-placeholder-count="4">
+        <div style="padding: 20px; border-radius: 16px; background: rgba(143,169,206,0.14); border: 1px solid rgba(143,169,206,0.3);">
+          <div style="font-family: 'Newsreader', Georgia, serif; font-size: 27px; font-weight: 500; color: #4E6E9C;">{{ stat.value }}</div>
+          <div style="font-size: 12.5px; color: rgba(31,31,31,0.6); margin-top: 4px;">{{ stat.label }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="padding: 0 24px 40px; display: flex; justify-content: center;">
+    <div style="max-width: 760px; width: 100%; display: flex; flex-direction: column; gap: 10px;">
+      <sc-for list="{{ highlights }}" as="h" hint-placeholder-count="2">
+        <div style="display: flex; gap: 12px; align-items: flex-start; font-size: 15px; line-height: 1.55; color: rgba(31,31,31,0.75);">
+          <span style="color: #4E6E9C; font-weight: 700; flex: none;">→</span><span>{{ h }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="padding: 0 24px 40px; display: flex; justify-content: center;">
+    <div style="max-width: 760px; width: 100%; display: flex; flex-direction: column; gap: 14px;">
+      <div style="font-size: 13px; font-weight: 600; color: rgba(31,31,31,0.45); letter-spacing: 0.05em; text-transform: uppercase;">Authors</div>
+      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <sc-for list="{{ authors }}" as="author" hint-placeholder-count="3">
+          <span style="padding: 9px 18px; border-radius: 999px; background: rgba(143,169,206,0.16); border: 1px solid rgba(143,169,206,0.35); font-size: 14px; font-weight: 500; color: #1F1F1F;">{{ author }}</span>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 30px 24px 130px; display: flex; justify-content: center;">
+    <div style="max-width: 760px; width: 100%; display: flex; flex-direction: column; gap: 3px;">
+      <sc-for list="{{ sections }}" as="sec" hint-placeholder-count="5">
+        <div ref="{{ sec.setRef }}" class="saim-reveal" style="padding: 26px 0; border-bottom: 1px solid rgba(31,31,31,0.08);">
+          <div style="font-family: 'Newsreader', Georgia, serif; font-size: 19px; font-weight: 500; margin-bottom: 8px;">{{ sec.name }}</div>
+          <p style="font-size: 15px; line-height: 1.65; color: rgba(31,31,31,0.68); margin: 0;">{{ sec.body }}</p>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="padding: 0 24px 90px; display: flex; justify-content: center;">
+    <div style="max-width: 1240px; width: 100%; border-top: 1px solid rgba(31,31,31,0.08); padding-top: 40px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+      <div style="font-size: 13.5px; color: rgba(31,31,31,0.5);">© 2026 SAIM Robotics. All rights reserved.</div>
+      <div style="display: flex; gap: 22px;">
+        <a href="Research.dc.html" style="color: rgba(31,31,31,0.5); font-size: 13.5px;">All research</a>
+        <a href="SAIM Robotics.dc.html" style="color: rgba(31,31,31,0.5); font-size: 13.5px;">Home</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  observer = null;
+  revealEls = new Set();
+  componentDidMount() {
+    this.observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('saim-in'); this.observer.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    this.revealEls.forEach(el => el && this.observer.observe(el));
+  }
+  componentWillUnmount() { if (this.observer) this.observer.disconnect(); }
+  makeRef = () => (el) => { if (el && !this.revealEls.has(el)) { this.revealEls.add(el); if (this.observer) this.observer.observe(el); } };
+
+  renderVals() {
+    const withRef = (list) => list.map(item => ({ ...item, setRef: this.makeRef() }));
+    return {
+      authors: ['Bogdan Felician Abaza', 'Andrei-Alexandru Staicu', 'Cristian Vasile Doicin'],
+      highlights: [
+        'A lightweight, deterministic camera–2D LiDAR fusion method (Angular Sector Fusion, ASF) enables robust object localization on CPU-only edge hardware, with no learned fusion parameters.',
+        'Penalty-weighted semantic routing with the Nav2 Route Server is feasible and reliable on physical robots, enabling online replanning across multi-robot, multi-session trials.',
+      ],
+      stats: [
+        { value: '97%', label: 'Overall navigation success' },
+        { value: '115', label: 'Navigation legs, 3 platforms' },
+        { value: '42', label: 'Replanning events (57% of trials)' },
+        { value: '85%→48%', label: 'CPU load via offloading' },
+      ],
+      sections: withRef([
+        { name: 'Abstract', body: 'This paper introduces a computationally efficient semantic-aware route planning framework for indoor mobile robots, designed for real-time execution on resource-constrained edge hardware (Raspberry Pi 5, CPU-only). The architecture fuses monocular object detection with 2D LiDAR-based range estimation and feeds the resulting semantic annotations into the Nav2 Route Server for penalty-weighted route selection. Object localization in the map frame is achieved through Angular Sector Fusion (ASF), a deterministic geometric method requiring no parameter tuning. Detected entities are classified by mobility semantics and persisted in a GeoJSON-based semantic map, propagated as additive penalties and velocity constraints on the navigation graph. Over 115 navigation legs on three heterogeneous robotic platforms, the system achieved a 97% overall success rate, with 42 replanning events observed in 57% of adaptive trials, substantially reducing navigation-time variance versus the static baseline.' },
+        { name: 'Introduction', body: 'Standard Nav2 deployments treat the environment as a static geometric space — costmaps encode obstacles as binary cells with no understanding of what those obstacles represent. A person near a junction or a chair blocking a path all demand different navigation responses that costmap cell costs alone cannot capture. Prior semantic mapping work stops at annotating object locations without closing the loop to routing decisions. This work closes that loop: a reproducible perception-to-route pipeline that updates routing decisions online, under real sensing noise and localization drift, on CPU-only edge hardware.' },
+        { name: 'Method', body: 'Angular Sector Fusion (ASF) projects YOLO26n bounding boxes onto LiDAR angular sectors and estimates object range via a 25th-percentile distance statistic, resolving all sensor parameters at runtime through ROS 2 topic introspection and the URDF transform tree for platform-agnostic deployment. Detected objects are classified by mobility (dynamic, static, minor) and encoded in a GeoJSON semantic map, propagated to navigation graph edges as penalties and velocity constraints. The Nav2 Route Server minimizes a composite cost combining path length with these semantic penalties, while a reactive replanning module monitors cost updates during execution and triggers route recomputation past a threshold.' },
+        { name: 'Results', body: 'Across 115 navigation legs on three robot platforms (two single-board RPi5 configurations and one dual-board setup with inference offloading), the system reached a 97% overall success rate (100% baseline, 94% adaptive), with 42 replanning events across 57% of adaptive trials. The adaptive planner did not significantly change mean navigation time but cut its variance substantially (σ = 11.0 s vs. 31.1 s), mainly by avoiding AMCL recovery-induced outliers. On-device YOLO26n inference via the NCNN backend ran at 5.5 ± 0.7 FPS, and distributed inference cut average CPU load from 85% to 48%.' },
+        { name: 'Conclusion', body: 'The ASF pipeline auto-configures from standard ROS 2 topics with under 5% CPU overhead at 3 Hz on the RPi5, and its penalty-weighted integration with the Nav2 Route Server delivers reliable, more predictable route execution across heterogeneous physical platforms — without replacing Nav2\u2019s proven execution stack. Planned next steps include validation on larger, more diverse navigation graphs, 3D depth sensing to remove the 2D LiDAR plane limitation, and incremental graph updates to eliminate the dedicated prescan phase.' },
+      ]),
+    };
+  }
+}
+</script>
+</body>
+</html>
