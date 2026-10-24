@@ -4,16 +4,142 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Research · SAIM Robotics</title>
-  <meta name="description" content="Papers behind the Semantic Autonomy Stack: localisation, semantic route planning and VLM reasoning.">
+  <meta name="description" content="Papers behind the Semantic Autonomy Stack: localisation, semantic route planning and VLM reasoning with memory.">
   <meta name="theme-color" content="#0a0a0b">
   <meta property="og:title" content="Research · SAIM Robotics">
-  <meta property="og:description" content="Papers behind the Semantic Autonomy Stack: localisation, semantic route planning and VLM reasoning.">
+  <meta property="og:description" content="Papers behind the Semantic Autonomy Stack: localisation, semantic route planning and VLM reasoning with memory.">
   <meta property="og:type" content="website">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
 </head>
 <body data-page="research">
   <main id="main">
-    <section class="section"><div class="container"><p class="eyebrow">Coming soon</p><h1 class="h1">Research</h1></div></section>
+    <header class="rx-hero">
+      <div class="rx-hero__bg" aria-hidden="true"></div>
+      <div class="container rx-hero__inner">
+        <p class="eyebrow" data-scramble>Publications · SAIM Robotics</p>
+        <h1 class="mega" style="margin-top:22px" data-split="chars">Three papers. <em class="fire-text">One stack.</em></h1>
+        <div class="rx-hero__row">
+          <p class="lead" data-reveal>The research behind the Semantic Autonomy Stack, built bottom-up on our own robots: a localisation filter that learns its own uncertainty, a perception layer that turns camera boxes into route decisions, and a reasoning layer that knows when it does not need a language model.</p>
+          <div class="rx-counters" data-reveal>
+            <div><div class="stat-value" data-counter="3">3</div><div class="stat-label">Peer-reviewed papers</div></div>
+            <div><div class="stat-value" data-counter="6">6</div><div class="stat-label">SAS layers, L0 to L5</div></div>
+            <div><div class="stat-value" data-counter="3">3</div><div class="stat-label">Open code + data repos</div></div>
+          </div>
+        </div>
+        <a class="rx-scroll mono" href="#papers"><i></i>Read the papers</a>
+      </div>
+    </header>
+
+    <section class="section" id="papers">
+      <div class="container">
+        <p class="eyebrow">The papers</p>
+        <h2 class="h2" style="margin:18px 0 clamp(32px,5vw,64px)" data-split>Every claim, <em>measured on robots</em>.</h2>
+        <div class="rx-papers">
+        <article class="rx-card" data-reveal>
+          <span class="rx-card__index" aria-hidden="true">01</span>
+          <div>
+            <p class="rx-card__meta"><span class="chip">RAS 2027</span><span class="mono" style="color:var(--fg-mute)">Reasoning + memory · SAS L3 · L4 · L5</span></p>
+            <h3 class="rx-card__title"><a href="research-vlm-autonomy.html">A semantic autonomy framework for VLM-integrated indoor mobile robots</a></h3>
+            <p class="rx-card__blurb">The six-layer Semantic Autonomy Stack. A deterministic-first resolver answers what its rules can accept, escalates the rest to a pretrained VLM, and promotes stable model answers into memory that a second robot can reuse.</p>
+            <p class="rx-card__authors">Abaza, Staicu, Doicin · Robotics and Autonomous Systems 207 (2027) 105822</p>
+            <div class="rx-card__actions">
+              <a class="btn btn--fire btn--sm" href="research-vlm-autonomy.html" data-magnetic>Explore the paper <span class="arrow">→</span></a>
+              <a class="btn btn--ghost btn--sm" href="https://doi.org/10.1016/j.robot.2026.105822" target="_blank" rel="noopener">Paper ↗</a>
+              <a class="btn btn--ghost btn--sm" href="https://github.com/bogdan-abaza/nav2-sas-vlm-memory" target="_blank" rel="noopener">Code ↗</a>
+            </div>
+          </div>
+          <div class="rx-card__side">
+            <div class="rx-card__fig"><img src="img/research/sas-fig1-stack.webp" alt="Semantic Autonomy Stack diagram, L0 to L5" loading="lazy"></div>
+            <div class="rx-card__stats"><div><div class="stat-value" data-counter="112" data-decimals="0" data-suffix="/216">112/216</div><div class="stat-label">Cycles without a VLM call</div></div><div><div class="stat-value" data-counter="0.245" data-decimals="3" data-suffix=" ms">0.245 ms</div><div class="stat-label">Median resolver compute</div></div><div><div class="stat-value" data-counter="17" data-decimals="0" data-suffix="/28">17/28</div><div class="stat-label">Sealed challenge acceptable</div></div><div><div class="stat-value" data-counter="0" data-decimals="0" data-suffix="/39">0/39</div><div class="stat-label">Forbidden destinations executed</div></div></div>
+          </div>
+        </article>
+        <article class="rx-card" data-reveal>
+          <span class="rx-card__index" aria-hidden="true">02</span>
+          <div>
+            <p class="rx-card__meta"><span class="chip">Sensors 2026</span><span class="mono" style="color:var(--fg-mute)">Perception + routing · SAS L1 · L2</span></p>
+            <h3 class="rx-card__title"><a href="research-route-planning.html">Lightweight Semantic-Aware Route Planning on Edge Hardware for Indoor Mobile Robots</a></h3>
+            <p class="rx-card__blurb">YOLO26n detections fused with a 2D LiDAR scan by Angular Sector Fusion, written to a GeoJSON semantic map and turned into edge penalties that make the Nav2 Route Server replan, on a CPU-only Raspberry Pi 5.</p>
+            <p class="rx-card__authors">Abaza, Staicu, Doicin · Sensors 2026, 26(7), 2232</p>
+            <div class="rx-card__actions">
+              <a class="btn btn--fire btn--sm" href="research-route-planning.html" data-magnetic>Explore the paper <span class="arrow">→</span></a>
+              <a class="btn btn--ghost btn--sm" href="https://doi.org/10.3390/s26072232" target="_blank" rel="noopener">Paper ↗</a>
+              <a class="btn btn--ghost btn--sm" href="https://github.com/bogdan-abaza/nav2-semantic-route-server" target="_blank" rel="noopener">Code ↗</a>
+            </div>
+          </div>
+          <div class="rx-card__side">
+            <div class="rx-card__fig"><img src="img/research/rp-fig7-environment.webp" alt="FIIR corridor map with the navigation graph and a detected plant" loading="lazy"></div>
+            <div class="rx-card__stats"><div><div class="stat-value" data-counter="97" data-decimals="0" data-suffix="%">97%</div><div class="stat-label">Success over 115 legs</div></div><div><div class="stat-value" data-counter="42" data-decimals="0" data-suffix="">42</div><div class="stat-label">Replanning events</div></div><div><div class="stat-value" data-counter="11.0" data-decimals="1" data-suffix="">11.0</div><div class="stat-label">σ nav time, vs 31.1 s</div></div><div><div class="stat-value" data-counter="48" data-decimals="0" data-suffix="%">48%</div><div class="stat-label">CPU with offloading, from 85%</div></div></div>
+          </div>
+        </article>
+        <article class="rx-card" data-reveal>
+          <span class="rx-card__index" aria-hidden="true">03</span>
+          <div>
+            <p class="rx-card__meta"><span class="chip">Sensors 2025</span><span class="mono" style="color:var(--fg-mute)">Localisation · SAS L1</span></p>
+            <h3 class="rx-card__title"><a href="research-covariance.html">AI-Driven Dynamic Covariance for ROS 2 Mobile Robot Localization</a></h3>
+            <p class="rx-card__blurb">A lightweight Random Forest, trained on logged EKF error, predicts x, y and yaw error from 15 live features and feeds them back as covariance to robot_localization, on a student-built robot with a Raspberry Pi 4.</p>
+            <p class="rx-card__authors">Abaza · Sensors 2025, 25(10), 3026</p>
+            <div class="rx-card__actions">
+              <a class="btn btn--fire btn--sm" href="research-covariance.html" data-magnetic>Explore the paper <span class="arrow">→</span></a>
+              <a class="btn btn--ghost btn--sm" href="https://doi.org/10.3390/s25103026" target="_blank" rel="noopener">Paper ↗</a>
+              <a class="btn btn--ghost btn--sm" href="https://github.com/bogdan-abaza/ai_tools" target="_blank" rel="noopener">Code ↗</a>
+            </div>
+          </div>
+          <div class="rx-card__side">
+            <div class="rx-card__fig"><img src="img/research/cv-fig16-yaw-scatter.webp" alt="Scatter of predicted versus actual yaw error by motion regime" loading="lazy"></div>
+            <div class="rx-card__stats"><div><div class="stat-value" data-counter="0.0061" data-decimals="4" data-suffix="">0.0061</div><div class="stat-label">Test-set MAE</div></div><div><div class="stat-value" data-counter="0.989" data-decimals="3" data-suffix="">0.989</div><div class="stat-label">Test-set R²</div></div><div><div class="stat-value" data-counter="21000" data-decimals="0" data-suffix="+">21000+</div><div class="stat-label">Logged samples, v7</div></div><div><div class="stat-value" data-counter="0.0362" data-decimals="4" data-suffix=" rad">0.0362 rad</div><div class="stat-label">Median yaw prediction error, static</div></div></div>
+          </div>
+        </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--ink2">
+      <div class="container">
+        <p class="eyebrow">How they fit together</p>
+        <h2 class="h2" style="margin:18px 0 clamp(32px,5vw,56px)" data-split>Each paper is a layer of <em>the stack</em>.</h2>
+        <div class="layermap">
+          <div class="layermap__stack" role="list" aria-label="Semantic Autonomy Stack layers">
+            <div class="lm-row" role="listitem" data-layer="5"><span class="lm-row__id">L5</span><span class="lm-row__name">Operational memory<span class="lm-row__note">M1–M5 scoped memory, compiled digest</span></span></div>
+            <div class="lm-row" role="listitem" data-layer="4"><span class="lm-row__id">L4</span><span class="lm-row__name">Mission interface<span class="lm-row__note">Natural-language and structured missions</span></span></div>
+            <div class="lm-row" role="listitem" data-layer="3"><span class="lm-row__id">L3</span><span class="lm-row__name">Semantic reasoning<span class="lm-row__note">Deterministic resolver L3a, VLM escalation L3b</span></span></div>
+            <div class="lm-row" role="listitem" data-layer="2"><span class="lm-row__id">L2</span><span class="lm-row__name">Perception and semantic map<span class="lm-row__note">YOLO26n, Angular Sector Fusion, GeoJSON map</span></span></div>
+            <div class="lm-row" role="listitem" data-layer="1"><span class="lm-row__id">L1</span><span class="lm-row__name">Navigation execution<span class="lm-row__note">EKF localisation, Nav2, Route Server replanning</span></span></div>
+            <div class="lm-row" role="listitem" data-layer="0"><span class="lm-row__id">L0</span><span class="lm-row__name">Mobile platform<span class="lm-row__note">Xplorer robots, Raspberry Pi 5, LiDAR, camera</span></span></div>
+          </div>
+          <div class="layermap__papers">
+            <button type="button" class="lm-paper" data-layers="3,4,5" aria-pressed="false"><span class="lm-paper__dot" style="background:var(--amber)"></span><span><span class="lm-paper__title">Semantic Autonomy Stack</span><span class="lm-paper__meta">RAS 2027 · defines L0–L5 and develops L3–L5: when to reason, when to remember</span></span></button>
+            <button type="button" class="lm-paper" data-layers="1,2" aria-pressed="false"><span class="lm-paper__dot" style="background:var(--orange)"></span><span><span class="lm-paper__title">Semantic route planning</span><span class="lm-paper__meta">Sensors 2026 · L2 perception feeding L1 routing: what the robot sees changes where it goes</span></span></button>
+            <button type="button" class="lm-paper" data-layers="1" aria-pressed="false"><span class="lm-paper__dot" style="background:var(--cyan)"></span><span><span class="lm-paper__title">AI dynamic covariance</span><span class="lm-paper__meta">Sensors 2025 · L1 localisation: an EKF that knows how much to trust each sensor</span></span></button>
+            <a class="link-arrow" href="stack.html" style="margin-top:12px">See the whole stack in motion</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--paper">
+      <div class="container">
+        <p class="eyebrow">Built bottom-up</p>
+        <h2 class="h2" style="margin:18px 0 clamp(40px,6vw,72px)" data-split>From a filter to <em>a framework</em>.</h2>
+        <div class="rx-timeline">
+          <span class="rx-timeline__line" aria-hidden="true"></span>
+          <div class="rx-step" data-reveal><span class="mono">May 2025 · Sensors</span><h3>Localisation that adapts</h3><p>A Random Forest predicts EKF error on a student-built robot and rewrites covariance live: MAE 0.0061, with the aggressive-turn gap stated plainly.</p></div>
+          <div class="rx-step" data-reveal data-reveal-delay="0.1"><span class="mono">April 2026 · Sensors</span><h3>Perception that routes</h3><p>Camera and 2D LiDAR fused on a Raspberry Pi 5, semantic penalties in the Nav2 Route Server: 115 legs, 97% success, navigation-time spread down from 31.1 s to 11.0 s.</p></div>
+          <div class="rx-step" data-reveal data-reveal-delay="0.2"><span class="mono">October 2026 · RAS</span><h3>Reasoning that remembers</h3><p>The Semantic Autonomy Stack: deterministic-first resolution, selective VLM escalation and promoted memory reused across two robots, evaluated on a frozen build.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <p class="eyebrow">Open science</p>
+        <h2 class="h2" style="margin:18px 0 clamp(32px,5vw,56px)" data-split>Code and data, <em>in the open</em>.</h2>
+        <div class="rx-open" data-stagger>
+          <a class="card rx-repo" href="https://github.com/bogdan-abaza/nav2-sas-vlm-memory" target="_blank" rel="noopener" data-tilt="5" data-spotlight><span class="mono">RAS 2027</span><strong>nav2-sas-vlm-memory</strong><p>Session E evidence package, audit logs, memory files and analysis scripts (tag ras-revision-rc1.2).</p><span class="link-arrow">GitHub</span></a>
+          <a class="card rx-repo" href="https://github.com/bogdan-abaza/nav2-semantic-route-server" target="_blank" rel="noopener" data-tilt="5" data-spotlight><span class="mono">Sensors 2026</span><strong>nav2-semantic-route-server</strong><p>Source for every module, the automated test framework and all 115 legs across 27 sessions.</p><span class="link-arrow">GitHub</span></a>
+          <a class="card rx-repo" href="https://github.com/bogdan-abaza/ai_tools" target="_blank" rel="noopener" data-tilt="5" data-spotlight><span class="mono">Sensors 2025</span><strong>ai_tools</strong><p>The ai_covariance nodes, dataset versions and the logged runs behind the results.</p><span class="link-arrow">GitHub</span></a>
+        </div>
+      </div>
+    </section>
   </main>
   <script type="module" src="/src/pages/research.js"></script>
 </body>
